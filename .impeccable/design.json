@@ -1,0 +1,513 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-31T00:00:00.000Z",
+  "title": "Design System: Koolink",
+  "extensions": {
+    "colorMeta": {
+      "frost": {
+        "role": "neutral",
+        "displayName": "Frost",
+        "canonical": "oklch(96.9% 0.011 236)",
+        "tonalRamp": [
+          "oklch(15% 0.011 236)",
+          "oklch(26% 0.011 236)",
+          "oklch(38% 0.011 236)",
+          "oklch(50% 0.011 236)",
+          "oklch(62% 0.011 236)",
+          "oklch(74% 0.011 236)",
+          "oklch(86% 0.011 236)",
+          "oklch(96.9% 0.011 236)"
+        ]
+      },
+      "sheet": {
+        "role": "neutral",
+        "displayName": "Sheet",
+        "canonical": "oklch(93.2% 0.015 234)",
+        "tonalRamp": [
+          "oklch(15% 0.015 234)",
+          "oklch(26% 0.015 234)",
+          "oklch(38% 0.015 234)",
+          "oklch(50% 0.015 234)",
+          "oklch(62% 0.015 234)",
+          "oklch(74% 0.015 234)",
+          "oklch(86% 0.015 234)",
+          "oklch(95% 0.015 234)"
+        ]
+      },
+      "glacier": {
+        "role": "neutral",
+        "displayName": "Glacier",
+        "canonical": "oklch(86.1% 0.032 235)",
+        "tonalRamp": [
+          "oklch(15% 0.032 235)",
+          "oklch(26% 0.032 235)",
+          "oklch(38% 0.032 235)",
+          "oklch(50% 0.032 235)",
+          "oklch(62% 0.032 235)",
+          "oklch(74% 0.032 235)",
+          "oklch(86.1% 0.032 235)",
+          "oklch(95% 0.032 235)"
+        ]
+      },
+      "deep": {
+        "role": "neutral",
+        "displayName": "Deep",
+        "canonical": "oklch(21.4% 0.028 236)",
+        "tonalRamp": [
+          "oklch(15% 0.028 236)",
+          "oklch(21.4% 0.028 236)",
+          "oklch(32% 0.028 236)",
+          "oklch(45% 0.028 236)",
+          "oklch(58% 0.028 236)",
+          "oklch(71% 0.028 236)",
+          "oklch(84% 0.028 236)",
+          "oklch(95% 0.028 236)"
+        ]
+      },
+      "abyss": {
+        "role": "neutral",
+        "displayName": "Abyss",
+        "canonical": "oklch(17.6% 0.026 237)",
+        "tonalRamp": [
+          "oklch(12% 0.026 237)",
+          "oklch(17.6% 0.026 237)",
+          "oklch(29% 0.026 237)",
+          "oklch(42% 0.026 237)",
+          "oklch(55% 0.026 237)",
+          "oklch(69% 0.026 237)",
+          "oklch(82% 0.026 237)",
+          "oklch(95% 0.026 237)"
+        ]
+      },
+      "steel": {
+        "role": "neutral",
+        "displayName": "Steel",
+        "canonical": "oklch(41.8% 0.037 240)",
+        "tonalRamp": [
+          "oklch(15% 0.037 240)",
+          "oklch(26% 0.037 240)",
+          "oklch(41.8% 0.037 240)",
+          "oklch(52% 0.037 240)",
+          "oklch(63% 0.037 240)",
+          "oklch(74% 0.037 240)",
+          "oklch(85% 0.037 240)",
+          "oklch(95% 0.037 240)"
+        ]
+      },
+      "haze": {
+        "role": "neutral",
+        "displayName": "Haze",
+        "canonical": "oklch(76.5% 0.037 234)",
+        "tonalRamp": [
+          "oklch(15% 0.037 234)",
+          "oklch(26% 0.037 234)",
+          "oklch(38% 0.037 234)",
+          "oklch(50% 0.037 234)",
+          "oklch(63% 0.037 234)",
+          "oklch(76.5% 0.037 234)",
+          "oklch(87% 0.037 234)",
+          "oklch(95% 0.037 234)"
+        ]
+      },
+      "marine": {
+        "role": "primary",
+        "displayName": "Marine",
+        "canonical": "oklch(45.2% 0.072 219)",
+        "tonalRamp": [
+          "oklch(15% 0.072 219)",
+          "oklch(24% 0.072 219)",
+          "oklch(34% 0.072 219)",
+          "oklch(45.2% 0.072 219)",
+          "oklch(57% 0.072 219)",
+          "oklch(70% 0.072 219)",
+          "oklch(83% 0.072 219)",
+          "oklch(95% 0.072 219)"
+        ]
+      },
+      "cyan": {
+        "role": "secondary",
+        "displayName": "Cyan",
+        "canonical": "oklch(66.4% 0.106 224)",
+        "tonalRamp": [
+          "oklch(15% 0.106 224)",
+          "oklch(26% 0.106 224)",
+          "oklch(38% 0.106 224)",
+          "oklch(50% 0.106 224)",
+          "oklch(66.4% 0.106 224)",
+          "oklch(77% 0.106 224)",
+          "oklch(87% 0.106 224)",
+          "oklch(95% 0.106 224)"
+        ]
+      },
+      "chill": {
+        "role": "primary",
+        "displayName": "Chill",
+        "canonical": "oklch(81.2% 0.108 216)",
+        "tonalRamp": [
+          "oklch(15% 0.108 216)",
+          "oklch(26% 0.108 216)",
+          "oklch(38% 0.108 216)",
+          "oklch(52% 0.108 216)",
+          "oklch(66% 0.108 216)",
+          "oklch(81.2% 0.108 216)",
+          "oklch(89% 0.108 216)",
+          "oklch(95% 0.108 216)"
+        ]
+      },
+      "ember": {
+        "role": "tertiary",
+        "displayName": "Ember",
+        "canonical": "oklch(48.6% 0.166 38)",
+        "tonalRamp": [
+          "oklch(15% 0.166 38)",
+          "oklch(25% 0.166 38)",
+          "oklch(36% 0.166 38)",
+          "oklch(48.6% 0.166 38)",
+          "oklch(60% 0.166 38)",
+          "oklch(72% 0.166 38)",
+          "oklch(84% 0.166 38)",
+          "oklch(95% 0.166 38)"
+        ]
+      },
+      "tile-muted": {
+        "role": "neutral",
+        "displayName": "Tile Muted",
+        "canonical": "color-mix(in srgb, rgb(var(--marine)) 15%, rgb(var(--frost)))",
+        "tonalRamp": [
+          "oklch(15% 0.022 226)",
+          "oklch(26% 0.022 226)",
+          "oklch(38% 0.022 226)",
+          "oklch(50% 0.022 226)",
+          "oklch(63% 0.022 226)",
+          "oklch(76% 0.022 226)",
+          "oklch(88.6% 0.022 226)",
+          "oklch(95% 0.022 226)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The two or three moments that carry the page. Hero and the numbers spread only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "One tier below display, for a section that speaks at nearly full volume."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Ordinary section headings."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "The h2-quiet tier: sections whose job is to be read rather than seen, and card headings."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Standalone numerals. Tighter tracking and leading than display type; a numeral has no descenders to protect."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "The paragraph directly under a heading, in muted text."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default reading size."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Captions, tile copy, button labels."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "The uppercase eyebrow. One per section, above a heading, never as a heading."
+      }
+    },
+    "shadows": [
+      {
+        "name": "glass-edge",
+        "value": "inset 0 1px 0 rgb(var(--glass-spec) / 0.28), inset 0 -1px 0 rgb(var(--glass-spec) / 0.1), inset 0 -2px 0 rgb(var(--glass-tint) / 0.3), 0 calc(var(--u) * 0.8) calc(var(--u) * 2) rgb(var(--deep) / 0.22)",
+        "purpose": "The standard four-layer glass edge: top highlight where a bevel catches light, bottom shading so the surface has two edges, then a soft lift."
+      },
+      {
+        "name": "panel-rim",
+        "value": "inset 0 0 0 1px rgb(255 255 255 / 0.16), inset 0 1px 2px rgb(255 255 255 / 0.3), 0 calc(var(--u) * 1) calc(var(--u) * 3) rgb(0 0 0 / 0.34)",
+        "purpose": "The menu panel. Two rings at different alphas read as the thickness of real glass; separation comes from edge light, not from darkness underneath."
+      },
+      {
+        "name": "button-primary",
+        "value": "inset 0 1px 0 rgb(255 255 255 / 0.45), inset 0 -1px 0 rgb(var(--btn-ink) / 0.12), 0 calc(var(--u) * 0.55) calc(var(--u) * 1.6) rgb(var(--deep) / 0.22)",
+        "purpose": "Primary pill at rest."
+      },
+      {
+        "name": "button-primary-hover",
+        "value": "inset 0 1px 0 rgb(255 255 255 / 0.55), inset 0 -1px 0 rgb(var(--btn-ink) / 0.14), 0 calc(var(--u) * 0.85) calc(var(--u) * 2.2) rgb(var(--deep) / 0.28)",
+        "purpose": "Primary pill lifted 1px on hover."
+      },
+      {
+        "name": "hanging-photo",
+        "value": "0 calc(var(--u) * 1.2) calc(var(--u) * 2.4) rgb(var(--deep) / 0.28)",
+        "purpose": "The product photograph, the only genuinely lifted object in the system. It breaks out of its tile, so it casts."
+      },
+      {
+        "name": "header-light",
+        "value": "inset 0 1px 0 rgb(255 255 255 / 0.6), inset 0 -1px 0 rgb(255 255 255 / 0.3), 0 1px calc(var(--u) * 1.5) rgb(var(--deep) / 0.07)",
+        "purpose": "Fixed header over a light bed. Barely there: separation is the blur and the hairline."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-thaw",
+        "value": "cubic-bezier(0.22, 0.61, 0.16, 1)",
+        "purpose": "Default. Slow out, no overshoot: the curve of something settling rather than bouncing. Ice does not bounce."
+      },
+      {
+        "name": "ease-out-circ",
+        "value": "cubic-bezier(0.075, 0.82, 0.165, 1)",
+        "purpose": "The long 1200-1400ms reveals."
+      },
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.165, 0.84, 0.44, 1)",
+        "purpose": "800-900ms reveals and all button state changes."
+      },
+      {
+        "name": "ease-out-cubic",
+        "value": "cubic-bezier(0.33, 1, 0.68, 1)",
+        "purpose": "The per-character stagger on split headings."
+      },
+      {
+        "name": "speed-fast",
+        "value": "180ms",
+        "purpose": "Press and release; anything that must feel immediate."
+      },
+      {
+        "name": "speed-md",
+        "value": "420ms",
+        "purpose": "Hover transitions and the menu slide."
+      },
+      {
+        "name": "speed-slow",
+        "value": "900ms",
+        "purpose": "The frost bloom and other ambient arrivals."
+      },
+      {
+        "name": "speed-reveal",
+        "value": "1400ms",
+        "purpose": "Scroll entrances."
+      },
+      {
+        "name": "delay",
+        "value": "32.5ms",
+        "purpose": "Stagger step between siblings in one arrival."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet",
+        "value": "991px"
+      },
+      {
+        "name": "phone-wide",
+        "value": "639px"
+      },
+      {
+        "name": "phone",
+        "value": "479px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action on any section. Inverts its bed instead of changing hue, at 90% fill so the bed still shows through at the edges.",
+      "html": "<a class=\"ds-btn ds-btn-primary\" href=\"#\">Message us on WhatsApp</a>",
+      "css": ".ds-btn { position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 0.55em; min-height: 52px; padding: 0 1.5rem; border-radius: 9999px; font-family: Geist, system-ui, sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.01em; text-decoration: none; border: 1px solid transparent; backdrop-filter: blur(14px) saturate(1.5) brightness(0.94); -webkit-backdrop-filter: blur(14px) saturate(1.5) brightness(0.94); transition: background-color 420ms cubic-bezier(0.165,0.84,0.44,1), border-color 420ms cubic-bezier(0.165,0.84,0.44,1), color 420ms cubic-bezier(0.165,0.84,0.44,1), box-shadow 420ms cubic-bezier(0.165,0.84,0.44,1), transform 420ms cubic-bezier(0.165,0.84,0.44,1); } .ds-btn::after { content: ''; position: absolute; inset: 0 0 auto; height: 30%; pointer-events: none; background: linear-gradient(to bottom, rgb(255 255 255 / 0.16), transparent); } .ds-btn-primary { background-color: rgb(242 247 250 / 0.9); color: #071822; border-color: rgb(242 247 250 / 0.5); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.45), inset 0 -1px 0 rgb(7 24 34 / 0.12), 0 8px 22px rgb(7 24 34 / 0.22); } .ds-btn-primary:hover { background-color: rgb(242 247 250 / 1); transform: translateY(-1px); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), inset 0 -1px 0 rgb(7 24 34 / 0.14), 0 12px 30px rgb(7 24 34 / 0.28); } .ds-btn-primary:focus-visible { outline: 2px solid #2BA8CE; outline-offset: 3px; } .ds-btn-primary:active { transform: translateY(0); transition-duration: 180ms; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Barely there by design. A 7% wash and a bright rim, so the primary reads as primary without a second hue.",
+      "html": "<a class=\"ds-btn ds-btn-secondary\" href=\"#\">Call 0802 268 9722</a>",
+      "css": ".ds-btn-secondary { background-color: rgb(255 255 255 / 0.07); color: #F2F7FA; border-color: rgb(255 255 255 / 0.5); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16), inset 0 1px 2px rgb(255 255 255 / 0.28), 0 4px 14px rgb(7 24 34 / 0.1); } .ds-btn-secondary:hover { background-color: rgb(255 255 255 / 0.16); border-color: rgb(255 255 255 / 0.38); transform: translateY(-1px); } .ds-btn-secondary:focus-visible { outline: 2px solid #2BA8CE; outline-offset: 3px; }"
+    },
+    {
+      "name": "Product Tile",
+      "kind": "custom",
+      "refersTo": "product-tile",
+      "description": "The signature component. A marine block with a 4:3 photograph suspended above it and breaking out of its top edge, the phone number stamped on the picture, and a corner square that fills with cyan on hover. Secondary copy uses tile-muted, mixed from marine, because haze fails AA on this background.",
+      "html": "<a class=\"ds-tile\" href=\"#\"><span class=\"ds-tile-photo\"><span class=\"ds-tile-empty\">Photograph to come</span><span class=\"ds-tile-stamp\">0802 268 9722</span></span><span class=\"ds-tile-corner\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 19 19 5M9 5h10v10\"/></svg></span><span class=\"ds-tile-body\"><span class=\"ds-tile-name\">Ice block machines</span><span class=\"ds-tile-cta\">Book now</span></span></a>",
+      "css": ".ds-tile { position: relative; display: flex; align-items: flex-end; height: 330px; margin-top: 112px; padding: 18px; border-radius: 6px; background-color: #146579; color: #F2F7FA; text-decoration: none; font-family: Geist, system-ui, sans-serif; transition: background-color 420ms cubic-bezier(0.22,0.61,0.16,1); } .ds-tile:hover { background-color: #071822; } .ds-tile-photo { position: absolute; z-index: 1; left: 18px; right: 18px; top: -112px; aspect-ratio: 4 / 3; border-radius: 6px; overflow: hidden; background-color: #041017; box-shadow: 0 17px 34px rgb(7 24 34 / 0.28); transition: transform 420ms cubic-bezier(0.22,0.61,0.16,1); } .ds-tile:hover .ds-tile-photo { transform: translate3d(0, -7px, 0); } .ds-tile-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px; color: #D1E1E7; background-image: linear-gradient(rgb(242 247 250 / 0.05) 1px, transparent 1px), linear-gradient(90deg, rgb(242 247 250 / 0.05) 1px, transparent 1px); background-size: 28px 28px; } .ds-tile-stamp { position: absolute; bottom: 8px; left: 8px; padding: 4px 9px; border-radius: 9999px; background-color: rgb(4 16 23 / 0.74); color: #F2F7FA; font-size: 14px; font-weight: 600; backdrop-filter: blur(6px); } .ds-tile-corner { position: absolute; z-index: 2; top: 9px; right: 9px; width: 47px; height: 47px; display: flex; align-items: center; justify-content: center; border-radius: 2px; background-color: rgb(242 247 250 / 0.1); transition: background-color 180ms cubic-bezier(0.22,0.61,0.16,1); } .ds-tile:hover .ds-tile-corner { background-color: #2BA8CE; color: #071822; } .ds-tile-corner svg { width: 11px; height: auto; } .ds-tile-body { width: 100%; display: flex; flex-direction: column; gap: 10px; } .ds-tile-name { font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 22px; line-height: 1.18; letter-spacing: -0.01em; } .ds-tile-cta { display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; letter-spacing: 0.01em; }"
+    },
+    {
+      "name": "Glass Panel",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The real thing: backdrop-filter with brightness doing the contrast work, so the surface stays transparent enough to trace the page through it.",
+      "html": "<div class=\"ds-glass\"><p class=\"ds-glass-label\">Full solar</p><p class=\"ds-glass-copy\">DC 24/48V, self-powered. Lithium batteries and panels included, brand new.</p></div>",
+      "css": ".ds-glass { position: relative; max-width: 340px; padding: 26px; border-radius: 20px; color: #F2F7FA; font-family: Geist, system-ui, sans-serif; background-color: rgb(7 24 34 / 0.12); background-image: linear-gradient(152deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.02) 46%, transparent 72%); border: 1px solid rgb(255 255 255 / 0.5); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16), inset 0 1px 2px rgb(255 255 255 / 0.3), 0 14px 42px rgb(0 0 0 / 0.34); backdrop-filter: blur(14.4px) saturate(1.5) brightness(0.44); -webkit-backdrop-filter: blur(14.4px) saturate(1.5) brightness(0.44); } .ds-glass-label { margin: 0 0 10px; font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #5FD3EE; } .ds-glass-copy { margin: 0; font-size: 16px; line-height: 1.6; color: #9FBCCC; }"
+    },
+    {
+      "name": "Figure Row",
+      "kind": "custom",
+      "refersTo": "figure",
+      "description": "The row idiom, shared by the numbers spread and the machine specifications. A hairline on top, a two-column grid, no box.",
+      "html": "<dl class=\"ds-rows\"><div class=\"ds-row\"><dt class=\"ds-row-key\">Years in business</dt><dd class=\"ds-row-val\">25</dd></div><div class=\"ds-row\"><dt class=\"ds-row-key\">Blocks per day</dt><dd class=\"ds-row-val\">500+</dd></div><div class=\"ds-row\"><dt class=\"ds-row-key\">Offices</dt><dd class=\"ds-row-val\">4</dd></div></dl>",
+      "css": ".ds-rows { margin: 0; font-family: Geist, system-ui, sans-serif; color: #071822; } .ds-row { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 26px; align-items: start; padding-block: 30px; border-top: 1px solid rgb(7 24 34 / 0.12); } .ds-row:last-child { border-bottom: 1px solid rgb(7 24 34 / 0.12); } .ds-row-key { margin: 0; font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #3A5060; } .ds-row-val { margin: 0; font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 96px; line-height: 0.86; letter-spacing: -0.045em; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }"
+    },
+    {
+      "name": "Section Label",
+      "kind": "chip",
+      "refersTo": "label",
+      "description": "The eyebrow. One per section, above the heading, never as the heading. The short rule that used to lead into it was removed along with the two Book now dashes.",
+      "html": "<p class=\"ds-eyebrow\">What we build</p>",
+      "css": ".ds-eyebrow { margin: 0; font-family: Geist, system-ui, sans-serif; font-size: 12px; font-weight: 500; line-height: 1.2; letter-spacing: 0.16em; text-transform: uppercase; color: #3A5060; }"
+    },
+    {
+      "name": "Frost Bloom Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "A hairline card whose top-left corner grows an ice crystal on arrival or hover, drawn with two conic gradients so it costs no markup and no image.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Delivered anywhere in Nigeria</h3><p class=\"ds-card-copy\">With every solar component brand new and an operational manual for running it.</p></div>",
+      "css": ".ds-card { position: relative; overflow: hidden; max-width: 340px; border: 1px solid rgb(7 24 34 / 0.12); border-radius: 20px; padding: 33px; font-family: Geist, system-ui, sans-serif; color: #071822; } .ds-card::before { content: ''; position: absolute; top: -1px; left: -1px; width: 46%; aspect-ratio: 1; pointer-events: none; opacity: 0; background: conic-gradient(from 210deg at 0% 0%, rgb(43 168 206 / 0.5), transparent 22%), conic-gradient(from 150deg at 0% 0%, rgb(95 211 238 / 0.28), transparent 14%); mask-image: radial-gradient(120% 120% at 0% 0%, #000 0%, transparent 72%); transition: opacity 900ms cubic-bezier(0.22,0.61,0.16,1); } .ds-card:hover::before { opacity: 1; } .ds-card-title { margin: 0 0 12px; font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 26px; font-weight: 400; line-height: 1.14; letter-spacing: -0.012em; } .ds-card-copy { margin: 0; font-size: 15px; line-height: 1.55; color: #3A5060; }"
+    },
+    {
+      "name": "Mobile Action Bar",
+      "kind": "nav",
+      "refersTo": "button-primary",
+      "description": "Phones only. Fixed to the bottom, tucks away over the footer, over the hero's own CTA row, and while the menu is open. Declares the dark-bed tokens itself: it has no theme ancestor, so var(--text) resolved to the body's dark ink and the Call label measured 1.00:1.",
+      "html": "<div class=\"ds-bar\"><a class=\"ds-bar-main\" href=\"#\">Book on WhatsApp</a><a class=\"ds-bar-call\" href=\"#\">Call</a></div>",
+      "css": ".ds-bar { display: flex; gap: 10px; width: 375px; padding: 12px 14px calc(12px + env(safe-area-inset-bottom)); background-color: rgb(4 16 23 / 0.72); border-top: 1px solid rgb(242 247 250 / 0.14); backdrop-filter: blur(18px) saturate(1.5) brightness(0.46); -webkit-backdrop-filter: blur(18px) saturate(1.5) brightness(0.46); font-family: Geist, system-ui, sans-serif; } .ds-bar-main, .ds-bar-call { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; border-radius: 9999px; font-size: 15px; font-weight: 600; text-decoration: none; transition: background-color 180ms cubic-bezier(0.22,0.61,0.16,1); } .ds-bar-main { flex: 1; background-color: rgb(242 247 250 / 0.92); color: #071822; } .ds-bar-main:hover { background-color: #F2F7FA; } .ds-bar-call { flex: none; padding: 0 20px; color: #F2F7FA; border: 1px solid rgb(242 247 250 / 0.4); } .ds-bar-call:hover { background-color: rgb(242 247 250 / 0.14); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Ice Core",
+    "overview": "The site is a vertical section cut through ice. Five section beds run from frost (#F2F7FA) at the surface down through sheet, glacier, deep and abyss (#041017) at the floor, and scrolling the page is descending through those strata. A section declares which depth it is; everything inside it reads its own text color, hairline and accent from that declaration, so no component ever needs to know whether it is sitting on light or dark. That single mechanism is what lets the page change temperature five times without a single component learning a light and a dark variant.\n\nThe register is industrial editorial, not consumer soft. Type is set in Archivo at four distinct tiers with negative tracking, structure is carried by 1px hairline rules rather than by boxes, and figures get their own scale because a number is the one piece of content that can carry a section on its own. There is exactly one fashionable material here, glass, and it earns its place because ice and glass are the same physical problem: something clear that bends what is behind it.\n\nEverything dimensional descends from one proportional unit. --u: clamp(12px, 0.96vw, 18px) is the site's only measure of length, and gutters, page margins, section rhythm, radii, shadow offsets and animation distances are all calc() off it. The result behaves like a drawing that scales rather than a layout with breakpoint variants: change the unit and the entire composition breathes together.",
+    "keyCharacteristics": [
+      "One proportional unit (--u) governs every dimension; type sits on its own clamps so text size is never purely a function of window width.",
+      "Five tonal beds, one component set. Depth is declared by the section, inherited by everything inside it.",
+      "Hairlines instead of containers. Structure comes from 1px rules and negative space.",
+      "Real refraction, sparingly. Four surfaces get backdrop-filter; nothing else does.",
+      "Monochromatic cool by instruction, with exactly one warm accent used exactly once.",
+      "Every glass value is a contrast measurement, not a taste choice."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Altitude Rule",
+        "body": "Marine and Chill are the same accent at two depths, never two colors. A section uses whichever its bed declares and never reaches across for the other.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Warm Thing Rule",
+        "body": "Ember appears once in the entire site, on the payment caution. Its rarity is the entire mechanism: a customer scanning a cool page stops at the one warm thing on it. Nothing decorative may ever use it, and a second use destroys the first.",
+        "section": "colors"
+      },
+      {
+        "name": "The Interaction-Is-Not-Emphasis Rule",
+        "body": "Cyan means something responded to a pointer. Marine and Chill mean something matters. Swapping them makes hover states look like headlines and headlines look like hover states.",
+        "section": "colors"
+      },
+      {
+        "name": "The Own-Bed Rule",
+        "body": "Any surface that is not inside a .theme-* section must declare the bed tokens itself. --text, --text-muted, --rule, --accent, --btn-fill and --btn-ink only exist inside a bed, and outside one they resolve to nothing, so a component reading them silently falls back to the inherited body ink, which is dark. This has already cost two real defects: the focus ring, invisible on two thirds of the page, and the mobile action bar's Call label at 1.00:1 against its own backdrop. Fixed chrome, portals, and anything position: fixed are the cases that bite.",
+        "section": "colors"
+      },
+      {
+        "name": "The Four Tiers Rule",
+        "body": "An audit of the finished page found every single h2 rendering at exactly 52px, and that uniformity is what makes a site read as templated no matter how good the individual parts are. Display, headline, title and subtitle exist so that something can be more important than something else. Never add a fifth tier; never collapse to one.",
+        "section": "typography"
+      },
+      {
+        "name": "The Negative Tracking Rule",
+        "body": "Tracking tightens as size grows: -0.012em at 30px, -0.018em at 52px, -0.035em at 118px, -0.045em on figures. At display sizes default tracking reads as loose, and negative tracking is most of what separates display type from big body type.",
+        "section": "typography"
+      },
+      {
+        "name": "The Eyebrow Is Not A Heading Rule",
+        "body": "The uppercase 0.16em label sits above a heading and labels it. It never replaces one, and it never appears twice in a section.",
+        "section": "typography"
+      },
+      {
+        "name": "The Unit Rule",
+        "body": "Never write a raw pixel dimension. If a value is not a multiple of --u, it is either type (which has its own clamps), a hairline (always exactly 1px), or a mistake.",
+        "section": "layout"
+      },
+      {
+        "name": "The Three Queries Rule",
+        "body": "A new breakpoint is a last resort. Re-proportioning the unit or changing a grid's column count inside an existing band is almost always the real fix.",
+        "section": "layout"
+      },
+      {
+        "name": "The Edge-Light Rule",
+        "body": "A raised surface is separated by a bright rim, not by a dark shadow. If a new component needs to lift, give it a 1px highlight along its top edge before reaching for box-shadow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Two Casters Rule",
+        "body": "Only glass and the hanging photograph cast. A card, a tile, a row or a section that acquires a drop shadow has broken the system.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No-Box Rule",
+        "body": "Reach for a hairline before a bordered container. The page has almost no boxes in it, and adding one costs more than the structure it buys.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Nothing-Clips Rule",
+        "body": "The hanging photograph breaks out of its tile. Any overflow: hidden added to a product tile or an ancestor of one silently destroys the site's signature move.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Four Surfaces Rule",
+        "body": "backdrop-filter goes on the header, the menu panel, the buttons and the phone stamp. Nothing else. It is one of the most expensive things a browser can be asked to do and this audience is on mid-range Android phones.",
+        "section": "components"
+      },
+      {
+        "name": "The Brightness-Not-Opacity Rule",
+        "body": "When glass fails contrast, lower brightness(). Never raise the tint. Raising the tint is how glass becomes a dark panel with a blur on it.",
+        "section": "components"
+      },
+      {
+        "name": "The Declare-It-Twice Rule",
+        "body": "Every refracted surface writes backdrop-filter twice: the filter-function version first, the url(#liquid-glass) version second. Deleting the first line breaks Safari and Firefox silently.",
+        "section": "components"
+      },
+      {
+        "name": "The Thickness-By-Size Rule",
+        "body": "A material the same thickness everywhere reads as a filter applied to things rather than as glass. Three blur tiers, taken by area: --glass-blur-chip 10px for the phone stamp, --glass-blur-chrome 20px for the header and phone action bar, --glass-blur-sheet 30px for the menu panel. Corollary: one surface, one thickness. The header blurred 28px over light and 12px over dark, which is the same strip changing thickness depending on what was behind it."
+      },
+      {
+        "name": "The Scroll-Edge Rule",
+        "body": "Fixed chrome separates itself from content with a short gradient below it, never a 1px border. A rule reads as a boundary between two regions; the header is a floating layer with the page running under it. Heavier over a photograph than over a flat bed: 1.3u at 18% black over the hero against 0.9u at 6% over frost."
+      },
+      {
+        "name": "The Opaque-Not-Frostier Rule",
+        "body": "Under prefers-reduced-transparency: reduce, glass goes fully opaque and the filter comes off. Not frostier - opaque. Nothing in that fallback can fail contrast: the glass guarantees a backdrop at or below 0.164 luminance (frost text at 4.55:1) and opaque the same text measures 16.74:1 on deep and 17.83:1 on abyss. Under prefers-contrast: more the same surfaces go opaque and every low-alpha rim becomes a real 70% border."
+      }
+    ],
+    "dos": [
+      "Do express every dimension as a multiple of --u. A raw pixel value is either type, a 1px hairline, or a bug.",
+      "Do let the section bed decide color. Write var(--text), var(--rule), var(--accent), var(--btn-fill) — never a raw channel name in a component. Outside a bed, declare the tokens on the element rather than hoping they resolve.",
+      "Do pick a heading tier deliberately. If a new section's heading is the same size as every other heading, the tier was not chosen.",
+      "Do put the phone number on every product picture, and a \"Book now\" action under it. This is a client requirement, not a design preference.",
+      "Do state a specification where you are tempted to write an adjective. Type, power, cycle, capacity.",
+      "Do leave a figure absent when it is unknown. An empty frame or a missing number is honest; an invented one is a liability.",
+      "Do derive contrast before choosing a glass value, and record the measurement in a comment next to it. Every existing glass number has one."
+    ],
+    "donts": [
+      "Don't use stock photography of machines that are not Koolink's. The deliberately empty product frame stays until real photographs arrive.",
+      "Don't add a fifth type tier or a fourth breakpoint. Both were reduced on purpose.",
+      "Don't write a literal border-radius or a literal white. Seven radius tokens and --glass-spec exist for exactly those two values; a literal is how the next six appear.",
+      "Don't put overflow: hidden on a product tile or any ancestor of one; it destroys the hanging photograph.",
+      "Don't give a card, row or section a drop shadow. Only glass and the hanging photograph cast.",
+      "Don't extend backdrop-filter to a fifth surface. It is a performance budget, not a style.",
+      "Don't introduce a new hue. The palette is monochromatic cool by client instruction; hierarchy comes from inversion and depth, not from color.",
+      "Don't reuse ember. One warm thing, on the payment caution, once.",
+      "Don't fake depth with harsh shadows or multi-stop gradients. Both were ruled out explicitly in the button brief; 1px edges and one restrained sheen are the whole vocabulary.",
+      "Don't put a price anywhere, in any form. A test fails the build if a naira figure appears under src/."
+    ]
+  }
+}

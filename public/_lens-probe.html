@@ -1,0 +1,90 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>lens probe 3</title>
+<style>
+  body{margin:0;background:#333;color:#fff;font:13px/1.4 monospace;padding:8px}
+  .row{display:flex;gap:12px;margin-bottom:10px}
+  .src{width:420px;height:240px;background:#000;position:relative;overflow:hidden}
+  .src::before{content:'';position:absolute;inset:0;
+    background-image:repeating-linear-gradient(0deg,#fff 0 3px,#000 3px 24px),
+      repeating-linear-gradient(90deg,#fff 0 3px,#000 3px 24px);
+    background-blend-mode:screen}
+  .src span{position:absolute;left:120px;top:100px;color:#fff;background:#000;font:700 34px monospace;padding:2px 6px;z-index:2}
+  b{display:block;color:#9f9}
+</style></head><body>
+
+<svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden"><defs>
+  <!-- shipped: percentage rects in a 0x0 svg, 128 in the off-channel -->
+  <linearGradient id="sx" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="rgb(255,128,0)"/><stop offset="0.132" stop-color="rgb(128,128,0)"/>
+    <stop offset="0.868" stop-color="rgb(128,128,0)"/><stop offset="1" stop-color="rgb(1,128,0)"/>
+  </linearGradient>
+  <linearGradient id="sy" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="rgb(128,255,0)"/><stop offset="0.132" stop-color="rgb(128,128,0)"/>
+    <stop offset="0.868" stop-color="rgb(128,128,0)"/><stop offset="1" stop-color="rgb(128,1,0)"/>
+  </linearGradient>
+  <rect id="sxr" width="100%" height="100%" fill="url(#sx)"/>
+  <rect id="syr" width="100%" height="100%" fill="url(#sy)"/>
+
+  <filter id="shipped" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feImage href="#sxr" result="rampX" preserveAspectRatio="none"/>
+    <feImage href="#syr" result="rampY" preserveAspectRatio="none"/>
+    <feBlend in="rampX" in2="rampY" mode="screen" result="lens"/>
+    <feDisplacementMap in="SourceGraphic" in2="lens" scale="17.48" xChannelSelector="R" yChannelSelector="G" result="dispR"/>
+    <feDisplacementMap in="SourceGraphic" in2="lens" scale="21.08" xChannelSelector="R" yChannelSelector="G" result="dispG"/>
+    <feDisplacementMap in="SourceGraphic" in2="lens" scale="24.68" xChannelSelector="R" yChannelSelector="G" result="dispB"/>
+    <feColorMatrix in="dispR" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="onlyR"/>
+    <feColorMatrix in="dispG" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="onlyG"/>
+    <feColorMatrix in="dispB" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="onlyB"/>
+    <feBlend in="onlyR" in2="onlyG" mode="screen" result="rg"/>
+    <feBlend in="rg" in2="onlyB" mode="screen" result="rgb"/>
+    <feComposite in="rgb" in2="dispG" operator="in"/>
+  </filter>
+
+  <!-- three scales, neutral map, to isolate the subregion question -->
+  <filter id="threescale" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feFlood flood-color="rgb(128,128,0)" flood-opacity="1" result="lens"/>
+    <feDisplacementMap in="SourceGraphic" in2="lens" scale="17.48" xChannelSelector="R" yChannelSelector="G" result="dispR"/>
+    <feDisplacementMap in="SourceGraphic" in2="lens" scale="21.08" xChannelSelector="R" yChannelSelector="G" result="dispG"/>
+    <feDisplacementMap in="SourceGraphic" in2="lens" scale="24.68" xChannelSelector="R" yChannelSelector="G" result="dispB"/>
+    <feColorMatrix in="dispR" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="onlyR"/>
+    <feColorMatrix in="dispG" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="onlyG"/>
+    <feColorMatrix in="dispB" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="onlyB"/>
+    <feBlend in="onlyR" in2="onlyG" mode="screen" result="rg"/>
+    <feBlend in="rg" in2="onlyB" mode="screen" result="rgb"/>
+    <feComposite in="rgb" in2="dispG" operator="in"/>
+  </filter>
+
+  <!-- fixed: data-URI ramps, 0 in the off-channel, one shared scale -->
+  <filter id="fixed" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feImage id="fx" result="rampX" preserveAspectRatio="none"/>
+    <feImage id="fy" result="rampY" preserveAspectRatio="none"/>
+    <feBlend in="rampX" in2="rampY" mode="screen" result="lens"/>
+    <feDisplacementMap in="SourceGraphic" in2="lens" scale="26" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
+
+<div class="row">
+  <div><b>no filter</b><div class="src"><span>Ag</span></div></div>
+  <div><b>shipped filter (empty map, 3 scales)</b><div class="src" style="filter:url(#shipped)"><span>Ag</span></div></div>
+</div>
+<div class="row">
+  <div><b>3 scales, neutral feFlood map</b><div class="src" style="filter:url(#threescale)"><span>Ag</span></div></div>
+  <div><b>fixed: data-URI ramps, one scale 26</b><div class="src" style="filter:url(#fixed)"><span>Ag</span></div></div>
+</div>
+<pre id="out"></pre>
+<script>
+const stops = [[0,255],[0.033,195],[0.066,156],[0.099,134],[0.132,128],
+               [0.868,128],[0.901,122],[0.934,100],[0.967,61],[1,1]];
+function ramp(axis){
+  const s = stops.map(([o,v]) => `<stop offset="${o}" stop-color="rgb(${axis==='x'?v:0},${axis==='x'?0:v},0)"/>`).join('');
+  const dir = axis==='x' ? 'x1="0" y1="0" x2="1" y2="0"' : 'x1="0" y1="0" x2="0" y2="1"';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">`+
+    `<defs><linearGradient id="g" ${dir}>${s}</linearGradient></defs>`+
+    `<rect width="100" height="100" fill="url(#g)"/></svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+document.getElementById('fx').setAttribute('href', ramp('x'));
+document.getElementById('fy').setAttribute('href', ramp('y'));
+document.getElementById('out').textContent = 'ok';
+</script>
+</body></html>

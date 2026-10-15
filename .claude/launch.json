@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "iceblock",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3500
+    },
+    {
+      "name": "iceblock-built",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "start", "-p", "3600"],
+      "port": 3600
+    }
+  ]
+}

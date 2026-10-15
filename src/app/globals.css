@@ -1,0 +1,3272 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Tokens.
+
+   Colours are raw channels so Tailwind's `/ <alpha-value>` works.
+
+   Everything dimensional is a multiple of one proportional unit, `--u`, which is
+   how the reference site holds together: their whole layout is authored in `em`
+   against `body { font-size: 0.96vw }`, so spacing, radii and every animation
+   distance scale with the viewport as one system. That is why their numbers read
+   as `height: 250em` and `x: -46em` — those are proportions, not pixels.
+
+   Ours is the same idea with the accessibility hole closed. A bare `0.96vw` means
+   a 1024px window renders body text at 9.8px and a browser font-size preference
+   is ignored entirely; clamping the unit keeps the proportional behaviour and puts
+   a floor and a ceiling on it. Type sits on its own clamps rather than on `--u`,
+   so text size never becomes a function of window width alone.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --btn-fill: 242 247 250;
+  --btn-ink: 7 24 34;
+  --frost: 242 247 250;
+  --sheet: 227 236 242;
+  --glacier: 195 216 230;
+  --deep: 7 24 34;
+  --abyss: 4 16 23;
+  --steel: 58 80 96;
+  --haze: 159 188 204;
+  --cyan: 43 168 206;
+  --chill: 95 211 238;
+  --marine: 20 101 121;
+  --ember: 178 58 8;
+
+  /* 0.96vw, floored and capped: 13.8px at 1440, 12px below 1250, 18px past 1875. */
+  --u: clamp(12px, 0.96vw, 18px);
+
+  --gutter: calc(var(--u) * 1.88);
+  --margin: calc(var(--u) * 4.6);
+  --v-space: calc(var(--u) * 10.7);
+  --v-space-sm: calc(var(--u) * 5.5);
+  --header-height: calc(var(--u) * 6);
+  --shell: calc(var(--u) * 85);
+
+  /* Six radii, named, because six unnamed ones is how a form language drifts. `tile`
+     is the near-square corner on the product tiles, `stamp` the corner square inside
+     one, `focus` the ring's own rounding, and `panel` the menu sheet, which is more
+     generous than a card on purpose: it is the largest surface on the page. */
+  --radius-focus: 3px;
+  --radius-stamp: calc(var(--u) * 0.13);
+  --radius-tile: calc(var(--u) * 0.4);
+  --radius-base: calc(var(--u) * 0.58);
+  --radius-card: calc(var(--u) * 1.45);
+  --radius-panel: calc(var(--u) * 1.8);
+  --radius-pill: 9999px;
+
+  /* Three heading tiers, not one. An audit of the finished page found every single
+     h2 rendering at exactly 52px, which is what makes a site read as templated no
+     matter how good the parts are: nothing announces itself as more important than
+     anything else. Display is for the two or three moments that carry the page, h2 for
+     ordinary sections, and h2-quiet for the ones whose job is to be read rather than
+     seen. */
+  --step-display: clamp(48px, 6.6vw + 23.25px, 118px);
+  --step-h1: clamp(34px, 4.1315vw + 18.507px, 78px);
+  --step-h2: clamp(27px, 2.3474vw + 18.1972px, 52px);
+  --step-h3: clamp(20px, 0.939vw + 16.4789px, 30px);
+  --step-lead: clamp(17px, 0.4695vw + 15.2394px, 22px);
+  --step-body: clamp(16px, 0.1878vw + 15.2958px, 18px);
+  --step-small: clamp(14px, 0.0939vw + 13.6479px, 15px);
+  --step-eyebrow: clamp(11px, 0.1878vw + 10.2958px, 13px);
+
+  /* Slow out, no overshoot — the curve of something settling rather than
+     bouncing. Ice does not bounce. */
+  --ease-thaw: cubic-bezier(0.22, 0.61, 0.16, 1);
+  /* Four ease-outs at four strengths, taken from the reference site's GSAP set: `outCirc` on
+     its long reveals, `outQuart` on its mid ones, `power2.out` on the character stagger. Same
+     feel, no library.
+
+     Two of the four are used once each and that is on purpose, not leftovers. `circ` is the
+     softest landing here and belongs to the menu sheet's arrival, because a surface that size
+     wants a longer settle than anything else on the page. `cubic` is the gentlest and belongs to
+     the per-character heading reveal, where 300ms compounds across every character and a
+     stronger curve reads as snapping. Reviewed against the improve-animations catalog's
+     consolidation rule on 2026-09-04 and kept. */
+  --ease-out-circ: cubic-bezier(0.075, 0.82, 0.165, 1);
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+
+  /* One duration scale, and it exists because an audit of this file found twelve literal
+     durations across the motion layer against four tokens: 120, 140, 160, 200, 240, 260, 280,
+     300, 380, 400, 420, 640. Some of those were decisions and three were drift — a 260 and a
+     280 sitting beside a 240 doing the same job in the same component. Each band below is one
+     intent, and anything needing a duration picks a band rather than a number.
+
+       press   the transform under a finger. Deliberately faster than a colour change: this is
+               the frame the user is watching for confirmation that the tap landed.
+       fast    colour, opacity, a small hover. Nobody is waiting on these.
+       ui      a state changing: a pill opening, a link settling, a row of links expanding.
+       fade    a plain opacity fade with no travel to it.
+       exit    something leaving. Shorter than its own entrance, always — and after an audit
+               against the improve-animations catalog on 2026-09-04 that shortness is the only
+               thing distinguishing an exit. The catalog puts entrances and exits both on
+               ease-out and calls ease-in on UI a defect; the duration asymmetry (380 against
+               480) already carries the intent, so there is no exit curve.
+       md      the general medium: header ink, a tile lifting, a scrim arriving.
+       enter   something arriving, which may take longer than it took to leave.
+       slow    a section entrance. */
+  --speed-press: 160ms;
+  --speed-fast: 180ms;
+  --speed-ui: 240ms;
+  --speed-fade: 300ms;
+  --speed-exit: 380ms;
+  --speed-md: 420ms;
+  --speed-enter: 480ms;
+  --speed-slow: 900ms;
+
+  /* The stagger between siblings in a reveal. 55ms rather than the 32.5 this was: at 32.5 a
+     six-card grid finishes 195ms after it starts, which reads as everything arriving at once
+     and gives the eye no reading order. At 55 the last card is 275ms behind the first — a
+     sequence you can follow. Phones drop back to 32.5 in the narrow band below, because there
+     the grid is one column and a stagger that reads as choreography on a desktop reads as
+     content being withheld on a phone. */
+  --delay: 55ms;
+  /* A vertical list is not a row. 55ms across three cards side by side reads as a reading
+     order; 55ms down a column of seven menu links means the last one lands 450ms after the
+     first, which is a wait rather than choreography. The menu's links and its foot stagger on
+     this instead, and phones fall back to it for grids too, because a phone stacks them. */
+  --delay-list: 32.5ms;
+  /* Per character, not per element — an order of magnitude below the sibling stagger because
+     a word has far more characters than a section has children. */
+  --split-step: 12ms;
+}
+
+/* ---------------------------------------------------------------------------
+   Section themes. A section declares which bed it is and everything inside it
+   reads `--text`, `--text-muted`, `--rule` and `--accent` from that, so no
+   component ever needs to know whether it is sitting on light or dark.
+   --------------------------------------------------------------------------- */
+
+.theme-frost {
+  --btn-fill: var(--deep);
+  --btn-ink: var(--frost);
+  --surface: rgb(var(--frost));
+  --text: rgb(var(--deep));
+  --text-muted: rgb(var(--steel));
+  --rule: rgb(var(--deep) / 0.12);
+  --accent: rgb(var(--marine));
+}
+
+.theme-sheet {
+  --btn-fill: var(--deep);
+  --btn-ink: var(--frost);
+  --surface: rgb(var(--sheet));
+  --text: rgb(var(--deep));
+  --text-muted: rgb(var(--steel));
+  --rule: rgb(var(--deep) / 0.14);
+  --accent: rgb(var(--marine));
+}
+
+.theme-glacier {
+  --btn-fill: var(--deep);
+  --btn-ink: var(--frost);
+  --surface: rgb(var(--glacier));
+  --text: rgb(var(--deep));
+  --text-muted: rgb(var(--steel));
+  --rule: rgb(var(--deep) / 0.18);
+  --accent: rgb(var(--marine));
+}
+
+.theme-deep {
+  --btn-fill: var(--frost);
+  --btn-ink: var(--deep);
+  --surface: rgb(var(--deep));
+  --text: rgb(var(--frost));
+  --text-muted: rgb(var(--haze));
+  --rule: rgb(var(--frost) / 0.16);
+  --accent: rgb(var(--chill));
+}
+
+.theme-abyss {
+  --btn-fill: var(--frost);
+  --btn-ink: var(--deep);
+  --surface: rgb(var(--abyss));
+  --text: rgb(var(--frost));
+  --text-muted: rgb(var(--haze));
+  --rule: rgb(var(--frost) / 0.14);
+  --accent: rgb(var(--chill));
+}
+
+[class*='theme-'] {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+/* ---------------------------------------------------------------------------
+   Base and typography.
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: rgb(var(--frost));
+    color: rgb(var(--deep));
+    /* Geist ships its own variable name from the `geist` package. */
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    font-size: var(--step-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: rgb(var(--cyan) / 0.35);
+  }
+
+  /* The ring reads the bed it lands on, the same way text and rules do. Cyan was the
+     obvious choice and the wrong one: #2BA8CE measures 2.56:1 on frost, 2.31:1 on sheet
+     and 1.88:1 on glacier, all under the 3:1 that a focus indicator has to clear, so a
+     keyboard user lost the ring across two thirds of the page. `--accent` is already
+     marine on the light beds (4.51–6.14:1) and chill on the dark ones (10.35–11.03:1).
+     The fallback covers the header, which sits outside any themed section. */
+  :focus-visible {
+    outline: 2px solid var(--accent, rgb(var(--marine)));
+    outline-offset: 3px;
+    border-radius: var(--radius-focus);
+  }
+
+  /* A focused element on a dark bed gets the ring plus a hairline of the bed colour
+     between it and the outline, so the ring never merges into a light control. */
+  .theme-deep :focus-visible,
+  .theme-abyss :focus-visible {
+    box-shadow: 0 0 0 3px rgb(var(--abyss) / 0.55);
+  }
+}
+
+/* Links in prose keep their underline — it is how a link is recognised — but not the
+   browser's default offset, which sits on the baseline and cuts the descenders of a
+   face with as much overshoot as Geist. */
+.shell p a:not(.button),
+.shell li a:not(.button) {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: currentColor;
+  transition: text-decoration-color var(--speed-fast) var(--ease-thaw);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shell p a:not(.button):hover,
+  .shell li a:not(.button):hover {
+    text-decoration-color: var(--accent);
+  }
+}
+
+/* Any anchored section lands clear of the fixed header, whether it was reached from
+   the menu, from a link somebody shared, or by typing the URL. */
+section[id],
+[id].scroll-mt-header {
+  scroll-margin-top: calc(var(--header-height) + var(--u));
+}
+
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+
+.h1 {
+  font-family: var(--font-display), 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--step-h1);
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+.h-display {
+  font-family: var(--font-display), 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--step-display);
+  line-height: 0.94;
+  /* Tighter than the h2 on purpose: at this size default tracking reads as loose, and
+     negative tracking is most of what separates display type from big body type. */
+  letter-spacing: -0.035em;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+/* Quiet sections. Same family, dropped a tier, so the page has somewhere to breathe
+   between the loud moments. */
+.h2-quiet {
+  font-family: var(--font-display), 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--step-h3);
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+.h2 {
+  font-family: var(--font-display), 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--step-h2);
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+.h3 {
+  font-family: var(--font-display), 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--step-h3);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.lead {
+  font-size: var(--step-lead);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.body-small {
+  font-size: var(--step-small);
+  line-height: 1.55;
+}
+
+/* Small caps with real tracking, used once per section as the label above a
+   heading. Never as a heading itself. */
+.eyebrow {
+  font-size: var(--step-eyebrow);
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.numeral {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Section labels. The hairline that used to run in front of the words is gone, along
+   with the two dashes beside the Book now actions — same 1px `--rule` line, same
+   decorative job, removed everywhere on the client's instruction. What is left is the
+   label itself, which was always the part carrying the information.
+   --------------------------------------------------------------------------- */
+
+.section-label {
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   The lockup: the wordmark on its own. The K mark that used to sit to its left is gone —
+   set immediately before a word starting with the same letter, the header read "K Koolink".
+   Sized in em so it scales with whatever font-size it is dropped into — header, menu,
+   footer — instead of needing a variant for each. No `gap` and no `flex: none` child left
+   to space, but `inline-flex` with `line-height: 1` stays: it makes the wrapper hug the
+   letters instead of carrying an inline box's descender space into the header grid.
+   --------------------------------------------------------------------------- */
+
+.logo-lockup {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-word {
+  font-family: var(--font-display), 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+  /* A five-letter name only reads as a logotype when the letters are pulled in. */
+  letter-spacing: -0.025em;
+}
+
+/* The initial, drawn rather than set. See `scripts/draw_wordmark_k.py` for the geometry and
+ * `KoolinkLogo.tsx` for why it is a drawing at all.
+ *
+ * 0.714em, which is the cap height of the letters after it and not a round number by accident.
+ * Archivo's cap height measures 0.70em — read off the live element with a canvas rather than
+ * taken from a spec sheet — and the drawing's cap is 100 of its 102-unit viewBox, so 0.70 x
+ * 102/100 puts its cap line and the wordmark's on the same line. Change the display face and
+ * this number has to be re-measured.
+ *
+ * It was a 1.55em versal before and read as too big beside the rest of the word, which is a
+ * judgement the drawing then had to be re-cut for: matching cap height puts the initial at 14px
+ * to 21px across `--step-h3`, far below the ~30px the fine-contrast version needed.
+ *
+ * The mark sits on the baseline for free because the drawing's baseline is the bottom edge of
+ * its viewBox: `vertical-align: baseline` on a replaced inline element aligns its bottom margin
+ * edge with the text baseline, so there is no magic offset to keep in sync with the artwork.
+ *
+ * No `display` on the `.logo-k` wrapper. It has to stay a plain inline box: as an inline-block
+ * it forms its own line box, takes a baseline of its own from the mark inside it, and then that
+ * baseline is aligned against the outer one — the two struts' descents compound and the
+ * wordmark's box grew from 43px to 62px, dragging `oolink` below the mark. */
+.logo-k-mark {
+  display: inline-block;
+  height: 0.714em;
+  width: auto;
+  vertical-align: baseline;
+  /* The drawing is 0.93 as wide as it is tall and carries its own side bearings in the
+     viewBox, so the only optical correction it needs is a hair of air before the `o`. */
+  margin-right: 0.03em;
+}
+
+/* Kept in the DOM, taken off the screen. The drawing is `aria-hidden`, so without this the
+   wordmark would read as "oolink" — and an `aria-label` on the header link would not fix the
+   footer or the menu sheet, neither of which has one. `clip-path` rather than `display: none`
+   because a hidden element is not in the accessibility tree at all. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Figures. A number is the one piece of content that can carry a whole section on
+   its own, so it gets its own scale rather than borrowing a heading's.
+   --------------------------------------------------------------------------- */
+
+.figure-value {
+  font-family: var(--font-display), 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--step-display);
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  font-weight: 400;
+}
+
+/* One rule-based row idiom, shared by the figures and the machine specs. Two sections
+   using the same device is consistency; two sections each inventing their own box is
+   what made the page read as assembled. */
+.spec-row,
+.figure-row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--gutter);
+  align-items: start;
+  padding-block: calc(var(--u) * 2.2);
+  border-top: 1px solid var(--rule);
+}
+
+.figure-row:last-child,
+.spec-group > .spec-row:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Narrower name column than the figures get: an option name is two or three words,
+   a numeral is one glyph doing the work of a headline. */
+.spec-row {
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  padding-block: calc(var(--u) * 1.5);
+  align-items: baseline;
+}
+
+/* One child since the numeral and the sub-label were removed, so the wrap and the column gap
+   that used to separate them are gone with them. The padding still does real work: it is what
+   separates the group heading from the first row under it. */
+.spec-head {
+  padding-bottom: calc(var(--u) * 1.1);
+}
+
+@media (max-width: 639px) {
+  .spec-row,
+  .figure-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: calc(var(--u) * 0.5);
+    padding-block: calc(var(--u) * 1.3);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Controls.
+   --------------------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  min-height: 52px;
+  padding: 0 1.5rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--step-small);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: center;
+  border: 1px solid transparent;
+  /* No `transition` here on purpose. This selector is declared a second time in the
+     glass block below, at the same specificity, so source order decides and anything
+     written here is dead. A 180ms transition did live here and was silently overridden
+     for as long as both blocks existed. */
+}
+
+/* ---------------------------------------------------------------------------
+   Buttons, as glass.
+
+   Monochromatic by instruction, which removes the obvious tool for telling a primary
+   action from a secondary one. So the primary inverts its bed instead of changing
+   hue: a light frosted pill on a dark section, a dark one on a light section. Set
+   against a secondary that is barely there, the hierarchy reads at a glance and the
+   page keeps one palette.
+
+   Everything here is 1px edges, one restrained sheen and one soft shadow — the brief
+   ruled out harsh shadows and excessive gradients, and both would have been the easy
+   way to fake depth.
+   --------------------------------------------------------------------------- */
+
+.button {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(14px) saturate(var(--glass-sat)) brightness(0.94);
+  -webkit-backdrop-filter: blur(14px) saturate(var(--glass-sat)) brightness(0.94);
+  backdrop-filter: url(#liquid-glass) blur(14px) saturate(var(--glass-sat)) brightness(0.94);
+  /* Transform on its own, and faster than everything else. A press has to answer inside
+     160ms to feel like the interface heard it; colour and shadow can take the slower
+     curve because nobody is waiting on those. The whole set used to run at 420ms, which
+     is most of half a second between the finger landing and the pill reacting. */
+  transition:
+    transform var(--speed-press) var(--ease-out-quart),
+    background-color var(--speed-fast) var(--ease-out-quart),
+    border-color var(--speed-fast) var(--ease-out-quart),
+    color var(--speed-fast) var(--ease-out-quart),
+    box-shadow var(--speed-fast) var(--ease-out-quart);
+}
+
+/* The specular sweep: one hairline of light across the top of the pill, clipped to
+   it. A gradient this quiet is the difference between a glass edge and a shiny plastic
+   one.
+
+   30%, not half, and that is a contrast constraint rather than a taste one. The label
+   is centred in a 52px pill, so it occupies roughly 35–65% of the height. At 52% the
+   sweep crossed it and dropped frost-on-secondary from 6.49:1 to 3.29:1 — under AA
+   for 15px text. Kept above the cap-height, the highlight costs the label nothing.
+
+   The peak went up and the reach came down together, and that pairing is the whole idea
+   behind every specular on this page: 0.28 at the very top edge where 0.16 used to be, but
+   ninety percent of it spent inside the first eighth of the pill instead of ramping steadily
+   across the whole 30% band. Brighter where a bevel catches light, gone before it reaches
+   anything anybody has to read. */
+.button::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 30%;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--glass-spec) / 0.28),
+    rgb(var(--glass-spec) / 0.04) 44%,
+    transparent
+  );
+}
+
+.button.primary {
+  /* 0.9, not 1: enough of the bed comes through at the edges for it to read as glass
+     rather than paint, and the label still measures 13.7:1 on a dark section. */
+  background-color: rgb(var(--btn-fill) / 0.9);
+  color: rgb(var(--btn-ink));
+  border-color: rgb(var(--btn-fill) / 0.5);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.55),
+    inset 0 -1px 0 rgb(var(--btn-ink) / 0.14),
+    0 1px 2px rgb(0 0 0 / 0.08),
+    0 calc(var(--u) * 0.55) calc(var(--u) * 1.6) rgb(var(--deep) / 0.22);
+}
+
+/* The lift is a mouse affordance and nothing else, so it is gated. Android latches
+   `:hover` on tap and holds it until something else is tapped, which left a pill sitting
+   1px high after the WhatsApp tab had already opened — and worse, made the press below
+   read backwards: the button was already lifted, so pressing it moved it *down*. */
+@media (hover: hover) and (pointer: fine) {
+  .button.primary:hover {
+    background-color: rgb(var(--btn-fill) / 1);
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 rgb(var(--glass-spec) / 0.72),
+      inset 0 -1px 0 rgb(var(--btn-ink) / 0.16),
+      0 2px 5px rgb(0 0 0 / 0.12),
+      0 calc(var(--u) * 0.85) calc(var(--u) * 2.2) rgb(var(--deep) / 0.28);
+  }
+}
+
+.button.secondary {
+  background-color: rgb(var(--glass-spec) / 0.08);
+  color: var(--text);
+  border-color: rgb(var(--glass-spec) / var(--glass-rim));
+  /* A chamfer rather than an outline. `inset 0 1px 2px` put a 2px-blurred glow along the top
+     and nothing along the bottom, which reads as a soft light source somewhere above; a real
+     bevel catches hard on the side facing the light and dimly on the side away from it, and both
+     edges are one pixel wide with no blur at all. The gap between the two alphas is the effect —
+     0.65 against 0.20 at the site's light setting. */
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / var(--glass-bevel-near)),
+    inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
+    inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
+    0 1px 2px rgb(0 0 0 / 0.04),
+    0 calc(var(--u) * 0.3) calc(var(--u) * 1) rgb(var(--deep) / 0.1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button.secondary:hover {
+    background-color: rgb(var(--glass-spec) / 0.18);
+    border-color: rgb(var(--glass-spec) / 0.45);
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 rgb(var(--glass-spec) / 0.82),
+      inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
+      inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
+      0 2px 6px rgb(0 0 0 / 0.08),
+      0 calc(var(--u) * 0.5) calc(var(--u) * 1.5) rgb(var(--deep) / 0.16);
+  }
+}
+
+/* The press. A real state of its own rather than the cancellation of a hover that touch
+   never had: before this, the only thing `:active` did was undo the lift, so on a phone
+   — which is nearly all of this traffic — the primary conversion button gave no feedback
+   at all. 0.97 because `scale` takes the label and the glass edge with it, so the whole
+   pill compresses rather than the box shrinking around static contents. */
+.button:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* With a pointer the pill is already lifted, so the press has to travel back down
+     through that 1px as well or the scale reads as a twitch. */
+  .button:active {
+    transform: translateY(0) scale(0.97);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The frost bloom. Our own motif, and the one thing here that is not on the
+   reference site: a crystal grows out of a card's top-left corner when the card
+   arrives, drawn with two conic gradients on a pseudo-element so it costs no
+   markup and no image.
+   --------------------------------------------------------------------------- */
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-card);
+  padding: calc(var(--gutter) * 1.25);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 46%;
+  aspect-ratio: 1;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    conic-gradient(from 210deg at 0% 0%, rgb(var(--cyan) / 0.5), transparent 22%),
+    conic-gradient(from 150deg at 0% 0%, rgb(var(--chill) / 0.28), transparent 14%);
+  mask-image: radial-gradient(120% 120% at 0% 0%, #000 0%, transparent 72%);
+  transition: opacity var(--speed-slow) var(--ease-thaw);
+}
+
+/* Split, because only the hover half is a pointer affordance. The scroll half is how
+   every phone sees the bloom at all, and gating that would delete the motif on the
+   device most of the traffic is using. */
+[data-in-view='true'] .card::before {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* 180ms here against the 900ms above, because the bloom has two triggers and one transition.
+     Nine tenths of a second is right for something arriving as you scroll towards it and far too
+     slow for a pointer affordance — the pointer has usually left before it finishes. Scoped to
+     the hover state so the scroll reveal keeps its slow arrival. */
+  .card:hover::before {
+    opacity: 1;
+    transition-duration: var(--speed-fast);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Character-by-character headings. The reference site's `[text-split]` effect,
+   with its numbers: 400ms a character, ease-out cubic (GSAP `power2.out`), 20ms
+   between characters, scrambled order, fired at `top 90%`.
+
+   `visibility` alongside `opacity` because GSAP's `autoAlpha` sets both, and the
+   difference shows: opacity alone leaves the glyph hit-testable and selectable while it
+   is invisible. Only `opacity` is transitioned, though — see the rule below.
+   --------------------------------------------------------------------------- */
+
+.split-text {
+  display: inline;
+}
+
+/* The word is the unit that may not break. Without this, every character is its own
+   break opportunity and the browser happily wraps mid-word. */
+.split-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.split-char {
+  display: inline-block;
+}
+
+/* 300ms a character on a 12ms step, down from 400 on 20. The reference site's numbers
+   were 400/20 and they are right for a heading of five or six words; the hero here is
+   fifty-four characters, which put the last one finishing at 1460ms. That heading is
+   above the fold, it is the largest text on the page, and because the order is scrambled
+   the sentence is not readable until nearly the end — so on a slow connection the reader
+   waits for the page and then waits again for the one line that tells them what this
+   company sells. 12/300 lands the same heading at 940ms and reads as the same effect.
+
+   `visibility` is still declared but no longer transitioned. It is here so an unrevealed
+   glyph is not hit-testable or selectable, which matters most in the state that lasts
+   longest — before the heading has been scrolled to. Transitioning it as well doubled the
+   animated property count on fifty-four elements to buy a staggered selectability that
+   nobody has ever needed. */
+html[data-js='1'] .split-text .split-char {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--speed-fade) var(--ease-out-cubic);
+  transition-delay: calc((var(--i, 0) + var(--split-offset, 0)) * var(--split-step));
+}
+
+html[data-js='1'] .split-text[data-in-view='true'] .split-char {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------------------------------------------------------------------------
+   Entrances. The runtime only ever flips data-in-view; all timing is here.
+
+   Gated behind html[data-js='1'] so that a visitor with no JavaScript — or one
+   whose bundle failed — gets the finished page rather than a blank one. That
+   attribute is set by an inline script in the document head, before paint.
+   --------------------------------------------------------------------------- */
+
+html[data-js='1'] .scroll-entrance > * {
+  opacity: 0;
+  transform: translate3d(0, 50px, 0);
+  transition:
+    opacity var(--speed-slow) var(--ease-thaw),
+    transform var(--speed-slow) var(--ease-thaw);
+  transition-delay: calc(var(--delay) * var(--delay-value, 0));
+}
+
+html[data-js='1'] .scroll-entrance[data-in-view='true'] > * {
+  opacity: 1;
+  transform: none;
+}
+
+html[data-js='1'] .scroll-entrance > *:nth-child(2) {
+  transition-delay: calc(var(--delay) * (var(--delay-value, 0) + 1));
+}
+
+html[data-js='1'] .scroll-entrance > *:nth-child(3) {
+  transition-delay: calc(var(--delay) * (var(--delay-value, 0) + 2));
+}
+
+html[data-js='1'] .scroll-entrance > *:nth-child(4) {
+  transition-delay: calc(var(--delay) * (var(--delay-value, 0) + 3));
+}
+
+html[data-js='1'] .scroll-entrance > *:nth-child(5) {
+  transition-delay: calc(var(--delay) * (var(--delay-value, 0) + 4));
+}
+
+html[data-js='1'] .scroll-entrance > *:nth-child(n + 6) {
+  transition-delay: calc(var(--delay) * (var(--delay-value, 0) + 5));
+}
+
+/* A child that owns a transform of its own cannot also borrow the section's transform for its
+   entrance. One property cannot hold two durations, and the blanket rule above wins on
+   specificity — which is why the product tile's press was measured running at 900ms instead of
+   the 160ms it asks for, and why its hover background was not transitioning at all: the tile's
+   own `transition` was being discarded wholesale, `background-color` included.
+
+   So the tile fades in rather than rising, and keeps its transform for the press. A card that
+   fades while the heading above it rises is still choreography; a press that takes nearly a
+   second is just broken. Anything else added here that owns a `transform` interaction needs the
+   same treatment — the hero buttons and the gallery actions are grandchildren, not `> *`, so
+   they were never affected. */
+html[data-js='1'] .scroll-entrance > .product-tile {
+  transform: none;
+  transition:
+    opacity var(--speed-slow) var(--ease-thaw),
+    transform var(--speed-press) var(--ease-out-quart),
+    background-color var(--speed-md) var(--ease-thaw);
+}
+
+/* ---------------------------------------------------------------------------
+   Scroll-linked layers. The runtime writes --scroll-percentage (0 → 1 as the
+   element crosses the viewport) onto anything carrying data-parallax; --offset
+   is how far that layer travels, set per instance in the markup.
+
+   No transition on the transform: it is already a function of scroll position,
+   and easing a value that is being driven every frame only adds lag.
+
+   `will-change` stays on at rest here, which is normally the wrong thing to do. It is
+   right in this one case: the transform is rewritten on every scroll frame for the
+   whole life of the page, so there is no rest state to release the layer back to, and
+   promoting it once is cheaper than repainting it continuously on a mid-range phone.
+   The reduced-motion block sets it back to `auto`, because there the transform is
+   fixed and the layer buys nothing.
+   --------------------------------------------------------------------------- */
+
+.parallax {
+  transform: translate3d(0, calc(var(--offset, 40px) * (0.5 - var(--scroll-percentage, 0.5)) * 2), 0);
+  will-change: transform;
+}
+
+/* Layered departure, borrowed from the reference site: three things leaving over
+   the same scroll range at different rates reads as depth without touching 3D. */
+.depth-near {
+  --offset: 96px;
+}
+
+.depth-mid {
+  --offset: 52px;
+}
+
+.depth-far {
+  --offset: 22px;
+}
+
+/* ---------------------------------------------------------------------------
+   The melt line. A single hairline down the page whose fill tracks scroll, so
+   there is one continuous element tying every section together.
+   --------------------------------------------------------------------------- */
+
+.melt-line {
+  position: absolute;
+  inset-block: 0;
+  width: 1px;
+  background: var(--rule);
+  overflow: hidden;
+}
+
+.melt-line::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: calc(var(--scroll-percentage, 0) * 100%);
+  background: linear-gradient(to bottom, transparent, rgb(var(--cyan) / 0.9));
+}
+
+/* ---------------------------------------------------------------------------
+   Product tiles, built to the reference site's structure — read out of their
+   stylesheet, not guessed at.
+
+   Theirs: `.product-item` is a solid colour tile 23.88em tall with a 0.4em radius,
+   the whole thing an <a>. The photograph is `position: absolute; top: -10em`, so it
+   hangs above the tile and breaks out of it — which is why their row carries
+   `margin-top: 12em`, to leave the overflow somewhere to go. The copy sits inside at
+   the bottom. The only affordance is a 3.38em square in the top-right corner filled
+   `#ffffff1a` holding a diagonal arrow. On narrow screens the row becomes a
+   horizontally scrolling strip of fixed-width cards with the scrollbar hidden, and
+   the photograph drops inside the tile instead of hanging above it.
+
+   Ours adds the two things the client asked for and their layout has nowhere for:
+   the phone number stamped on every photograph, and the words "Book now" next to
+   the arrow rather than an arrow alone.
+   --------------------------------------------------------------------------- */
+
+.product-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: var(--gutter);
+  /* Room above each row for the photographs to hang into. With multiple rows it is needed
+     between the rows as well. */
+  row-gap: calc(var(--u) * 12);
+  margin-top: calc(var(--u) * 12);
+}
+
+@media (min-width: 1100px) {
+  .product-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.product-tile {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: calc(var(--u) * 23.88);
+  padding: calc(var(--u) * 1.25);
+  border-radius: var(--radius-tile);
+  background-color: rgb(var(--marine));
+  color: rgb(var(--frost));
+  text-decoration: none;
+  transition: background-color var(--speed-md) var(--ease-thaw);
+  /* The tile is a bed of its own, and it needs its own muted ink because it is the
+     only surface on the page whose background is not one of the five themes. Haze,
+     the muted colour every dark bed uses, measures 3.33:1 on marine — under AA for
+     the 15px line inside the tile, and only passing on hover once the bed darkens to
+     deep, which is the state it is almost never in.
+
+     Mixed from marine towards frost rather than reached for from the palette: a
+     secondary tone on a coloured surface belongs to that surface's hue, and a grey
+     would read as a different material sitting on top of it. 15% marine measures
+     4.94:1 at rest and 13.44:1 on hover. Where `color-mix` is unsupported the
+     declaration drops and the text inherits frost, which is 6.14:1 — a safe
+     degradation rather than a broken one. */
+  --tile-muted: color-mix(in srgb, rgb(var(--marine)) 15%, rgb(var(--frost)));
+}
+
+/* Gated, and this is the worst of the latched-hover cases: a tap opens WhatsApp in a new
+   tab, and on return the tile was still sitting darkened with its photograph lifted,
+   indefinitely, until something else was tapped. Six of them can be stuck at once. */
+@media (hover: hover) and (pointer: fine) {
+  .product-tile:hover {
+    background-color: rgb(var(--deep));
+  }
+}
+
+.tile-muted {
+  color: var(--tile-muted);
+}
+
+/* The photograph hangs above the tile and breaks out of it. This is the whole look,
+   and it only works because the tile does not clip: no overflow hidden anywhere on
+   the way up. */
+.product-photo {
+  position: absolute;
+  z-index: 1;
+  left: calc(var(--u) * 1.25);
+  right: calc(var(--u) * 1.25);
+  top: calc(var(--u) * -8);
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-tile);
+  overflow: hidden;
+  background-color: rgb(var(--abyss));
+  box-shadow: 0 calc(var(--u) * 1.2) calc(var(--u) * 2.4) rgb(var(--deep) / 0.28);
+  /* `--speed-fast`, not `--speed-md`. A pointer sweeping six tiles leaves each one before a
+     420ms lift has finished, which reads as the interface trailing the hand. */
+  transition: transform var(--speed-fast) var(--ease-thaw);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .product-tile:hover .product-photo {
+    transform: translate3d(0, calc(var(--u) * -0.5), 0);
+  }
+}
+
+.product-photo > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  display: block;
+}
+
+/* An obviously-empty frame, on purpose. Stock photography of somebody else's
+   machine teaches a customer something untrue about this company. */
+.product-photo-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+  text-align: center;
+  color: rgb(var(--haze));
+  background-image:
+    linear-gradient(rgb(var(--frost) / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--frost) / 0.05) 1px, transparent 1px);
+  background-size: calc(var(--u) * 2) calc(var(--u) * 2);
+}
+
+/* The number travels with the picture: a screenshot of one card, shared into a
+   WhatsApp group with no link attached, still carries the number to call. */
+.product-stamp {
+  position: absolute;
+  bottom: calc(var(--u) * 0.6);
+  left: calc(var(--u) * 0.6);
+  padding: calc(var(--u) * 0.28) calc(var(--u) * 0.65);
+  border-radius: var(--radius-pill);
+  background-color: rgb(var(--abyss) / 0.74);
+  color: rgb(var(--frost));
+  font-size: var(--step-small);
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+}
+
+.product-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.75);
+}
+
+/* Their corner square, to the em: 3.38em, filled with 10% white, a 0.13em radius,
+   inset 0.63em from the top-right. */
+.product-corner {
+  position: absolute;
+  z-index: 2;
+  inset: calc(var(--u) * 0.63) calc(var(--u) * 0.63) auto auto;
+  width: calc(var(--u) * 3.38);
+  height: calc(var(--u) * 3.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-stamp);
+  border: 1px solid rgb(var(--frost) / 0.18);
+  background-color: rgb(var(--frost) / 0.1);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--frost) / 0.4),
+    inset 0 -1px 0 rgb(var(--frost) / 0.08),
+    0 2px 6px rgb(var(--abyss) / 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    background-color var(--speed-fast) var(--ease-thaw),
+    border-color var(--speed-fast) var(--ease-thaw),
+    box-shadow var(--speed-fast) var(--ease-thaw),
+    transform var(--speed-fast) var(--ease-thaw);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .product-tile:hover .product-corner {
+    background-color: rgb(var(--cyan));
+    color: rgb(var(--deep));
+    border-color: rgb(var(--cyan));
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.6),
+      0 4px 12px rgb(var(--cyan) / 0.35);
+    transform: scale(1.04);
+  }
+}
+
+.product-corner svg {
+  width: calc(var(--u) * 0.75);
+  height: auto;
+}
+
+/* Same removal as `.gallery-cta`: the trailing 1px rule is gone from every Book now on the
+   site, so the two look identical without either one having to remember to. */
+.product-cta {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--step-small);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* PRODUCT-BLOCK */
+
+/* ---------------------------------------------------------------------------
+   The gallery.
+
+   Forty-seven photographs of Koolink's own machines, at whatever shape each one was
+   taken in. Columns rather than a grid, and that is the whole reason it works: a grid
+   would need one aspect ratio, which means cropping a portrait shot of a coldroom door
+   into a landscape box and losing the door. `columns` lets every frame keep its own
+   proportions and still tile without gaps, and it costs no JavaScript and no measuring.
+
+   The trade is that column layout reads top-to-bottom then left-to-right, so the reading
+   order inside a section is not the source order. For a set of photographs of the same
+   category that is irrelevant — nobody reads a gallery in sequence — and it is why the
+   catalogue is grouped in the first place.
+   --------------------------------------------------------------------------- */
+
+.gallery-grid {
+  columns: 3;
+  column-gap: var(--gutter);
+}
+
+@media (max-width: 991px) {
+  .gallery-grid {
+    columns: 2;
+  }
+}
+
+@media (max-width: 639px) {
+  .gallery-grid {
+    columns: 1;
+  }
+
+  /* The page margin is 4.6u, and at the phone unit that is 69px a side. Two columns inside
+     it left each photograph about 97px wide — narrow enough that the phone number stamped
+     on it wrapped onto three lines and a machine was unreadable. So on a phone the gallery
+     takes the margin back and runs one column at nearly the width of the screen, while the
+     headings above it stay inset at the normal margin. Text indented, pictures wide, which
+     is what a printed catalogue does for the same reason. */
+  .gallery-shell {
+    padding-inline: calc(var(--u) * 1.2);
+  }
+}
+
+.gallery-item {
+  /* Both properties, because Safari still wants the older one. Without it a figure is
+     split across a column break and its caption ends up under a different photograph. */
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  margin: 0 0 calc(var(--gutter) * 1.6);
+}
+
+/* Opacity only, and that is the whole decision. Every other block on this site rises 50px
+   over 900ms; twenty-eight of those would be twenty-eight transforms held on a mid-range
+   Android for the length of a very long page, to animate content the reader came here
+   specifically to look at. But leaving them with no entrance at all was worse than either
+   option: the heading of each section rose and the photographs under it simply appeared,
+   which reads as the images having failed to arrive rather than as restraint.
+
+   `--speed-ui` because a fade the reader is scrolling towards should be finished by the time
+   it is in front of them. The stagger comes from the runtime's per-child observer, which
+   offsets anything crossing the line in the same frame by `--delay`, so a row of three lands
+   as a row rather than as three separate events. */
+html[data-js='1'] .gallery-item[data-in-view='false'] {
+  opacity: 0;
+  transform: translate3d(0, calc(var(--u) * 1), 0);
+}
+
+/* A rise as well as a fade, so a photograph arriving reads the way the heading above it does
+   rather than like an image that finally loaded. One unit rather than the 50px the section
+   reveals use: a figure is a smaller object, and the same distance on a smaller thing reads as a
+   lurch. The product tile stays opacity-only for a different reason — its transform is spoken
+   for by the press. */
+html[data-js='1'] .gallery-item {
+  transition:
+    opacity var(--speed-ui) var(--ease-out-quart),
+    transform var(--speed-ui) var(--ease-out-quart);
+}
+
+.gallery-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-tile);
+  /* The bed shows through until the picture decodes, so a slow connection sees the shape
+     of what is coming rather than a white hole. */
+  background-color: rgb(var(--abyss));
+  transition: transform var(--speed-fast) var(--ease-out-quart);
+}
+
+/* The frame answers the pointer. Forty-seven figures are interactive and until now the
+   photograph itself gave no sign of it — only the small Book now underneath did. A 1px lift
+   is the same vocabulary the product tiles use for the same job, and it is the smallest
+   movement that still reads as a response. */
+@media (hover: hover) and (pointer: fine) {
+  .gallery-item:hover .gallery-frame {
+    transform: translateY(-1px);
+  }
+}
+
+.gallery-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The number travels with the picture. Same element as the product tiles use, for the
+   same reason: a screenshot of one photograph, shared into a WhatsApp group with no link
+   attached, still carries a number to call. */
+.gallery-caption {
+  margin-top: calc(var(--u) * 0.7);
+  color: var(--text-muted);
+}
+
+/* No trailing rule. There was a 1px line running out of the label to the edge of the frame,
+   once under every photograph in the catalogue, and once the client saw it on a phone it read
+   as decoration the photographs had not asked for. The label alone says what it does, and the
+   hit area is padding on touch rather than the width of a dash. */
+.gallery-cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: calc(var(--u) * 0.35);
+  font-size: var(--step-small);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    color var(--speed-fast) var(--ease-thaw),
+    transform var(--speed-press) var(--ease-out-quart);
+}
+
+/* Forty-one of these on a phone, and none of them acknowledged a press. */
+.gallery-cta:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery-cta:hover {
+    color: var(--accent);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The gallery layout families.
+
+   One per section, each chosen from what its photographs are rather than for variety: a lead
+   frame that carries nineteen nylon shots, coldroom strips that want the whole shell, and
+   exactly three mould frames in exactly three cells. Every one of them collapses to a single
+   column below 768px, declared here beside its desktop rule rather than left to Tailwind.
+
+   Three more families are styled below and no longer rendered — the strip, the contact band
+   and the stepped column, written for product lines the client later dropped. Their CSS stays
+   because `.gallery-strip` carries the mobile suite's `touch-action: pan-x` assertion.
+   --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   React Bits ScrollStack, adapted to the catalogue.
+
+   Ordinary flow is the contract. JavaScript opts a stack into sticky cards only on a
+   desktop fine pointer with motion allowed; phones, touch devices, Reduced Motion and a
+   failed runtime all keep the exact same figures in a plain vertical list. There is no
+   second scroller and no second Lenis owner.
+   --------------------------------------------------------------------------- */
+
+.scroll-stack,
+.scroll-stack-inner {
+  position: relative;
+  width: 100%;
+}
+
+.scroll-stack-card {
+  position: relative;
+  transform: none;
+  margin-bottom: calc(var(--gutter) * 1.6);
+}
+
+.scroll-stack-card .gallery-item {
+  margin-bottom: 0;
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .scroll-stack[data-stack-active='true'] {
+    /* Enough release travel for the last card without React Bits' fixed 50rem spacer. */
+    padding-bottom: calc(var(--u) * 6);
+  }
+
+  html[data-js='1'] .scroll-stack[data-stack-active='true'] .scroll-stack-card {
+    --stack-offset: calc(var(--stack-index) * var(--u) * 0.35);
+    position: sticky;
+    top: calc(var(--scroll-stack-position) * 1vh + var(--stack-offset));
+    z-index: calc(var(--stack-index) + 1);
+    transform: translate3d(0, 0, 0) scale(var(--stack-scale, 1));
+    transform-origin: top center;
+    backface-visibility: hidden;
+  }
+
+  .scroll-stack[data-stack-active='true'] .scroll-stack-card:last-of-type {
+    /* The final card must scroll on instead of covering the next product heading indefinitely. */
+    position: relative;
+    top: auto;
+  }
+
+  /* Each arriving card needs an opaque bed: without one, all prior photographs show through
+     its caption and action band while they overlap. This is a section surface, not glass. */
+  .scroll-stack[data-stack-active='true'] .gallery-item {
+    padding: calc(var(--u) * 0.8);
+    border: 1px solid var(--rule);
+    border-radius: calc(var(--radius-tile) + var(--u) * 0.8);
+    background: var(--surface);
+    box-shadow: 0 calc(var(--u) * 0.6) calc(var(--u) * 1.8) rgb(var(--abyss) / 0.14);
+  }
+}
+
+@media (max-width: 767px), (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .scroll-stack,
+  .scroll-stack-card {
+    transform: none !important;
+  }
+
+  .scroll-stack-card {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
+/* The lead frame. Wider than a column and shorter than a hero: it is the best photograph in
+   its group, not a page-opening statement. */
+.gallery-lead {
+  margin-bottom: 0;
+}
+
+/* Same corner as every other frame. The lead is bigger, not a different kind of object, and
+   one radius for one component beats a distinction no reader will consciously register. */
+
+/* Pairs beside the panoramas. */
+.gallery-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gutter);
+  align-items: start;
+}
+
+/* One large, two stacked. `minmax(0, …)` on both tracks because a `<picture>` inside a grid
+   child will otherwise refuse to shrink below its intrinsic width and push the row wide. */
+.gallery-trio {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: var(--gutter);
+  align-items: start;
+}
+
+.gallery-trio-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+}
+
+.gallery-trio-lead,
+.gallery-trio-stack .gallery-item {
+  margin-bottom: 0;
+}
+
+/* The tight band. Three across, no captions, so the shapes line up as a range. */
+.gallery-band {
+  display: grid;
+  /* The column count comes from the component, which reads it off how many photographs the
+     group actually has. Three is the default; a group of four takes two so it lands as 2x2
+     instead of a full row and a stranded pair. */
+  grid-template-columns: repeat(var(--band-cols, 3), minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+}
+
+.gallery-band .gallery-item {
+  margin-bottom: 0;
+}
+
+/* The story. Two columns where the second is pushed down by half a frame, so the eye walks
+   the sequence rather than scanning a grid of it. */
+.gallery-stagger {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gutter) var(--gutter);
+  align-items: start;
+}
+
+.gallery-stagger-offset {
+  margin-top: calc(var(--u) * 4);
+}
+
+.gallery-stagger .gallery-item {
+  margin-bottom: 0;
+}
+
+/* The strip that scrolls on its own axis. Breaks out of the shell on both sides so the row
+   runs to the edges of the screen and reads as continuing past them, with the page margin
+   restored as leading and trailing padding so the first frame still lines up with the
+   heading above it. */
+.gallery-strip {
+  display: flex;
+  gap: var(--gutter);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-inline: var(--margin);
+  /* Not the same thing as the padding above, which is why both are here: `padding-inline`
+     positions the frames, `scroll-padding-inline` positions the snap. Without it a snapped
+     frame sits flush against the container's edge instead of lining up with the heading
+     above it, so the row looks a few pixels out from the rest of the page. */
+  scroll-padding-inline: var(--margin);
+  padding-bottom: calc(var(--u) * 0.5);
+  /* Stops a flick that reaches either end of this row from carrying on into the page, which
+     on Android is how a horizontal overscroll becomes a browser back-navigation. The menu's
+     own scroller does the same thing for the same reason. */
+  overscroll-behavior-x: contain;
+  /* No visible gutter. The row's own overflow is the affordance, and a grey bar under a set
+     of photographs reads as a browser artefact rather than as part of the page. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* `scroll-behavior` is not inherited, so the rule on `html` never reached this container and
+   an arrow key in the focused strip jumped a frame instantly. Gated rather than unconditional
+   because a reader who asked for less motion did not ask for a glide. */
+@media (prefers-reduced-motion: no-preference) {
+  .gallery-strip {
+    scroll-behavior: smooth;
+  }
+}
+
+.gallery-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-strip-item {
+  flex: 0 0 30%;
+  margin-bottom: 0;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 991px) {
+  .gallery-band {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gallery-strip-item {
+    flex-basis: 44%;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Every family becomes one column. Below this width a 1.7fr/1fr split gives the small
+     column about 90px, an offset row reads as a misalignment rather than as rhythm, and a
+     three-up band of cabinets is unreadable. The strip is the exception: scrolling sideways
+     is exactly as useful on a phone as it is on a desktop, so it keeps its axis and only
+     widens its frames. */
+  .gallery-pair,
+  .gallery-trio,
+  .gallery-band,
+  .gallery-stagger {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gallery-trio-stack {
+    gap: calc(var(--gutter) * 1.6);
+  }
+
+  .gallery-pair,
+  .gallery-stagger {
+    gap: calc(var(--gutter) * 1.6);
+  }
+
+  .gallery-stagger-offset {
+    margin-top: 0;
+  }
+
+  .gallery-strip {
+    padding-inline: calc(var(--u) * 1.2);
+    scroll-padding-inline: calc(var(--u) * 1.2);
+  }
+
+  .gallery-strip-item {
+    flex-basis: 78%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Marquee. The reference site's cadence — 10 seconds for one full pass — with one
+   deliberate difference. Theirs moves a single track to -107.5%, where the extra
+   7.5% covers the gap after its last item; ours duplicates the track and moves it
+   -100%, which lands the second copy exactly where the first began. Same speed,
+   and the seam is genuinely invisible rather than nearly.
+   --------------------------------------------------------------------------- */
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  flex: none;
+  gap: calc(var(--gutter) * 2);
+  padding-right: calc(var(--gutter) * 2);
+  animation: marquee-slide 10s linear infinite;
+}
+
+/* Moving content that starts on its own needs a way to stop it, and the OS-level
+   Reduce Motion setting is not one the page provides. Three routes, because the three
+   input methods are genuinely different:
+
+   `focus-within` covers a keyboard and is not gated — a keyboard user exists on every
+   device. Hover is gated, because a latched `:hover` on Android would pause the strip
+   permanently after one stray tap, which is a worse bug than the one it fixes. And
+   `data-onscreen="false"` covers the case neither of those reaches: for most of a
+   9,700px page this strip is nowhere near the viewport, and an infinite animation on a
+   composited layer keeps the compositor awake for the whole session. That attribute is
+   two-way, unlike `data-in-view`, which is a one-shot arrival flag — hence its own name
+   rather than borrowing that one. It starts `false`, so the strip is paused until it is
+   actually seen. */
+.marquee:focus-within .marquee-track,
+.marquee[data-onscreen='false'] .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee-slide {
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The header and the slide-out menu, built to the reference site's measurements.
+
+   Theirs, read out of their stylesheet:
+     .nav-wrap          grid, 1fr 1fr 1fr, space-between, padding-inline 1.88em
+     .menu-side-bar     position absolute, 100vw x 100vh, z-index 2
+     .menu-side-bar-inner  47em wide, full height, brand fill, padding 1.63em 1.88em
+     .menu-side-bg      inset 0, #0000004d — the scrim, click to close
+     .light-divider     1px wide, full height, 10% of the light colour (vertical!)
+     .menu-items        column, space-between, padding-top 6.88em
+     .heading-77        4.4em, line-height 90%   (2.6em on a phone)
+     .nav-link          1.5em, line-height 90%
+     .icon-36           absolute, left -3.25em, 2em square, opacity 0
+     .link-item_links   column, gap .75em, padding-left 3.4em, overflow hidden,
+                        transition all .7s cubic-bezier(.23, 1, .32, 1)
+     .link-item.active .menu-link-heading  transform: translateX(2em)
+     .link-item.active .icon-36            opacity: 1
+
+   Ours is the same geometry in our own colours: the panel is the deep bed with
+   frost type, and the icon that appears beside the open heading is cyan.
+   --------------------------------------------------------------------------- */
+
+/* Structure only. Everything this surface looks like is set in the glass block near
+   the bottom of this file, because those rules re-declare the same selector at the same
+   specificity and source order decides. A tint or a blur written here would be
+   overridden with no error and no way to find out why, so the visual properties live in
+   one place and this block owns geometry and the colour that flips with the bed. */
+.site-header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 60;
+  height: var(--header-height);
+  color: rgb(var(--deep));
+  /* Own-Bed Rule. Fixed chrome with no `.theme-*` ancestor, so it declares its own accent
+     rather than leaving `var(--accent)` to resolve to nothing. Two things inside the header
+     read it: the wordmark's initial and the focus ring, and until this was here both fell
+     back to marine in the dark state — 2.03:1 on `deep`, which is a ring a keyboard user
+     cannot see and a letter that disappears into the hero. */
+  --accent: rgb(var(--marine));
+  transition:
+    color var(--speed-md) var(--ease-thaw),
+    background-color var(--speed-md) var(--ease-thaw),
+    border-color var(--speed-md) var(--ease-thaw);
+}
+
+.site-header[data-on-dark='true'] {
+  color: rgb(var(--frost));
+  /* The accent's other altitude, for the same reason the text colour flips. Chill measures
+     10.35:1 on deep and 11.03:1 on abyss. */
+  --accent: rgb(var(--chill));
+}
+
+/* Three columns, so the logo is centred on the page rather than on whatever is
+   left over after the other two. */
+.nav-wrap {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--gutter);
+  padding-inline: calc(var(--u) * 1.88);
+}
+
+.nav-logo {
+  justify-self: center;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.text-caps {
+  font-size: var(--step-eyebrow);
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Their `.menu-btn-wrap` and `.close-btn-wrap`: a flex row with a .38em gap and a
+   pointer cursor. Two bars rather than the usual three, because the panel is opened
+   by a word as much as by an icon. */
+/* 44px is a WCAG constant rather than a dimension of this design, which is why it is a
+   raw pixel value in a stylesheet that otherwise has none. Both buttons were the height
+   of their own 13px label with no padding — about 18px, under even the 24px that WCAG 2.2
+   asks for at AA, on the only control that opens navigation on a phone and the only
+   pointer route out of the menu besides the scrim. The header row is 6u tall, so the
+   larger target costs nothing visually: `align-items: center` keeps the bars and the
+   label exactly where they were and the extra area is invisible. No inline padding, or
+   the lockup would stop aligning with the page margin. */
+.menu-btn,
+.close-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 0.38);
+  min-height: 44px;
+  cursor: pointer;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+.menu-btn {
+  justify-self: start;
+}
+
+.menu-bars {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(var(--u) * 0.3);
+  width: calc(var(--u) * 1.4);
+}
+
+.menu-bars > span {
+  display: block;
+  height: 1px;
+  background-color: currentColor;
+  transition: transform var(--speed-md) var(--ease-thaw);
+}
+
+/* The bars spread apart under a pointer. Gated: on touch it would latch open and the
+   closed icon would stop reading as closed. */
+@media (hover: hover) and (pointer: fine) {
+  .menu-btn:hover .menu-bars > span:first-child {
+    transform: translate3d(0, 1px, 0);
+  }
+
+  .menu-btn:hover .menu-bars > span:last-child {
+    transform: translate3d(0, -1px, 0);
+  }
+}
+
+/* Their `.contact-wrap` with its `.underline` — a hairline that grows on hover,
+   which is the IX2 "Underline Link On/Off" pair done in CSS. */
+.contact-wrap {
+  justify-self: end;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: calc(var(--u) * 0.25);
+  text-decoration: none;
+  color: inherit;
+}
+
+.contact-wrap .underline {
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--speed-fast) var(--ease-out-quart);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .contact-wrap:hover .underline {
+    transform: scaleX(1);
+  }
+}
+
+/* The panel. `display: none` when closed is theirs; a visibility/pointer-events
+   pair is used instead so the slide can be animated rather than snapped. */
+.menu-side {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  visibility: hidden;
+  pointer-events: none;
+  /* The delay is the whole fix for the close. `visibility` is not an animatable
+     property — it flips the instant `data-open` changes — so hiding the wrapper
+     immediately cut the panel's slide-out dead and the menu appeared to vanish. Held
+     visible for the length of the exit, the animation is actually seen. */
+  transition: visibility 0s linear calc(var(--speed-exit) + 20ms);
+}
+
+.menu-side[data-open='true'] {
+  visibility: visible;
+  pointer-events: auto;
+  transition: visibility 0s linear 0s;
+}
+
+.menu-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background-color: rgb(0 0 0 / 0.3);
+  opacity: 0;
+  /* The blur leaves with the scrim rather than switching off under it: opening the menu was one
+     event rendered two ways, the sheet's glass forming over 380ms while the page behind it was
+     already soft from the first frame. Both now form and dissolve together. */
+  --scrim-blur: 0px;
+  transition:
+    opacity var(--speed-ui) var(--ease-out-quart),
+    --scrim-blur var(--speed-ui) var(--ease-out-quart);
+}
+
+.menu-side[data-open='true'] .menu-scrim {
+  opacity: 1;
+  /* `--speed-exit` on the blur, matching the sheet's ramp, so the two materials finish forming on
+     the same frame rather than one chasing the other. */
+  --scrim-blur: 3px;
+  transition:
+    opacity var(--speed-md) var(--ease-out-quart),
+    --scrim-blur var(--speed-exit) var(--ease-out-quart);
+}
+
+.menu-panel {
+  position: absolute;
+  inset: var(--margin) auto var(--margin) var(--margin);
+  z-index: 2;
+  width: calc(var(--u) * 27);
+  max-width: calc(100vw - var(--margin) * 2);
+  height: auto;
+  display: flex;
+  gap: calc(var(--u) * 1.3);
+  align-items: flex-start;
+  padding: calc(var(--u) * 1.4) calc(var(--u) * 1.4) calc(var(--u) * 1.6);
+  /* One radius, all four corners, because the sheet floats clear of every edge. */
+  border-radius: var(--radius-panel);
+  background-color: rgb(var(--deep));
+  color: rgb(var(--frost));
+  /* Own-Bed Rule again: the panel is the deep bed but carries no theme class, so the
+     wordmark's initial and anything else reading `var(--accent)` inside it needs the value
+     declared here. */
+  --accent: rgb(var(--chill));
+  overflow: hidden;
+  /* Exit: quick, and it leaves rather than only sliding — a touch of scale and a fade
+     read as the sheet being taken away instead of pushed off the edge.
+
+     The offsets are custom properties because this is the only `transform` on the
+     panel anywhere in the file. Four separate `.menu-panel` rules used to set it
+     between them and the open state was somehow losing to one of them; a single
+     declaration cannot be shadowed. The phone block overrides the axis, not the
+     transform. */
+  --slide-x: -102%;
+  --slide-y: 0%;
+  transform: translate3d(var(--slide-x), var(--slide-y), 0) scale(var(--slide-scale, 0.97));
+  transform-origin: left center;
+  opacity: 0.35;
+  /* The glass thins as the sheet leaves, and thickens as it arrives — see the `@property`
+     block above `.menu-panel`'s glass rule for why the blur travels through a registered
+     custom property instead of through `backdrop-filter` directly. A fifth of the target
+     rather than zero: a first frame with no glass at all reads as a flat panel that
+     suddenly frosts, which is the opposite of a material arriving. */
+  --panel-blur: calc(var(--glass-blur-sheet) * 0.2);
+  transition:
+    transform var(--speed-exit) var(--ease-out-quart),
+    opacity var(--speed-ui) linear,
+    --panel-blur var(--speed-ui) var(--ease-out-quart);
+}
+
+/* Enter: slower and eased harder, because arriving should feel weightier than
+   leaving. 640ms rather than the 1400ms this used to borrow from the hero reveals —
+   a menu is something the reader is waiting on.
+
+   The blur ramps over 380ms, not the full 640: the material has finished forming well
+   before the sheet finishes sliding, which is both how it reads better and how it costs
+   fewer recomposited frames. */
+.menu-side[data-open='true'] .menu-panel {
+  --slide-x: 0%;
+  --slide-y: 0%;
+  --slide-scale: 1;
+  --panel-blur: var(--glass-blur-sheet);
+  opacity: 1;
+  transition:
+    transform var(--speed-enter) var(--ease-out-circ),
+    opacity var(--speed-fade) linear,
+    --panel-blur var(--speed-exit) var(--ease-out-quart);
+}
+
+/* Their `.light-divider`: one hairline, vertical, at a tenth of the light colour.
+   It runs the full height of the panel beside the items. */
+.menu-divider {
+  flex: none;
+  width: 1px;
+  align-self: stretch;
+  /* Faint on purpose. At a tenth it read as the panel's edge rather than as a rule
+     inside it, which put the close column visually outside the glass. */
+  background-color: rgb(var(--frost) / 0.055);
+}
+
+/* A narrow left column holding just the word, the way theirs does on desktop —
+   their `.logo-inside` is display:none until the panel goes full width. */
+.close-btn {
+  flex: none;
+  align-self: flex-start;
+}
+
+.close-btn .logo-inside {
+  display: none;
+}
+
+.menu-items {
+  /* `min-width: 0` is explicit rather than incidental: `overflow-x: hidden` below
+     already makes `min-width: auto` resolve to zero for a flex item, and spelling it
+     out keeps that from looking like an accident to the next person. */
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  /* flex-start, not space-between: a flex container that overflows with
+     space-between can put content past its start edge where nothing can reach it.
+     The foot is pushed down with an auto margin instead, which is the same layout
+     with none of that risk. */
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: var(--gutter);
+  padding-top: calc(var(--u) * 4.2);
+  /* Room for the open group's pill to bleed, and the reason this is padding rather than
+     nothing at all. The clip box of a scroll container is its padding box, and the pill
+     deliberately reaches 0.7u past the text on each side plus another 0.5u right when the
+     group is open — so without this the scroller sliced the pill's left corners flat and
+     took a bite out of its right. Padding makes the clip box that much wider; the matching
+     negative margins put the column back where it was, so nothing else on the panel moves.
+     The bleed lands in the panel's own 1.4u padding, which is why 1.2u is the ceiling. */
+  padding-inline: calc(var(--u) * 0.7) calc(var(--u) * 1.2);
+  margin-inline: calc(var(--u) * -0.7) calc(var(--u) * -1.2);
+  /* The items scroll, the close button does not. */
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Stops a flick that reaches the end of this list from carrying on into the page
+     behind it. */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  /* No visible scrollbar. The panel is a sheet of glass; a grey gutter down its edge
+     gives the game away. Three declarations because three engines. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.menu-items::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-items-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.link-item {
+  width: 100%;
+  user-select: none;
+}
+
+/* The panel's contents arrive one after another behind the slide, on the same 32.5ms
+   step the rest of the page staggers on. Four headings landing simultaneously is what
+   made the open feel like a screenshot rather than a movement. */
+.menu-side .link-item,
+.menu-side .menu-foot {
+  opacity: 0;
+  transform: translate3d(calc(var(--u) * -1.2), 0, 0);
+  /* Exit: 160ms, no stagger. A staggered exit means the last item is still fading
+     while the panel has already gone, which reads as lag rather than choreography. */
+  transition:
+    opacity var(--speed-press) var(--ease-out-quart),
+    transform var(--speed-press) var(--ease-out-quart);
+  transition-delay: 0s;
+}
+
+.menu-side[data-open='true'] .link-item,
+.menu-side[data-open='true'] .menu-foot {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--speed-md) var(--ease-out-quart),
+    transform var(--speed-md) var(--ease-out-quart);
+  transition-delay: calc(var(--speed-ui) * 0.6 + var(--delay-list) * var(--i, 4));
+}
+
+/* The heading slides 2em right when its group opens, and the icon at -3.25em fades
+   in behind it. Both numbers are theirs. */
+.menu-link-heading {
+  /* How far the pill reaches past the text on each side. One number, because three
+     declarations have to agree about it or the pill stops being centred on its own label:
+     the padding that holds the text off the pill's edge, the negative margin that cancels
+     that padding so the label still lines up with the links underneath, and the width that
+     has to grow by both of them. They were three separate literals before. */
+  --pill-bleed: calc(var(--u) * 0.7);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 1.25);
+  /* `100%` plus the bleed, rather than a bare `100%`. A `<button>` shrinks to fit at
+     `width: auto` whatever its display is, so the width has to be stated — and stated at
+     the column's width plus both bleeds, or the negative margin below slides the box left
+     instead of widening it. That is what was wrong: the pill hung 0.7u off the left of the
+     column and fell 0.7u short on the right, 1.4u out of centre on the label it highlights,
+     with its left corners sliced flat by the column's clip edge. */
+  width: calc(100% + var(--pill-bleed) * 2);
+  color: inherit;
+  background: none;
+  border: 0;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  /* No `transition` here. This selector is declared again below with its own transition,
+     at the same specificity, so this one is dead — the third instance of that trap in this
+     file, after `.button` and `.site-header`. */
+}
+
+.link-item[data-active='true'] .menu-link-heading {
+  transform: translateX(calc(var(--u) * 0.5));
+}
+
+/* The open group becomes a nested glass pill — milkier than the panel it sits on,
+   with a brighter rim, exactly the way the reference treats its selected row. It is
+   the one element in that video doing the most work, because it shows the material
+   can layer on itself. */
+.menu-link-heading {
+  border-radius: var(--radius-card);
+  padding: calc(var(--u) * 0.4) var(--pill-bleed);
+  margin-inline: calc(var(--pill-bleed) * -1);
+  margin-bottom: calc(var(--u) * 0.4);
+  border: 1px solid transparent;
+  /* 240ms, down from 500. Half a second on the nudge a heading makes when you point at
+     it is long enough that the pointer has usually moved on before the movement finishes,
+     which reads as the interface lagging behind the hand rather than answering it. */
+  transition:
+    transform var(--speed-ui) var(--ease-out-quart),
+    background-color var(--speed-ui) var(--ease-out-quart),
+    border-color var(--speed-ui) var(--ease-out-quart),
+    box-shadow var(--speed-ui) var(--ease-out-quart);
+}
+
+.link-item[data-active='true'] .menu-link-heading {
+  background-color: rgb(var(--glass-spec) / 0.1);
+  border-color: rgb(var(--glass-spec) / 0.42);
+  /* A bevel here too, but a shallower one than the sheet it sits inside — two of equal strength
+     would read as two panes rather than as a row lifting out of one.
+
+     And no `backdrop-filter`, which it used to have. This was the site's only glass stacked on
+     glass, and the reference material forbids that outright: the panel has already blurred and
+     re-lit what is behind it, so a second filter over the result has nothing left to bend and
+     spends a composite finding that out. The site's own Reduce Transparency note had already
+     worked out the same thing from the other end — "a lighter translucent surface stacked on a
+     translucent sheet is the one combination that always loses" — and made it opaque there.
+     It is a translucent lifted row everywhere now. */
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / calc(var(--glass-bevel-near) * 0.66)),
+    inset 0 -1px 0 rgb(var(--glass-spec) / calc(var(--glass-bevel-far) * 0.66)),
+    inset 0 0 0 1px rgb(var(--glass-spec) / 0.14);
+}
+
+.menu-icon {
+  position: absolute;
+  left: calc(var(--u) * -1.5);
+  z-index: 0;
+  width: calc(var(--u) * 0.85);
+  height: calc(var(--u) * 0.85);
+  border-radius: 50%;
+  opacity: 0;
+  background-color: rgb(var(--cyan));
+  /* Two triggers — the group opening and hover — so this one duration serves both. 180ms is
+     inside the budget for either. */
+  transition: opacity var(--speed-fast) var(--ease-thaw);
+}
+
+.link-item[data-active='true'] .menu-icon {
+  opacity: 1;
+}
+
+/* All three of these are pointer affordances on a control that already has a real state
+   (`data-active`), so a latched hover on touch would compete with it: a tapped group and
+   a stuck-hovered group would look the same. */
+@media (hover: hover) and (pointer: fine) {
+  .menu-link-heading:hover .menu-icon {
+    opacity: 0.35;
+  }
+
+  .link-item:not([data-active='true']) .menu-link-heading:hover {
+    transform: translateX(calc(var(--u) * 0.75));
+  }
+
+  .menu-link-heading:hover .menu-heading {
+    color: rgb(var(--chill));
+  }
+}
+
+
+/* "You are here": the group holding the section being read keeps a mark even when
+   collapsed, so opening the menu tells you where you are before you read anything. */
+.link-item[data-current='true'] .menu-heading::after {
+  content: '';
+  display: inline-block;
+  width: 0.3em;
+  height: 0.3em;
+  margin-left: 0.3em;
+  border-radius: 50%;
+  background-color: rgb(var(--cyan));
+  vertical-align: middle;
+}
+
+.nav-link[aria-current='true'] {
+  color: rgb(var(--chill));
+}
+
+/* 4.4em, line-height 90% — theirs. Big enough that four of them fill the panel. */
+.menu-heading {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display), 'Helvetica Neue', Arial, sans-serif;
+  font-size: calc(var(--u) * 2.6);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+/* The accordion, and the one animation on this page that is not transform or opacity.
+   Grid rows rather than max-height so it is smooth without measuring anything.
+
+   It stays a layout animation on purpose, because the layout genuinely changes: a group
+   that opens has to take space from the ones below it, and clip-path or transform would
+   reveal the links without moving anything out of the way. That is the honest reason to
+   break the rule — but it is also the most expensive thing on this page per frame, so it
+   no longer runs for 700ms. 280ms is inside the ceiling for a control the reader is
+   waiting on, and the items inside carry their own staggered opacity and translate, which
+   is what the eye actually follows; the height change underneath them is scenery.
+   Theirs was 700ms on an ease-out-quint, and matching it here was copying a number
+   without checking what it cost on the device this audience uses. */
+.link-item-links {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  padding-left: calc(var(--u) * 2.2);
+  transition: grid-template-rows var(--speed-ui) var(--ease-out-quart);
+}
+
+.link-item[data-active='true'] .link-item-links {
+  grid-template-rows: 1fr;
+  margin-bottom: calc(var(--u) * 1.75);
+}
+
+.link-item-links-inner {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.75);
+}
+
+.nav-link {
+  font-size: calc(var(--u) * 1.1);
+  line-height: 1.1;
+  /* 0.82, up from 0.72. Against a white worst case behind the panel these links measured
+     4.51:1 — over AA by a hundredth, which is not a margin, and it was the lowest number on
+     the site once the panel's own sheen was counted. At 0.82 the same worst case is 5.04:1 and
+     the links still read as secondary to the headings above them. */
+  color: rgb(var(--frost) / 0.82);
+  text-decoration: none;
+  opacity: 0;
+  transform: translate3d(calc(var(--u) * -0.6), 0, 0);
+  /* `--speed-ui`, the same band as the box growing above them, with the delay below doing
+     the sequencing instead: the container opens, the links follow it in. At the old 420ms they
+     were still arriving
+     140ms after the height had stopped, which is the gap that reads as lag. */
+  transition:
+    color var(--speed-fast) var(--ease-thaw),
+    opacity var(--speed-ui) var(--ease-out-quart),
+    transform var(--speed-ui) var(--ease-out-quart);
+}
+
+.link-item[data-active='true'] .nav-link {
+  opacity: 1;
+  transform: none;
+  /* Held back so the links land as the space appears rather than racing the row open, and
+     staggered on the list step rather than the grid one — see `--delay-list`. */
+  transition-delay: calc(var(--speed-ui) / 2 + var(--delay-list) * var(--i, 0));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-link:hover {
+    color: rgb(var(--chill));
+  }
+}
+
+.menu-foot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--u) * 0.5);
+  padding-top: var(--gutter);
+}
+
+/* Freezes the page behind the open panel on touch devices, where Lenis is never
+   loaded and so has no scroll to stop. */
+html.menu-open,
+html.menu-open body {
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------------
+   Photographic section beds.
+
+   The scale move is the reference site's `Bg Scale`: their `.hero-img` runs scale
+   1 → 1.2 beginning at 40% of the section's crossing. Expressed here against the
+   `--scroll-percentage` the runtime maintains, remapped so the first 40% does
+   nothing and the remaining 60% carries the whole growth.
+   --------------------------------------------------------------------------- */
+
+.section-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.section-bg > picture {
+  display: contents;
+}
+
+.section-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: center;
+  transform: scale(calc(1 + 0.2 * clamp(0, (var(--scroll-percentage, 0) - 0.4) / 0.6, 1)));
+  will-change: transform;
+}
+
+/* Left-weighted, because the copy is left-aligned and the right side of the frame
+   is where the picture should still be readable as a picture. */
+.section-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    /* Header clearance. The hero photograph has a specular highlight in its top strip
+       that measures gray 243 — bright enough that glass over it would fail contrast
+       whatever tint it carried. This band makes the header's backdrop a property of
+       the design rather than of whichever photograph is behind it, which also means a
+       future photo swap cannot quietly break the header. */
+    linear-gradient(
+      to bottom,
+      rgb(var(--abyss) / 0.88),
+      rgb(var(--abyss) / 0.4) calc(var(--header-height) * 1.1),
+      transparent calc(var(--header-height) * 1.9)
+    ),
+    linear-gradient(
+      100deg,
+      rgb(var(--abyss) / calc(0.86 * var(--scrim, 1))),
+      rgb(var(--abyss) / calc(0.62 * var(--scrim, 1))) 52%,
+      rgb(var(--abyss) / calc(0.34 * var(--scrim, 1)))
+    );
+}
+
+/* Portrait turns the scrim through ninety degrees, and that is what lets the phone show the
+   machine at all.
+ *
+ * On a desktop the copy sits in the left half, so the scrim runs left-heavy at 100deg and the
+ * right side of the frame stays readable as a picture. On a phone the copy spans the full
+ * width, so a left-heavy gradient darkens the wrong thing: measured against a crop that
+ * includes the machine, frost text came out at 2.4:1, and lifting the whole scrim to 1.7 to
+ * fix it dimmed the machine into the background along with everything else.
+ *
+ * Top-heavy instead. The headline and both buttons live in the upper two thirds, which is
+ * where the scrim is strongest; the machine and the ice sit in the bottom third, where it
+ * falls away to almost nothing. Same image, same asset, and the part of the picture the
+ * reader is meant to see is the part that is not being darkened. */
+@media (orientation: portrait) {
+  .section-bg::after {
+    background:
+      linear-gradient(
+        to bottom,
+        rgb(var(--abyss) / 0.88),
+        rgb(var(--abyss) / 0.4) calc(var(--header-height) * 1.1),
+        transparent calc(var(--header-height) * 1.9)
+      ),
+      linear-gradient(
+        to bottom,
+        rgb(var(--abyss) / calc(0.9 * var(--scrim, 1))),
+        rgb(var(--abyss) / calc(0.82 * var(--scrim, 1))) 46%,
+        rgb(var(--abyss) / calc(0.44 * var(--scrim, 1))) 68%,
+        rgb(var(--abyss) / calc(0.18 * var(--scrim, 1)))
+      );
+  }
+}
+
+/* Anything that sits on a photographic bed needs to be above it. */
+.section-bg ~ * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Touch.
+
+   Everything below is keyed on `(pointer: coarse)` rather than on a width, because the
+   thing that matters is whether the pointer is a finger. A 900px tablet held in two hands
+   needs these; a 500px browser window on a laptop does not.
+
+   Measured at 390px before any of this existed: the twenty-one links inside the menu were
+   18px tall, the header's Book now was 18px, and every Book now action in the catalogue —
+   forty-one of them in the photograph set that was live then — was 22px. WCAG 2.2 asks for
+   24px at AA and 44px is the comfortable target, so the primary navigation and the site's
+   main conversion action were both roughly a third of the size a thumb expects.
+   --------------------------------------------------------------------------- */
+
+@media (pointer: coarse) {
+  /* Padding rather than a min-height, because these are inline text links: padding grows the
+     hit area around the words without moving them or changing the type. The list gap goes to
+     zero to pay for it, so twenty-one links do not also become a much longer menu — and so
+     that adjacent 44px targets sit flush instead of overlapping, which is its own bug: two
+     hit areas that overlap make the edge between them ambiguous. */
+  .link-item-links-inner {
+    gap: 0;
+  }
+
+  .nav-link {
+    /* 0.9 and not 0.85: at the phone unit the smaller value landed on 43px, which is a
+       rounding error away from the target rather than a decision. */
+    padding-block: calc(var(--u) * 0.9);
+  }
+
+  /* The header's Book now, and the logo beside it. Both were the height of their own text. */
+  .contact-wrap,
+  .nav-logo {
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .nav-logo {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Forty-one of these on the catalogue page, one under every photograph. The negative top
+     margin keeps the action visually tucked under its caption while the tappable box extends
+     past it in both directions. */
+  .gallery-cta {
+    padding-block: calc(var(--u) * 0.75);
+    margin-top: 0;
+  }
+
+  /* The browser's own tap flash goes, and every tappable thing gets a real pressed state in
+     its place. Removing the highlight without replacing it would leave touch with no feedback
+     at all, which is worse than an unstyled grey box. */
+  a,
+  button,
+  [role='button'] {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Kills the double-tap-to-zoom wait on anything meant to be tapped once. */
+  .button,
+  .product-tile,
+  .gallery-cta,
+  .nav-link,
+  .menu-link-heading,
+  .contact-wrap,
+  .menu-btn,
+  .close-btn {
+    touch-action: manipulation;
+  }
+
+  /* The strip scrolls sideways; saying so lets a vertical swipe that starts inside it scroll
+     the page instead of being swallowed. */
+  .gallery-strip {
+    touch-action: pan-x;
+  }
+}
+
+/* Pressed states. These are not gated behind a pointer query — a mouse press deserves the
+   same acknowledgement — but they are what makes removing the tap highlight safe.
+
+   The tile gets 0.99 rather than the 0.97 a button gets. It is 386px tall on a phone, and the
+   same ratio that reads as a press on a 52px pill reads as a zoom on something that size. */
+.product-tile:active {
+  transform: scale(0.99);
+}
+
+/* The open group sets `opacity: 1` on its links at three classes deep, so a bare
+   `.nav-link:active` loses to it and the press does nothing. Matching that specificity is the
+   fix, and it is honest about scope: a link inside a closed group is invisible anyway. */
+.link-item[data-active='true'] .nav-link:active {
+  opacity: 0.62;
+}
+
+.menu-link-heading:active,
+.contact-wrap:active {
+  opacity: 0.62;
+}
+
+.contact-wrap {
+  transition: opacity var(--speed-fast) var(--ease-thaw);
+}
+
+.product-tile {
+  transition:
+    background-color var(--speed-md) var(--ease-thaw),
+    transform var(--speed-press) var(--ease-out-quart);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Glass.
+
+   Ice and glass are the same material problem — something clear that bends what is
+   behind it — so this is the one fashionable surface treatment this site has an
+   honest reason to use.
+
+   Two kinds, and the distinction matters for performance as much as for looks:
+
+   `.glass` does the real thing — `backdrop-filter` with a saturation boost, because
+   saturation is what separates glass from frosted plastic. It is reserved for the
+   four places with something behind them worth bending: the header, the menu panel,
+   the notes over the scrubbed footage, and the number stamped on a photograph. A
+   backdrop-filter is one of the most expensive things a browser can be asked to do,
+   and this audience is on phones.
+
+   `.glass-surface` is the same visual language with no filter at all — a specular
+   top edge, a raking sheen, a low-alpha border. On a flat colour bed there is
+   nothing to refract, so a blur there costs a composite and buys a placebo.
+
+   Both are built from four layers, in this order: a tint, a raking sheen implying a
+   curved lens, a hairline of light along the top edge where a real bevel would catch
+   it, and a shadow to lift the whole thing off what it sits on.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* Real glass, and the reason it can be this transparent is `brightness()`.
+     A tint darkens by covering the backdrop up; brightness darkens the backdrop
+     itself, optically, inside the filter — so the surface stays see-through while the
+     luminance behind the text stays under control. That is how a 26% tint reads as
+     readable glass where 76% was needed without it, and it is the difference between
+     this and a dark panel with a blur on it.
+
+     The blur matters as much: at 32px a bright specular needle is averaged into its
+     neighbourhood before it ever reaches the text, so there is no bright spike left
+     to fail against. */
+  --glass-blur: 12px;
+  /* Three thicknesses, ordered by how big the surface is. A material that is the same
+     thickness everywhere reads as a filter applied to things rather than as glass: a big
+     sheet should look thicker than a chip, the way a window looks thicker than a lens.
+     By area, on a 1280px viewport: the stamp is about 4k px², the header 92k, the menu
+     panel 266k. So 10px, 20px, 30px, and the blur is the thing that says which is which.
+
+     This also settles an inconsistency. The header's two states were 28px light and 12px
+     dark — the same strip changing thickness depending on what happened to be behind it,
+     which is exactly the thing glass never does. Both are `chrome` now. The dark state
+     gains from it too: its contrast guarantee rests on the blur averaging a specular
+     needle into its neighbourhood before it reaches the text, and 20px averages more of
+     one than 12px did. */
+  --glass-blur-chip: 10px;
+  --glass-blur-chrome: 20px;
+  --glass-blur-sheet: 30px;
+  --glass-sat: 1.5;
+  /* 0.42, down from 0.46. Every tint on the page came down at the same time — the header over a
+     photograph from 0.12 to 0.08, the stamp from 0.16 to 0.10, the action bar from 0.22 to 0.14 —
+     and this is what pays for it. A tint covers the backdrop up; brightness dims it optically and
+     leaves it visible, so trading four points of tint for four of brightness makes the glass
+     clearer *and* measures better: the header over the hero photograph went from 4.28:1 to
+     5.32:1 against a white worst case. scripts/glass_contrast.py is the arithmetic. */
+  --glass-dim: 0.42;
+  /* The rim is most of the effect. In the reference the panel separates from its
+     background by a bright outline rather than by a shadow, and that outline is
+     thicker and brighter than a normal border — it is light piling up in the edge of
+     a thick piece of glass. Two rings at different alphas read as that thickness.
+     `--glass-rim`, `--glass-rim-inner` and the two `--glass-bevel-*` values are injected by
+     LiquidGlassFilter from the same six dials the SVG filter is built from, so the CSS edge and
+     the refraction cannot drift apart; the values here are the fallback if that never renders. */
+  --glass-rim: 0.5;
+  --glass-rim-inner: 0.16;
+  /* The bevel, in three parts, and the light is a single source directly above — which is what
+     Apple's own is, and what its icon tooling states as a vertical light angle. So the top edge
+     catches hard, the bottom lip returns a weaker gleam, and the left and right get neither: they
+     face away from a vertical light, and what shows there instead is the dark ring. That dark ring
+     is the newest part of the reference material and it is the only thing in the CSS that says how
+     thick the glass is. A first pass here used a diagonal top-left/bottom-right pair, which is a
+     chamfer lit from the corner and not what the reference does. */
+  --glass-bevel-near: 0.65;
+  --glass-bevel-far: 0.2;
+  --glass-bevel-dark: 0.2;
+  /* The sheen is white on dark beds and near-black on light ones; both themes set
+     these, so one set of rules covers the whole page. */
+  --glass-spec: 255 255 255;
+  --glass-tint: 4 16 23;
+}
+
+.theme-frost,
+.theme-sheet,
+.theme-glacier {
+  /* The highlight stays white on a light bed — that is what a bevel does — but the
+     shading has to go dark, or the surface gets a top edge and no bottom one and
+     reads as flat rather than raised. */
+  --glass-spec: 255 255 255;
+  --glass-tint: 7 24 34;
+}
+
+.glass,
+.glass-surface {
+  position: relative;
+  border: 1px solid rgb(var(--glass-spec) / 0.16);
+  /* Five things, and the order is the paint order — first listed is on top. The top bevel and the
+     bottom gleam sit over a dark ring that runs all four sides, so the ring only shows where the
+     light does not reach: down the left and right edges. Then a thread of light outside the
+     border, which is how the reference separates glass from its background — light around the
+     shape rather than shadow beneath it, which is why it survives on a light bed. */
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / var(--glass-bevel-near)),
+    inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
+    inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
+    0 0 0 0.5px rgb(var(--glass-spec) / 0.14),
+    0 2px 4px rgb(0 0 0 / 0.05),
+    0 calc(var(--u) * 0.8) calc(var(--u) * 2) rgb(var(--deep) / 0.22);
+}
+
+/* The raking sheen lives in background-image rather than a pseudo-element, and that
+   is a constraint rather than a preference: `.card::before` is already the frost
+   bloom, and a second absolutely-positioned layer would have to fight it. A
+   background-image layers over the element's own background-color and clashes with
+   nothing.
+
+   Shorter and brighter than it was — 0.20 at the corner against 0.13, but spent by 46% of the
+   way across instead of 64%. The peak is the bevel catching light; the tail was only lifting the
+   middle of the surface, which is where text sits. */
+.glass,
+.glass-surface {
+  background-image: linear-gradient(
+    148deg,
+    rgb(var(--glass-spec) / 0.22),
+    rgb(var(--glass-spec) / 0.04) 22%,
+    transparent 46%
+  );
+}
+
+.glass {
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+  backdrop-filter: url(#liquid-glass) blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+}
+
+
+/* ---------------------------------------------------------------------------
+   Refraction.
+
+   Every glass surface below declares `backdrop-filter` twice. That is the fallback
+   pattern, not a mistake: the plain blur-and-brightness version first, the `url()`-bearing
+   version second, so an engine that rejects the second keeps the first.
+
+   Worth being exact about who gets which, because the obvious version of this is wrong.
+   Chromium runs the whole graph. Safari's prefixed property accepts filter *functions* only, and
+   Safari reads `-webkit-backdrop-filter`, which never carries a `url()` — so it gets the plain
+   glass and nothing is lost. Firefox is the awkward one: it parses `backdrop-filter: url(...)`
+   quite happily, so the second declaration wins its cascade, and only at paint time does it find
+   that `feDisplacementMap` and `feImage` are pref-gated off and drop the *entire* chain, blur
+   included. See the `@supports (-moz-orient: inline)` block below, which hands Gecko the plain
+   chain back.
+
+   So the warping is an enhancement for most of the traffic and invisible to the rest — which is
+   why the base is still tuned to stand up on its own rather than depending on the filter to look
+   finished.
+
+   The filter itself lives in components/LiquidGlassFilter.tsx.
+   --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   Where the glass goes. Everything below re-declares an existing component, so it
+   has to sit after those definitions — same specificity means source order wins.
+   --------------------------------------------------------------------------- */
+
+/* The header. Already blurred; now it has an edge that catches light and a tint that
+   picks up the section beneath it.
+
+   No `border-bottom`. A 1px rule under fixed chrome reads as a divider between two
+   regions, which is the wrong idea: the header is a floating layer and the page runs
+   underneath it. What replaces it is a short gradient below the header — see
+   `.site-header::after` — so content fades into the chrome instead of stopping at a line.
+   The inset specular edges stay, because those are the glass's own bevel and a different
+   job entirely. */
+.site-header {
+  background-color: rgb(var(--frost) / 0.12);
+  /* The measured text band is 34.9%–65.1% of the header height, so the specular is spent by 22%
+     and gone by 44%: the bright edge sits entirely above the cap-height of the wordmark. That is
+     what lets the peak go from 0.30 to 0.42 without the ink paying for it. */
+  background-image: linear-gradient(
+    to bottom,
+    rgb(var(--glass-spec) / 0.42),
+    rgb(var(--glass-spec) / 0.03) 22%,
+    transparent 44%
+  );
+  /* Top and bottom only. A full-width strip has no left or right edge on screen, so a
+     four-sided chamfer would draw two hairlines down the sides of the viewport. */
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.72),
+    inset 0 -1px 0 rgb(var(--glass-spec) / 0.2),
+    0 1px 3px rgb(0 0 0 / 0.04),
+    0 1px calc(var(--u) * 1.5) rgb(var(--deep) / 0.08);
+  /* Brightness above 1 here, not below: this state only ever sits over a light bed,
+     and its text is the dark ink, so the backdrop wants lifting rather than dimming. */
+  backdrop-filter: blur(var(--glass-blur-chrome)) saturate(1.6) brightness(1.12);
+  -webkit-backdrop-filter: blur(var(--glass-blur-chrome)) saturate(1.6) brightness(1.12);
+  backdrop-filter: url(#liquid-glass) blur(var(--glass-blur-chrome)) saturate(1.6) brightness(1.12);
+}
+
+/* The scroll edge. A few units of the header's own tint, fading out, sitting just below
+   it and outside it — so the last of the page slides under the chrome rather than meeting
+   a rule. `pointer-events: none` because it covers content that has to stay clickable,
+   and it inherits `--glass-tint`, so it flips with the bed the header is over without a
+   second declaration. */
+.site-header::after {
+  content: '';
+  position: absolute;
+  inset: 100% 0 auto;
+  height: calc(var(--u) * 0.9);
+  pointer-events: none;
+  background-image: linear-gradient(
+    to bottom,
+    rgb(var(--glass-tint) / 0.06),
+    rgb(var(--glass-tint) / 0)
+  );
+}
+
+/* The dark state, and the numbers are arithmetic rather than taste. Frost text needs
+   the composited backdrop at or below 0.164 relative luminance to clear 4.5:1. A tint
+   alone would have to be 0.55 to guarantee that against the bright rim of ice in the
+   hero photograph — barely glass. `brightness()` inside the filter dims the backdrop
+   optically instead of covering it up, which gets the same guarantee at a fraction of the
+   tint: nine tenths of the picture still comes through, and the 20px blur has already
+   averaged any specular needle into its neighbourhood before it reaches the text.
+
+   The tint is 0.08 now, down from 0.12, and the dim is 0.42, down from 0.46. Measured against a
+   pure white backdrop that is 5.32:1 where the old pair was 4.28:1 — the old pair was under AA,
+   which only became visible once the specular sheen was counted as part of what the text is read
+   against. The sheen is the other half of the fix: it kept its brightness and gave up its reach,
+   so at the text band it contributes almost nothing. The hero's header band measures p95 0.953
+   relative luminance, which is why white is the worst case rather than a pessimistic one.
+
+   Same `--glass-blur-chrome` as the light state: it is the same piece of glass, and the
+   thickness of a material does not depend on what is behind it. */
+.site-header[data-on-dark='true'] {
+  background-color: rgb(var(--abyss) / 0.08);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(var(--glass-spec) / 0.26),
+    rgb(var(--glass-spec) / 0.02) 22%,
+    transparent 44%
+  );
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.42),
+    inset 0 -1px 0 rgb(var(--glass-spec) / 0.12),
+    0 1px 3px rgb(0 0 0 / 0.15),
+    0 1px calc(var(--u) * 1.5) rgb(0 0 0 / 0.3);
+  backdrop-filter: blur(var(--glass-blur-chrome)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+  -webkit-backdrop-filter: blur(var(--glass-blur-chrome)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+  backdrop-filter: url(#liquid-glass) blur(var(--glass-blur-chrome)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+}
+
+/* Heavier over a photograph than over a flat bed. A scroll edge has to separate the
+   chrome from what is under it, and a busy backdrop needs more of one — over the hero it
+   is the difference between the header floating and the header dissolving. */
+.site-header[data-on-dark='true']::after {
+  height: calc(var(--u) * 1.3);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 0.18),
+    rgb(0 0 0 / 0)
+  );
+}
+
+/* The blur has to travel through a registered custom property rather than through
+   `backdrop-filter` itself, and that is a spec constraint rather than a preference. A filter
+   list containing a `url()` reference is not interpolable — so on Chromium, the one engine
+   that takes the `url(#liquid-glass)` declaration and therefore the only one showing the real
+   lens, transitioning `backdrop-filter` would snap instead of ramp. Registering `--panel-blur`
+   as a `<length>` makes the number itself animatable, and the filter re-resolves from it every
+   frame. Engines without `@property` (Chromium < 85, Safari < 16.4, Firefox < 128) fall back
+   to a snap, which is what the panel did before this existed.
+
+   Only this surface gets the ramp. The header, the action bar and the stamp are persistent —
+   they never arrive — so there is nothing to materialize and no reason to pay for it. */
+/* The scrim's blur travels the same way and for the same reason as the sheet's — see the note
+   above `--panel-blur`. Registered so the length interpolates; 0 to 3px, which is the whole range
+   the scrim ever had. */
+@property --scrim-blur {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 3px;
+}
+
+@property --panel-blur {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 30px;
+}
+
+/* The menu panel. This is the one surface where the effect earns its cost outright:
+   the page is still there behind it, bent and desaturated, so the panel reads as a
+   sheet of glass laid over the site rather than a new page. */
+.menu-panel {
+  /* 0.08, down from 0.12 and originally 0.28. In the reference you can trace individual
+     terrace bands straight across the panel, and that only happens down here. What keeps
+     the text readable at that transparency is brightness() rather than tint — see the
+     token block — plus the fact that this panel does not sit on the page at all. It sits on
+     `.menu-scrim`, which has already dimmed everything behind it to 0.86 and laid 18% black
+     over that, so the panel's real backdrop is far darker than the page. */
+  background-color: rgb(var(--deep) / 0.08);
+  background-image: linear-gradient(
+    152deg,
+    rgb(var(--glass-spec) / 0.22),
+    rgb(var(--glass-spec) / 0.03) 24%,
+    transparent 50%
+  );
+  border: 1px solid rgb(var(--glass-spec) / var(--glass-rim));
+  /* The chamfer, then a tighter ring inside it, then a thread of light outside the border, then
+     the faintest lift. No heavy drop shadow: the reference separates its panel from the
+     background with light on the edge, not with darkness underneath. */
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / var(--glass-bevel-near)),
+    inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
+    inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
+    0 0 0 0.5px rgb(var(--glass-spec) / 0.14),
+    0 4px 14px rgb(0 0 0 / 0.18),
+    0 calc(var(--u) * 1) calc(var(--u) * 3) rgb(0 0 0 / 0.34);
+  backdrop-filter: blur(var(--panel-blur)) saturate(var(--glass-sat)) brightness(0.46);
+  -webkit-backdrop-filter: blur(var(--panel-blur)) saturate(var(--glass-sat)) brightness(0.46);
+  backdrop-filter: url(#liquid-glass) blur(var(--panel-blur)) saturate(var(--glass-sat)) brightness(0.46);
+}
+
+/* A touch of blur on the scrim as well, so the gap between the panel edge and the
+   page does not look like a hard cut. */
+.menu-scrim {
+  background-color: rgb(0 0 0 / 0.18);
+  /* No refraction on the scrim, deliberately: it covers the whole viewport, and
+     warping an entire page rather than a panel-sized area of it is nauseating rather
+     than pretty. */
+  backdrop-filter: blur(var(--scrim-blur)) saturate(1.1) brightness(0.86);
+  -webkit-backdrop-filter: blur(var(--scrim-blur)) saturate(1.1) brightness(0.86);
+}
+
+
+
+/* The plate carries the words now, so the full-height wash can come back down and
+   let more of the footage through. */
+
+/* The number on a photograph: small, over a picture, and the fourth place a real
+   backdrop-filter is worth paying for. */
+/* The photographs behind these have not arrived yet, so the tint assumes the worst
+   about them: a phone number that cannot be read is the one thing on this page that
+   must never happen. */
+.product-stamp {
+  background-color: rgb(var(--abyss) / 0.1);
+  /* A pill this small has almost no room above its cap-height, so the specular is spent by 16%
+     and gone by 34% — the tightest of the four, because the text starts higher up. */
+  background-image: linear-gradient(
+    to bottom,
+    rgb(var(--glass-spec) / 0.3),
+    rgb(var(--glass-spec) / 0.02) 16%,
+    transparent 34%
+  );
+  border: 1px solid rgb(var(--glass-spec) / var(--glass-rim));
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / var(--glass-bevel-near)),
+    inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
+    inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
+    0 0 0 0.5px rgb(var(--glass-spec) / 0.16),
+    0 2px 8px rgb(0 0 0 / 0.22);
+  backdrop-filter: blur(var(--glass-blur-chip)) saturate(var(--glass-sat)) brightness(0.38);
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur-chip) * 1.6)) saturate(var(--glass-sat)) brightness(0.42);
+  backdrop-filter: url(#liquid-glass) blur(var(--glass-blur-chip)) saturate(var(--glass-sat)) brightness(0.38);
+}
+
+/* ---------------------------------------------------------------------------
+   Firefox gets its glass back.
+
+   The Declare-It-Twice Rule rests on a premise that turns out to be false. It assumed a browser
+   without `url()` support inside `backdrop-filter` throws that whole declaration away as invalid
+   and keeps the plain one above it. Safari does behave that way — it reads `-webkit-backdrop-filter`,
+   which never contains a `url()`, so it is fine. Firefox does not: it *parses* the reference
+   version, so the reference version wins the cascade, and only at paint time does it discover it
+   cannot run the graph.
+
+   Measured on Firefox 153: `getComputedStyle` returns
+   `url("#liquid-glass") blur(20px) saturate(1.5) brightness(0.42)`, and
+   `CSS.supports('backdrop-filter', 'url(#x) blur(4px)')` is true. Gecko has a real SVG-filter path
+   for backdrop filters, but `feDisplacementMap`, `feTurbulence` and `feImage` are all pref-gated
+   off (`gfx.webrender.svg-filter-effects.*` default false), and when a primitive falls back to a
+   blob image the backdrop path cannot use it — so it discards the entire chain. Not just the
+   refraction: the blur, the saturation and the brightness go with it.
+
+   Which means Firefox was rendering these surfaces with no filter at all, and the tint alone is
+   nowhere near enough. The header over the hero photograph is an 8% tint over an unfiltered
+   backdrop: frost text on a 235-grey surface, about 1.1:1. Invisible, not merely low.
+
+   So this block restates the plain chain for Gecko only. `-moz-orient` is Gecko-only and stable;
+   verified true on Firefox 153 and false on Chromium 148. It has to sit after every `url()`
+   declaration above and before the accessibility blocks below, because `@supports` adds no
+   specificity and source order is what decides. If Firefox ever flips those prefs on, this block
+   costs it the refraction it would have gained — a graceful loss rather than a broken surface.
+   --------------------------------------------------------------------------- */
+
+@supports (-moz-orient: inline) {
+  .button {
+    backdrop-filter: blur(14px) saturate(var(--glass-sat)) brightness(0.94);
+  }
+
+  .glass {
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+  }
+
+  .site-header {
+    backdrop-filter: blur(var(--glass-blur-chrome)) saturate(1.6) brightness(1.12);
+  }
+
+  .site-header[data-on-dark='true'] {
+    backdrop-filter: blur(var(--glass-blur-chrome)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+  }
+
+  .menu-panel {
+    backdrop-filter: blur(var(--panel-blur)) saturate(var(--glass-sat)) brightness(0.46);
+  }
+
+  .product-stamp {
+    backdrop-filter: blur(var(--glass-blur-chip)) saturate(var(--glass-sat)) brightness(0.38);
+  }
+}
+
+/* Everything from here down is surface only — no filter, because it sits on a flat
+   colour bed with nothing behind it to bend. */
+.card,
+.product-tile {
+  background-image: linear-gradient(
+    148deg,
+    rgb(var(--glass-spec) / 0.12),
+    rgb(var(--glass-spec) / 0.03) 38%,
+    transparent 64%
+  );
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.18),
+    0 calc(var(--u) * 0.5) calc(var(--u) * 1.4) rgb(var(--deep) / 0.14);
+}
+
+.product-tile {
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.16),
+    0 calc(var(--u) * 0.8) calc(var(--u) * 2.2) rgb(var(--deep) / 0.28);
+}
+
+
+.product-corner {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(var(--glass-spec) / 0.16),
+    rgb(var(--glass-spec) / 0.02)
+  );
+  box-shadow: inset 0 1px 0 rgb(var(--glass-spec) / 0.22);
+}
+
+/* ---------------------------------------------------------------------------
+   The other two scaling bands. The reference site steps its unit up on smaller
+   screens rather than letting it shrink — 0.96vw on desktop, 1.75vw on tablet,
+   4vw on a phone — so the design stays proportional to the screen it is on
+   instead of collapsing to a minimum and looking cramped. Same three bands here,
+   each with a floor so text can never become unreadable.
+   --------------------------------------------------------------------------- */
+
+@media (max-width: 991px) {
+  :root {
+    --u: clamp(12px, 1.75vw, 18px);
+  }
+
+  /* Stacked, with the divider laid flat and the headings dropped from 4.4em to
+     2.6em — theirs. The width is not theirs: they go straight to 100vw from 991px
+     down, but `--u` steps up to 1.75vw in this band, so a literal 47em would be
+     wider than the screen. Capping it at two thirds keeps it a side panel with the
+     page still visible behind the scrim, which is the point of the design. */
+  .menu-panel {
+    width: min(calc(var(--u) * 27), 82vw);
+    flex-direction: column;
+    gap: calc(var(--u) * 1.1);
+    padding: calc(var(--u) * 1) calc(var(--u) * 1) calc(var(--u) * 4);
+  }
+
+  .menu-divider {
+    width: 100%;
+    height: 1px;
+    align-self: auto;
+    margin-top: calc(var(--u) * 2.5);
+  }
+
+  .close-btn {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .close-btn .logo-inside {
+    display: block;
+  }
+
+  .menu-items {
+    padding-top: calc(var(--u) * 2);
+  }
+
+  .menu-heading {
+    font-size: calc(var(--u) * 1.9);
+  }
+
+  .menu-icon {
+    left: calc(var(--u) * -2);
+    width: calc(var(--u) * 1.2);
+    height: calc(var(--u) * 1.2);
+  }
+
+  .link-item-links {
+    padding-left: calc(var(--u) * 1.6);
+  }
+
+  .nav-wrap {
+    padding-inline: calc(var(--u) * 1);
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    --u: clamp(12px, 4vw, 18px);
+    /* Back to the tighter stagger. A phone lays these grids out as one column, so a reveal
+       that reads as choreography across a row of cards reads as content arriving late when the
+       cards are stacked and each one fills the screen. */
+    --delay: 32.5ms;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Narrow screens, product row only. The reference site turns the same three-column
+   grid into a horizontally scrolling strip of fixed-width cards with the scrollbar
+   hidden, and drops the photograph inside the tile rather than hanging it above.
+   Their breakpoint is 991px, so this is theirs.
+   --------------------------------------------------------------------------- */
+
+@media (max-width: 991px) {
+  .product-row {
+    display: flex;
+    grid-template-columns: none;
+    row-gap: 0;
+    column-gap: var(--gutter);
+    margin-top: calc(var(--u) * 2.5);
+    /* Bleeds the strip to both screen edges while the first card stays aligned
+       with the heading above it. */
+    margin-inline: calc(var(--margin) * -1);
+    padding-inline: var(--margin);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .product-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-tile {
+    flex: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: calc(var(--u) * 19);
+    height: auto;
+    scroll-snap-align: start;
+  }
+
+  .product-photo {
+    position: relative;
+    inset: auto;
+    box-shadow: none;
+    margin-bottom: calc(var(--u) * 1.25);
+  }
+
+  /* Not gated behind a pointer query like every other hover rule, and deliberately: at
+     this width the photograph is back in flow, so this cancels a transform that no longer
+     has anywhere to go. It only matters for a fine-pointer device narrower than 640px. */
+  .product-tile:hover .product-photo {
+    transform: none;
+  }
+
+  .product-body {
+    margin-top: auto;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The phone action bar. Hidden entirely above 639px, where there is a header with
+   room for a button in it and a mouse that can reach anywhere.
+   --------------------------------------------------------------------------- */
+
+.action-bar {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .action-bar {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 65;
+    display: flex;
+    gap: calc(var(--u) * 0.6);
+    padding: calc(var(--u) * 0.7) var(--margin);
+    /* Clears the iOS home indicator without guessing at its height. */
+    padding-bottom: max(calc(var(--u) * 0.7), env(safe-area-inset-bottom));
+
+    /* The bar declares its own bed, and it has to: it is fixed chrome, so it has no
+       `.theme-*` ancestor, and every token the buttons read resolves to nothing here.
+       `.button.secondary` sets `color: var(--text)`, which fell back to the inherited
+       body ink — deep on a bar tinted with abyss. The Call label measured 1.00:1 against
+       the dark beds it spends most of the page over: the same colour as its own backdrop,
+       invisible rather than merely low. Declaring the tokens is also what makes any
+       control added here later correct by default instead of by accident. Deliberately
+       not the `theme-deep` class, which would bring `background-color: var(--surface)`
+       with it and paint over the glass. */
+    --text: rgb(var(--frost));
+    --text-muted: rgb(var(--haze));
+    --rule: rgb(var(--frost) / 0.16);
+    --accent: rgb(var(--chill));
+    --btn-fill: var(--frost);
+    --btn-ink: var(--deep);
+
+    background-color: rgb(var(--abyss) / 0.14);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(var(--glass-spec) / 0.24),
+      rgb(var(--glass-spec) / 0.02) 20%,
+      transparent 42%
+    );
+    border-top: 1px solid rgb(var(--glass-spec) / var(--glass-rim));
+    box-shadow:
+      inset 0 1px 0 rgb(var(--glass-spec) / 0.24),
+      0 calc(var(--u) * -0.5) calc(var(--u) * 2) rgb(0 0 0 / 0.28);
+    backdrop-filter: blur(var(--glass-blur-chrome)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+    -webkit-backdrop-filter: blur(var(--glass-blur-chrome)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
+    transition: transform var(--speed-md) var(--ease-out-quart);
+  }
+
+  /* Out of the way over the footer, which repeats both numbers, and while the menu is
+     open, because two competing sets of actions on one screen is worse than either. */
+  .action-bar[data-tucked='true'],
+  html.menu-open .action-bar {
+    transform: translate3d(0, 120%, 0);
+  }
+
+  .action-bar-main {
+    flex: 1;
+  }
+
+  .action-bar-call {
+    flex: none;
+    padding-inline: calc(var(--u) * 1.4);
+  }
+
+  /* So the last thing on the page is never sitting underneath the bar. */
+  body {
+    padding-bottom: calc(var(--u) * 5);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Phone. Everything below here overrides a class defined above, so it has to
+   stay at the bottom of the file: same specificity means source order decides,
+   and a media query placed before the class it overrides silently does nothing.
+   --------------------------------------------------------------------------- */
+
+@media (max-width: 639px) {
+  /* A 50px rise is a sixth of a phone screen. Shorter travel, same duration —
+     the movement stays legible without the copy starting off-screen. */
+  html[data-js='1'] .scroll-entrance > * {
+    transform: translate3d(0, 36px, 0);
+  }
+
+  /* The notes get less room and less padding on a phone — one short line each,
+     which is all a note should ever be. */
+
+
+
+  /* On a phone this stops being a side drawer and becomes an inset sheet that rises
+     from the bottom.
+
+     Two reasons, and they were asked for separately. It must not span the screen
+     horizontally — so it keeps a margin on every side and its own rounded corners,
+     which also makes the page behind it read as still being there. And a left-hand
+     drawer puts fifteen links in the top two thirds of a tall screen, which is the
+     part of a phone a thumb cannot reach; rising from the bottom puts them where the
+     hand already is. */
+  .menu-panel {
+    /* Not `--margin`. That token is the page's text margin, 4.6u, which at the phone unit is
+       69px a side — it left a bottom sheet 237px wide on a 375px screen, 63% of the width, so
+       "Ice drinks chiller machines" wrapped onto two lines and the last group headings were
+       cut off below the fold of the scroller. A sheet is not a text column; it wants the edge
+       of the screen, with just enough inset to read as a sheet rather than a new page.
+
+       84vh rather than 78 for the same reason: the links now fit on one line each, so more of
+       the menu is reachable without scrolling, and a strip of the page still shows above it,
+       which is the cue that the page is still there underneath. */
+    inset: auto calc(var(--u) * 0.8) 0;
+    width: auto;
+    /* The base rule caps this at `100vw - --margin * 2`, which is the same 69px-a-side text
+       margin and was still holding the sheet at 237px however the inset was set. Releasing the
+       cap is what actually widens it; the inset alone did nothing. */
+    max-width: none;
+    height: auto;
+    max-height: 84vh;
+    flex-direction: column;
+    gap: calc(var(--u) * 0.9);
+    padding: calc(var(--u) * 1.2) calc(var(--u) * 1.2) calc(var(--u) * 1.4);
+    border: 1px solid rgb(var(--glass-spec) / var(--glass-rim));
+    border-radius: var(--radius-panel);
+    /* Clears the home indicator, and leaves the action bar's height underneath. */
+    margin-bottom: max(calc(var(--u) * 1), env(safe-area-inset-bottom));
+    /* Up, not sideways — and only the axis changes, never the transform itself. */
+    --slide-x: 0%;
+    --slide-y: 106%;
+    --slide-scale: 1;
+    transform-origin: center bottom;
+  }
+
+  /* The rail runs across the top of the sheet rather than down its side. */
+  .menu-divider {
+    width: 100%;
+    height: 1px;
+    align-self: auto;
+    margin-top: calc(var(--u) * 0.9);
+  }
+
+  .menu-items {
+    padding-top: calc(var(--u) * 1.2);
+  }
+
+  /* A sheet is short, so the type comes down again and the rows tighten. */
+  .menu-heading {
+    font-size: calc(var(--u) * 1.6);
+  }
+
+  .nav-link {
+    font-size: calc(var(--u) * 1.05);
+  }
+
+  .menu-link-heading {
+    margin-bottom: calc(var(--u) * 0.25);
+  }
+
+
+  .marquee-track {
+    animation-duration: 7s;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Reduce Motion. This setting means "stop moving things", not "show me nothing" — so
+   entrances become a straight cross-fade with no travel and the parallax beds hold
+   still. Nothing is hidden and nothing is left mid-animation.
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html[data-js='1'] .scroll-entrance > * {
+    transform: none;
+    transition: opacity var(--speed-md) linear;
+  }
+
+  .parallax {
+    transform: none;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+
+  /* The sheet stops materializing and is simply already glass. Reduce Motion is not a
+     vestibular objection to a blur radius, but it is an objection to things forming in
+     front of you, and the panel is still cross-fading in underneath this. Held at the
+     target in both states, so there is nothing to interpolate rather than a ramp that
+     runs at zero duration. */
+  .menu-panel,
+  .menu-side[data-open='true'] .menu-panel {
+    --panel-blur: var(--glass-blur-sheet);
+  }
+
+  .menu-scrim,
+  .menu-side[data-open='true'] .menu-scrim {
+    --scrim-blur: 3px;
+  }
+
+  .melt-line::after {
+    display: none;
+  }
+
+  /* The photographic beds stop opening up. Left as a plain `transform: none` rather
+     than a different scale, because 1 is where the crop was authored. */
+  .section-bg img {
+    transform: none;
+    will-change: auto;
+  }
+
+  .parallax {
+    will-change: auto;
+  }
+
+  /* The panel still arrives, but it cross-fades in place instead of sliding 102% of the
+     viewport width. A drawer crossing the screen is movement whatever else it is, and
+     640ms of it was the largest uncancelled motion left in here. The wrapper's
+     `visibility: hidden` is what keeps the closed panel out of the way now that it no
+     longer sits off-screen, so the exit delay has to come down to match the shorter
+     fade or the panel is held visible at opacity 0 for a quarter of a second. */
+  .menu-side {
+    transition: visibility 0s linear var(--speed-fast);
+  }
+
+  .menu-panel {
+    --slide-x: 0%;
+    --slide-y: 0%;
+    --slide-scale: 1;
+    opacity: 0;
+    transition: opacity var(--speed-fast) linear;
+  }
+
+  .menu-side[data-open='true'] .menu-panel {
+    opacity: 1;
+    transition: opacity var(--speed-fast) linear;
+  }
+
+  /* The heading arrives as one thing. Nothing moves in a split reveal, so it survived the
+     first pass — but fifty-four glyphs cross-fading in sequence over a second and a half
+     is the "fewer and gentler" this query asks for, not an exception to it. */
+  html[data-js='1'] .split-text .split-char {
+    transition: opacity var(--speed-fast) linear;
+    transition-delay: 0s;
+  }
+
+  /* The catalogue arrives too, without a queue. The runtime writes a per-item delay for the
+     stagger, so it has to be overridden here rather than merely shortened: twenty-eight fades
+     played in sequence is still a sequence. */
+  html[data-js='1'] .gallery-item {
+    transform: none;
+    transition: opacity var(--speed-fast) linear;
+    transition-delay: 0s !important;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   Reduce Transparency.
+
+   The companion setting to Reduce Motion, and the site had no answer for it. Someone who
+   turns it on is telling the browser that translucency costs them legibility — so every
+   refracting surface goes opaque and the filter comes off entirely. Not frostier: opaque.
+   A half-measure is the worst of both, still hard to read and no longer glass.
+
+   Nothing here can fail contrast, which is the point of doing it this way. The glass
+   guarantees a composited backdrop at or below 0.164 relative luminance, which is frost
+   text at 4.55:1. Opaque, the same text measures 16.74:1 on `deep` and 17.83:1 on `abyss`,
+   the header's dark ink measures 16.74:1 on frost, and the muted tone measures 9.06:1 —
+   every one of them a long way above the floor the glass was holding.
+
+   The filter goes off with `backdrop-filter: none` rather than by not being declared,
+   because these rules re-declare selectors that already set it twice for the Chromium
+   fallback and both declarations have to be overridden.
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .site-header,
+  .site-header[data-on-dark='true'],
+  .menu-panel,
+  .menu-scrim,
+  .product-stamp,
+  .link-item[data-active='true'] .menu-link-heading {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .site-header {
+    background-color: rgb(var(--frost));
+    background-image: none;
+  }
+
+  .site-header[data-on-dark='true'] {
+    background-color: rgb(var(--abyss));
+    background-image: none;
+  }
+
+  /* The scroll edge survives, and it has to: with no blur the header no longer separates
+     itself from the content optically, so the gradient is the only thing left doing it. */
+  .site-header::after {
+    background-image: linear-gradient(to bottom, rgb(var(--glass-tint) / 0.14), rgb(var(--glass-tint) / 0));
+  }
+
+  .menu-panel {
+    background-color: rgb(var(--deep));
+    background-image: none;
+  }
+
+  /* The scrim carries the whole separation now. Raised from 0.3 to 0.62, because at 0.3 it
+     was a hint over a blur that is no longer there. */
+  .menu-scrim {
+    background-color: rgb(0 0 0 / 0.62);
+  }
+
+  .product-stamp,
+  .action-bar {
+    background-color: rgb(var(--abyss));
+    background-image: none;
+  }
+
+  /* The open group's pill was a lighter translucent surface stacked on a translucent
+     sheet, which is the one combination that always loses. Opaque, it becomes a plain
+     lifted row. */
+  .link-item[data-active='true'] .menu-link-heading {
+    background-color: rgb(var(--frost) / 0.14);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Increase Contrast. Opaque as above, and then every edge that was a low-alpha hint
+   becomes a real border. The glass reads separation through light piling up in a rim; at
+   this setting a rim is not enough and the surface needs an outline.
+   --------------------------------------------------------------------------- */
+
+@media (prefers-contrast: more) {
+  .glass,
+  .site-header,
+  .site-header[data-on-dark='true'],
+  .menu-panel,
+  .product-stamp {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-image: none;
+  }
+
+  .site-header {
+    background-color: rgb(var(--frost));
+    border-bottom: 1px solid rgb(var(--deep) / 0.7);
+  }
+
+  .site-header[data-on-dark='true'] {
+    background-color: rgb(var(--abyss));
+    border-bottom-color: rgb(var(--frost) / 0.7);
+  }
+
+  /* A defined border replaces the fade — at this setting a gradient is exactly the kind of
+     soft edge the reader has asked not to have to find. */
+  .site-header::after {
+    background-image: none;
+  }
+
+  .menu-panel {
+    background-color: rgb(var(--deep));
+    border-color: rgb(var(--frost) / 0.7);
+  }
+
+  .product-stamp {
+    background-color: rgb(var(--abyss));
+    border-color: rgb(var(--frost) / 0.7);
+  }
+
+  .action-bar {
+    background-color: rgb(var(--abyss));
+    background-image: none;
+    border-top-color: rgb(var(--frost) / 0.7);
+  }
+}
