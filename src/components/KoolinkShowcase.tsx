@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-import FlexCarousel, { FlexCarouselItem } from '@/components/FlexCarousel';
+import { ArrowRight, Layers, Sparkles } from 'lucide-react';
+import FlexCarousel, { DEFAULT_ITEMS, FlexCarouselItem } from '@/components/FlexCarousel';
 import { Reveal } from '@/components/Reveal';
 
 const koolinkItems: ReadonlyArray<FlexCarouselItem> = [
@@ -34,33 +34,73 @@ const koolinkItems: ReadonlyArray<FlexCarouselItem> = [
 ];
 
 export function KoolinkShowcase() {
+  const [collection, setCollection] = useState<'koolink' | 'materials'>('koolink');
+
+  const activeItems = collection === 'koolink' ? koolinkItems : DEFAULT_ITEMS;
+
   return (
     <section id="products" className="theme-frost py-v-space border-b scroll-mt-header" style={{ borderColor: 'var(--rule)' }}>
       <div className="shell flex flex-col gap-6">
-        <Reveal className="w-full flex items-center justify-between">
+        <Reveal className="w-full flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <p className="eyebrow" style={{ color: 'var(--accent)' }}>Interactive Showcase</p>
-            <h2 className="h2 mt-1">Explore our flagship refrigeration lines.</h2>
+            <p className="eyebrow" style={{ color: 'var(--accent)' }}>Interactive WebGL Showcase</p>
+            <h2 className="h2 mt-1">Explore our product lines & material studies.</h2>
+            <p className="body text-subtle mt-1">
+              Drag, swipe or scrub with trackpad. Click any card to expand details with chromatic liquid dispersion.
+            </p>
           </div>
-          <Link
-            href="/products"
-            className="hidden sm:inline-flex items-center gap-2 body-small font-medium"
-            style={{ color: 'var(--accent)' }}
-          >
-            Explore all 29 photographs <ArrowRight size={16} />
-          </Link>
+
+          <div className="flex items-center gap-3 self-start sm:self-auto flex-wrap">
+            {/* Collection Switcher Pills */}
+            <div className="inline-flex p-1 rounded-pill bg-[rgb(var(--deep)/0.06)] border border-[rgb(var(--deep)/0.08)]">
+              <button
+                type="button"
+                onClick={() => setCollection('koolink')}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-pill text-xs font-semibold transition-all ${
+                  collection === 'koolink'
+                    ? 'bg-white text-[rgb(var(--deep))] shadow-sm'
+                    : 'text-[rgb(var(--steel))] hover:text-[rgb(var(--deep))]'
+                }`}
+              >
+                <Layers size={14} />
+                Flagship Machines ({koolinkItems.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setCollection('materials')}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-pill text-xs font-semibold transition-all ${
+                  collection === 'materials'
+                    ? 'bg-white text-[rgb(var(--deep))] shadow-sm'
+                    : 'text-[rgb(var(--steel))] hover:text-[rgb(var(--deep))]'
+                }`}
+              >
+                <Sparkles size={14} />
+                Art & Materials ({DEFAULT_ITEMS.length})
+              </button>
+            </div>
+
+            <Link
+              href="/products"
+              className="hidden lg:inline-flex items-center gap-2 body-small font-medium"
+              style={{ color: 'var(--accent)' }}
+            >
+              Explore all 29 photographs <ArrowRight size={16} />
+            </Link>
+          </div>
         </Reveal>
 
-        {/* Liquid-glass flex-squeeze carousel */}
+        {/* Liquid-glass WebGL FlexCarousel */}
         <Reveal className="w-full" delay={1}>
-          <div className="w-full h-[clamp(380px,52vh,560px)] relative rounded-card overflow-hidden">
+          <div className="w-full h-[clamp(420px,56vh,620px)] relative rounded-card overflow-hidden bg-gradient-to-b from-transparent via-[rgb(var(--deep)/0.02)] to-[rgb(var(--deep)/0.04)]">
             <FlexCarousel
-              items={koolinkItems}
+              items={activeItems}
               preset="liquid"
               intro="rise"
-              cardHeight={0.92}
-              gap={14}
-              squeeze={0.22}
+              cardHeight={0.62}
+              gap={16}
+              radius={20}
+              fit="natural"
+              squeeze={0.25}
               focusOnClick
               captions
             />
