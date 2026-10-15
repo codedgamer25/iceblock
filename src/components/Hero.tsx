@@ -12,20 +12,8 @@ export function Hero() {
           <KoolinkHeaderBanner />
         </Reveal>
 
-        {/* Koolink Official Flyer Showcase */}
-        <Reveal className="w-full max-w-[1080px] overflow-hidden rounded-card shadow-xl border bg-white" style={{ borderColor: 'var(--rule)' }} delay={1}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/koolink-flyer.jpg"
-            alt="Koolink Nigeria Limited - Commercial Refrigeration, Ice Block Machines, Walk-in Coldrooms and Solar Systems"
-            className="w-full h-auto object-contain block"
-            loading="eager"
-            fetchPriority="high"
-          />
-        </Reveal>
-
         {/* Conversion Action Bar & Trust Notes */}
-        <Reveal className="w-full max-w-[1080px] flex flex-col sm:flex-row items-center justify-between gap-4 mt-2" delay={2}>
+        <Reveal className="w-full max-w-[1080px] flex flex-col sm:flex-row items-center justify-between gap-4 mt-2" delay={1}>
           <div
             className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center"
             data-hero-cta

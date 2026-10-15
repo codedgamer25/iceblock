@@ -4,7 +4,6 @@ import { KoolinkShowcase } from '@/components/KoolinkShowcase';
 import { MachineOptions } from '@/components/MachineOptions';
 import { Numbers } from '@/components/Numbers';
 import { Offices } from '@/components/Offices';
-import { Products } from '@/components/Products';
 import { SocialBand } from '@/components/SocialBand';
 import { WhyKoolink } from '@/components/WhyKoolink';
 
@@ -26,7 +25,6 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Products />
       <KoolinkShowcase />
       <MachineOptions />
       <Numbers />

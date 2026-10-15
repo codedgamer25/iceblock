@@ -35,7 +35,7 @@ const koolinkItems: ReadonlyArray<FlexCarouselItem> = [
 
 export function KoolinkShowcase() {
   return (
-    <section className="theme-sheet py-v-space border-y" style={{ borderColor: 'var(--rule)' }}>
+    <section id="products" className="theme-sheet py-v-space border-y scroll-mt-header" style={{ borderColor: 'var(--rule)' }}>
       <div className="shell flex flex-col gap-6">
         <Reveal className="w-full flex items-center justify-between">
           <div>
