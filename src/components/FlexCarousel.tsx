@@ -1336,11 +1336,6 @@ export const FlexCarousel: React.FC<FlexCarouselProps> = ({
             {current.title || current.alt}
             {current.subtitle && <span className="flex-carousel__subtitle">{current.subtitle}</span>}
           </span>
-          <span className="flex-carousel__count" data-hidden={focusOpen ? '' : undefined}>
-            <Digits value={active + 1} />
-            <span className="flex-carousel__slash">/</span>
-            <span>{String(list.length).padStart(2, '0')}</span>
-          </span>
         </div>
       )}
       <div className="flex-carousel__live" aria-live="polite" aria-atomic="true">
