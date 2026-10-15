@@ -13,7 +13,7 @@ export function KoolinkShowcase() {
         <Reveal className="w-full flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <p className="eyebrow" style={{ color: 'var(--accent)' }}>Interactive WebGL Showcase</p>
-            <h2 className="h2 mt-1">Explore our flagship refrigeration & materials.</h2>
+            <h2 className="h2 mt-1">Explore our flagship refrigeration &amp; cold systems.</h2>
             <p className="body text-subtle mt-1">
               Drag, swipe or scrub with trackpad. Click any card to expand details with chromatic liquid dispersion.
             </p>

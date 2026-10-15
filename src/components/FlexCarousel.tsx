@@ -13,81 +13,79 @@ export type FlexCarouselItem = {
   objectPosition?: string;
 };
 
-const photo = (id: string) => `https://images.unsplash.com/${id}?w=1200&q=80&auto=format&fit=max`;
-
 export const DEFAULT_ITEMS: ReadonlyArray<FlexCarouselItem> = [
   {
-    src: photo('photo-1737071371043-761e02b1ef95'),
-    alt: 'An iridescent chrome sculpture of a head',
-    title: 'Iridescence',
-    subtitle: 'Prismatic metallic reflection'
+    src: '/products/nylon.webp',
+    alt: 'Koolink Nylon Type Ice Block Machine',
+    title: 'Nylon Type Machines',
+    subtitle: '21 to 500+ blocks per batch • Bagged clean ice',
   },
   {
-    src: photo('photo-1693645325828-62cd35c8da8f'),
-    alt: 'A person in dark clothes standing in front of a white backdrop',
-    title: 'White Room',
-    subtitle: 'Minimal studio composition'
+    src: '/products/mould.webp',
+    alt: 'Koolink Stainless Mould Type Ice Block Machine',
+    title: 'Mould Type Machines',
+    subtitle: 'Fixed steel grid • Zero daily nylon consumables',
   },
   {
-    src: photo('photo-1739056238917-d89cd05c48d5'),
-    alt: 'A twisted chrome form on black',
-    title: 'Liquid Metal',
-    subtitle: 'Flowing fluid geometry'
+    src: '/products/coldroom.webp',
+    alt: 'Koolink Walk-In Cold Room Installation',
+    title: 'Walk-In Cold Rooms',
+    subtitle: 'Modular insulated panels • Solar & AC options',
   },
   {
-    src: photo('photo-1747191092806-c7da11881986'),
-    alt: 'A clay bust shown in profile',
-    title: 'Clay Study',
-    subtitle: 'Tactile sculpted earth'
+    src: '/products/solar.webp',
+    alt: 'Full Solar DC 24V/48V Refrigeration System',
+    title: 'Full Solar (DC 24V/48V)',
+    subtitle: 'Monocrystalline panels with lithium battery bank',
   },
   {
-    src: photo('photo-1605034313761-73ea4a0cfbf3'),
-    alt: 'Black and white low top sneakers',
-    title: 'Low Tops',
-    subtitle: 'Monochrome product profile'
+    src: '/gallery/20-40-58.webp',
+    alt: 'Heavy-Duty Red Trough Machine with Sleeves',
+    title: 'Industrial Trough Assembly',
+    subtitle: 'Reinforced steel tank with refrigeration coils',
   },
   {
-    src: photo('photo-1495462911434-be47104d70fa'),
-    alt: 'A woman in a wide black hat',
-    title: 'Brim',
-    subtitle: 'High contrast portrait'
+    src: '/gallery/20-41-05-1.webp',
+    alt: 'Nylon Sleeves Freezing Inside Machine Trough',
+    title: 'Fast Freeze Cycle',
+    subtitle: 'Uniform sub-zero brine temperature transfer',
   },
   {
-    src: photo('photo-1786835568925-20cd20007ed0'),
-    alt: 'Three swirling shapes in white, gold and silver on grey',
-    title: 'Three Forms',
-    subtitle: 'Tri-metal ribbon flow'
+    src: '/gallery/20-41-00.webp',
+    alt: 'Solid Bagged Ice Blocks on Drying Shelves',
+    title: 'Commercial Ice Production',
+    subtitle: 'Dense, hard-frozen commercial blocks ready for sale',
   },
   {
-    src: photo('photo-1770249196550-ff6c641165cb'),
-    alt: 'A chrome humanoid sculpture',
-    title: 'Automaton',
-    subtitle: 'Synthetic biomechanical form'
+    src: '/gallery/solar-roof-install.webp',
+    alt: 'Rooftop Solar Array Installation',
+    title: 'Rooftop Solar Arrays',
+    subtitle: 'Engineered for 100% off-grid cold room operation',
   },
   {
-    src: photo('photo-1787181875088-087d612262a7'),
-    alt: 'A black textured sculpture with an opening at its center',
-    title: 'Obsidian',
-    subtitle: 'Volcanic mineral texture'
+    src: '/gallery/20-43-48-1.webp',
+    alt: 'Commercial Walk-in Cold Room Storage with Shelving',
+    title: 'Custom Cold Storage',
+    subtitle: 'Heavy-duty multi-tier wire racking and evaporators',
   },
   {
-    src: photo('photo-1770062422885-2dfcbe8fb65b'),
-    alt: 'A woman in a white shirt crouching on a dark set',
-    title: 'Poise',
-    subtitle: 'Architectural body posture'
+    src: '/gallery/20-43-50.webp',
+    alt: 'Stocked Commercial Cold Room with Crates',
+    title: 'Active Cold Storage',
+    subtitle: 'Maintains consistent sub-zero temperatures under full load',
   },
   {
-    src: photo('photo-1726910133626-9b573eca70ff'),
-    alt: 'Black curved shapes stacked like a fan',
-    title: 'Fins',
-    subtitle: 'Radial acoustic fins'
+    src: '/gallery/20-41-06-1.webp',
+    alt: 'Upright Freezing Cabinet with Integrated Condenser',
+    title: 'Upright Freezing Cabinets',
+    subtitle: 'Compact multi-shelf footprint for retail locations',
   },
   {
-    src: photo('photo-1604854574958-59047362c165'),
-    alt: 'A white plaster bust on a black table',
-    title: 'Plaster',
-    subtitle: 'Classical museum cast'
-  }
+    src: '/gallery/20-40-57.webp',
+    alt: 'Koolink Factory Showroom Inspection',
+    title: 'Factory Showroom',
+    subtitle: 'Full live machine demonstration prior to purchase',
+  },
 ];
 
 export const BEND_PRESETS = {
