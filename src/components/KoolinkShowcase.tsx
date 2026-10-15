@@ -35,7 +35,7 @@ const koolinkItems: ReadonlyArray<FlexCarouselItem> = [
 
 export function KoolinkShowcase() {
   return (
-    <section id="products" className="theme-sheet py-v-space border-y scroll-mt-header" style={{ borderColor: 'var(--rule)' }}>
+    <section id="products" className="theme-frost py-v-space border-b scroll-mt-header" style={{ borderColor: 'var(--rule)' }}>
       <div className="shell flex flex-col gap-6">
         <Reveal className="w-full flex items-center justify-between">
           <div>
@@ -53,7 +53,7 @@ export function KoolinkShowcase() {
 
         {/* Liquid-glass flex-squeeze carousel */}
         <Reveal className="w-full" delay={1}>
-          <div className="w-full h-[clamp(380px,52vh,560px)] relative rounded-card overflow-hidden shadow-md">
+          <div className="w-full h-[clamp(380px,52vh,560px)] relative rounded-card overflow-hidden">
             <FlexCarousel
               items={koolinkItems}
               preset="liquid"
