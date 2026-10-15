@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import FlexCarousel, { FlexCarouselItem } from '@/components/FlexCarousel';
-import { KoolinkHeaderBanner } from '@/components/KoolinkHeaderBanner';
 import { Reveal } from '@/components/Reveal';
 
 const koolinkItems: ReadonlyArray<FlexCarouselItem> = [
@@ -37,15 +36,8 @@ const koolinkItems: ReadonlyArray<FlexCarouselItem> = [
 export function KoolinkShowcase() {
   return (
     <section className="theme-sheet py-v-space border-y" style={{ borderColor: 'var(--rule)' }}>
-      <div className="shell flex flex-col gap-8">
-        <Reveal className="w-full flex flex-col items-center">
-          {/* Authentic Scalable Flyer Header Banner with RC 950910 and Circular Seal */}
-          <div className="w-full max-w-[940px] rounded-card p-4 sm:p-6 shadow-sm border" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--rule)' }}>
-            <KoolinkHeaderBanner />
-          </div>
-        </Reveal>
-
-        <Reveal className="w-full flex items-center justify-between mt-2" delay={1}>
+      <div className="shell flex flex-col gap-6">
+        <Reveal className="w-full flex items-center justify-between">
           <div>
             <p className="eyebrow" style={{ color: 'var(--accent)' }}>Interactive Showcase</p>
             <h2 className="h2 mt-1">Explore our flagship refrigeration lines.</h2>
@@ -60,7 +52,7 @@ export function KoolinkShowcase() {
         </Reveal>
 
         {/* Liquid-glass flex-squeeze carousel */}
-        <Reveal className="w-full" delay={2}>
+        <Reveal className="w-full" delay={1}>
           <div className="w-full h-[clamp(380px,52vh,560px)] relative rounded-card overflow-hidden shadow-md">
             <FlexCarousel
               items={koolinkItems}
