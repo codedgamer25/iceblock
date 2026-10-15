@@ -1,5 +1,4 @@
 import { Reveal } from '@/components/Reveal';
-import { KoolinkHeaderBanner } from '@/components/KoolinkHeaderBanner';
 import { BUSINESS, PAYMENT_ADVICE, PHONE_DISPLAY, isContactConfigured } from '@/lib/business';
 import { telLink, whatsappLink } from '@/lib/whatsapp';
 
@@ -7,9 +6,16 @@ export function Hero() {
   return (
     <section className="theme-frost relative overflow-hidden pb-v-space pt-[calc(var(--header-height)+var(--v-space-sm))] border-b" style={{ borderColor: 'var(--rule)' }}>
       <div className="shell flex flex-col items-center gap-8">
-        {/* Exact Vector Header Banner */}
-        <Reveal className="w-full max-w-[1080px] bg-white rounded-card p-4 sm:p-7 shadow-sm border" style={{ borderColor: 'var(--rule)' }}>
-          <KoolinkHeaderBanner />
+        {/* Seamless Hero Lockup with Official Emblem & Production Photo Capsules */}
+        <Reveal className="w-full max-w-[1020px] flex justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/koolink-hero-banner.png"
+            alt="Koolink Nigeria Limited (RC 950910) - Commercial Refrigeration, Ice Block Machines, Coldrooms and Solar Systems"
+            className="w-full h-auto object-contain block select-none pointer-events-none"
+            loading="eager"
+            fetchPriority="high"
+          />
         </Reveal>
 
         {/* Conversion Action Bar & Trust Notes */}
