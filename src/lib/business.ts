@@ -34,6 +34,7 @@ export const BUSINESS = {
   summary:
     'Koolink Nigeria Limited. Non solar and full solar walk-in coldrooms, ice block machines, ice drinks chiller machines, solar deep freezers, domestic cold storages and liquid chillers. Professionals with over 25 years of experience.',
   yearsExperience: 25,
+  rcNumber: 'RC 950910',
   areaServed: 'Nigeria',
   deliveryNote: 'We deliver anywhere in Nigeria.',
   bookingChannels: ['WhatsApp', 'Phone call'],
