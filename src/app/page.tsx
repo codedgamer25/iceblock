@@ -1,5 +1,6 @@
 import { CtaBand } from '@/components/CtaBand';
 import { Hero } from '@/components/Hero';
+import { KoolinkShowcase } from '@/components/KoolinkShowcase';
 import { MachineOptions } from '@/components/MachineOptions';
 import { Numbers } from '@/components/Numbers';
 import { Offices } from '@/components/Offices';
@@ -26,6 +27,7 @@ export default function HomePage() {
     <>
       <Hero />
       <Products />
+      <KoolinkShowcase />
       <MachineOptions />
       <Numbers />
       <WhyKoolink />
