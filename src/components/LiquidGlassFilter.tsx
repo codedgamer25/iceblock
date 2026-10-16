@@ -1,7 +1,6 @@
 import type { GlassSettings } from '@/lib/liquid-glass';
 import {
   FILTER_ID,
-  RAMP_NEUTRAL,
   SITE_GLASS,
   filterValues,
   rampStops,
@@ -86,12 +85,12 @@ export function LiquidGlassFilter({ settings = SITE_GLASS }: { settings?: GlassS
         <defs>
           <linearGradient id={`${FILTER_ID}-ramp-x`} x1="0" y1="0" x2="1" y2="0">
             {ramp.map(({ offset, value }) => (
-              <stop key={offset} offset={offset} stopColor={`rgb(${value},${RAMP_NEUTRAL},0)`} />
+              <stop key={offset} offset={offset} stopColor={`rgb(${value},0,0)`} />
             ))}
           </linearGradient>
           <linearGradient id={`${FILTER_ID}-ramp-y`} x1="0" y1="0" x2="0" y2="1">
             {ramp.map(({ offset, value }) => (
-              <stop key={offset} offset={offset} stopColor={`rgb(${RAMP_NEUTRAL},${value},0)`} />
+              <stop key={offset} offset={offset} stopColor={`rgb(0,${value},0)`} />
             ))}
           </linearGradient>
 
@@ -188,7 +187,8 @@ export function LiquidGlassFilter({ settings = SITE_GLASS }: { settings?: GlassS
 
             <feBlend in="onlyR" in2="onlyG" mode="screen" result="rg" />
             <feBlend in="rg" in2="onlyB" mode="screen" result="rgb" />
-            <feComposite in="rgb" in2="dispG" operator="in" />
+            <feComposite in="rgb" in2="SourceGraphic" operator="over" result="filled" />
+            <feComposite in="filled" in2="SourceGraphic" operator="in" />
           </filter>
         </defs>
       </svg>

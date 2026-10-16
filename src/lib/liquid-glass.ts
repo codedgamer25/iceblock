@@ -177,12 +177,12 @@ export function surfaceValues(settings: GlassSettings) {
  * top of its range for the same reason — it is what keeps the bend in the band.
  */
 export const SITE_GLASS: GlassSettings = {
-  light: 0.82,
-  refraction: 0.72,
-  depth: 0.52,
-  dispersion: 0.56,
-  frost: 0.48,
-  splay: 0.92,
+  light: 0.68,
+  refraction: 0.52,
+  depth: 0.36,
+  dispersion: 0.28,
+  frost: 0.42,
+  splay: 0.9,
 };
 
 export const FILTER_ID = 'liquid-glass';

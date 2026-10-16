@@ -520,7 +520,7 @@ section[id],
   font-weight: 600;
   letter-spacing: 0.01em;
   text-align: center;
-  border: 1px solid transparent;
+  border: 0;
   /* No `transition` here on purpose. This selector is declared a second time in the
      glass block below, at the same specificity, so source order decides and anything
      written here is dead. A 180ms transition did live here and was silently overridden
@@ -559,46 +559,27 @@ section[id],
     box-shadow var(--speed-fast) var(--ease-out-quart);
 }
 
-/* The specular sweep: one hairline of light across the top of the pill, clipped to
-   it. A gradient this quiet is the difference between a glass edge and a shiny plastic
-   one.
-
-   30%, not half, and that is a contrast constraint rather than a taste one. The label
-   is centred in a 52px pill, so it occupies roughly 35–65% of the height. At 52% the
-   sweep crossed it and dropped frost-on-secondary from 6.49:1 to 3.29:1 — under AA
-   for 15px text. Kept above the cap-height, the highlight costs the label nothing.
-
-   The peak went up and the reach came down together, and that pairing is the whole idea
-   behind every specular on this page: 0.28 at the very top edge where 0.16 used to be, but
-   ninety percent of it spent inside the first eighth of the pill instead of ramping steadily
-   across the whole 30% band. Brighter where a bevel catches light, gone before it reaches
-   anything anybody has to read. */
 .button::after {
   content: '';
   position: absolute;
-  inset: 0 0 auto;
-  height: 32%;
+  inset: 0;
+  border-radius: inherit;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    rgb(var(--glass-spec) / 0.34),
-    rgb(var(--glass-spec) / 0.05) 44%,
-    transparent
+    rgb(var(--glass-spec) / 0.16),
+    rgb(var(--glass-spec) / 0.02) 38%,
+    transparent 60%
   );
 }
 
 .button.primary {
-  /* 0.9, not 1: enough of the bed comes through at the edges for it to read as glass
-     rather than paint, and the label still measures 13.7:1 on a dark section. */
-  background-color: rgb(var(--btn-fill) / 0.9);
+  background-color: rgb(var(--btn-fill) / 0.96);
   color: rgb(var(--btn-ink));
-  border-color: rgb(var(--btn-fill) / 0.55);
   box-shadow:
-    inset 0 1px 0 rgb(var(--glass-spec) / 0.64),
-    inset 0 -1px 0 rgb(var(--btn-ink) / 0.16),
-    0 0 0 0.5px rgb(var(--glass-spec) / 0.18),
-    0 1px 2px rgb(0 0 0 / 0.08),
-    0 calc(var(--u) * 0.55) calc(var(--u) * 1.6) rgb(var(--deep) / 0.22);
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.24),
+    0 2px 5px rgb(0 0 0 / 0.08),
+    0 calc(var(--u) * 0.45) calc(var(--u) * 1.3) rgb(var(--deep) / 0.18);
 }
 
 /* The lift is a mouse affordance and nothing else, so it is gated. Android latches
@@ -610,44 +591,43 @@ section[id],
     background-color: rgb(var(--btn-fill) / 1);
     transform: translateY(-1px);
     box-shadow:
-      inset 0 1px 0 rgb(var(--glass-spec) / 0.78),
-      inset 0 -1px 0 rgb(var(--btn-ink) / 0.18),
-      0 0 0 0.5px rgb(var(--glass-spec) / 0.24),
-      0 2px 5px rgb(0 0 0 / 0.12),
-      0 calc(var(--u) * 0.85) calc(var(--u) * 2.2) rgb(var(--deep) / 0.28);
+      inset 0 1px 0 rgb(var(--glass-spec) / 0.34),
+      0 3px 8px rgb(0 0 0 / 0.12),
+      0 calc(var(--u) * 0.7) calc(var(--u) * 1.8) rgb(var(--deep) / 0.24);
   }
 }
 
 .button.secondary {
-  background-color: rgb(var(--glass-spec) / 0.12);
+  background-color: rgb(var(--glass-spec) / 0.55);
   color: var(--text);
-  border-color: rgb(var(--glass-spec) / var(--glass-rim));
-  /* A chamfer rather than an outline. `inset 0 1px 2px` put a 2px-blurred glow along the top
-     and nothing along the bottom, which reads as a soft light source somewhere above; a real
-     bevel catches hard on the side facing the light and dimly on the side away from it, and both
-     edges are one pixel wide with no blur at all. The gap between the two alphas is the effect —
-     0.65 against 0.20 at the site's light setting. */
   box-shadow:
-    inset 0 1px 0 rgb(var(--glass-spec) / var(--glass-bevel-near)),
-    inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
-    inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
-    0 0 0 0.5px rgb(var(--glass-spec) / 0.18),
-    0 1px 2px rgb(0 0 0 / 0.05),
-    0 calc(var(--u) * 0.35) calc(var(--u) * 1.1) rgb(var(--deep) / 0.12);
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.85),
+    inset 0 0 0 1px var(--rule),
+    0 1px 3px rgb(0 0 0 / 0.04),
+    0 calc(var(--u) * 0.3) calc(var(--u) * 0.9) rgb(var(--deep) / 0.07);
+}
+
+.theme-deep .button.secondary,
+.theme-abyss .button.secondary,
+.action-bar .button.secondary {
+  background-color: rgb(var(--glass-spec) / 0.1);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .button.secondary:hover {
-    background-color: rgb(var(--glass-spec) / 0.22);
-    border-color: rgb(var(--glass-spec) / 0.52);
+    background-color: rgb(var(--glass-spec) / 0.75);
     transform: translateY(-1px);
     box-shadow:
-      inset 0 1px 0 rgb(var(--glass-spec) / 0.86),
-      inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
-      inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
-      0 0 0 0.5px rgb(var(--glass-spec) / 0.26),
-      0 2px 6px rgb(0 0 0 / 0.08),
-      0 calc(var(--u) * 0.5) calc(var(--u) * 1.5) rgb(var(--deep) / 0.16);
+      inset 0 1px 0 rgb(var(--glass-spec) / 0.95),
+      inset 0 0 0 1px var(--rule),
+      0 2px 6px rgb(0 0 0 / 0.06),
+      0 calc(var(--u) * 0.45) calc(var(--u) * 1.3) rgb(var(--deep) / 0.12);
+  }
+
+  .theme-deep .button.secondary:hover,
+  .theme-abyss .button.secondary:hover,
+  .action-bar .button.secondary:hover {
+    background-color: rgb(var(--glass-spec) / 0.18);
   }
 }
 
@@ -663,9 +643,9 @@ section[id],
 .button:active::after {
   background: linear-gradient(
     to bottom,
-    rgb(var(--glass-spec) / 0.48),
-    rgb(var(--glass-spec) / 0.08) 48%,
-    transparent
+    rgb(var(--glass-spec) / 0.28),
+    rgb(var(--glass-spec) / 0.04) 44%,
+    transparent 65%
   );
 }
 
@@ -2765,20 +2745,16 @@ html.menu-open body {
    colour bed with nothing behind it to bend. */
 .card,
 .product-tile {
-  background-color: rgb(var(--glass-spec) / 0.42);
+  background-color: rgb(var(--glass-spec) / 0.52);
   background-image: linear-gradient(
     148deg,
-    rgb(var(--glass-spec) / 0.38),
-    rgb(var(--glass-spec) / 0.08) 38%,
+    rgb(var(--glass-spec) / 0.36),
+    rgb(var(--glass-spec) / 0.06) 38%,
     transparent 64%
   );
-  border-color: rgb(var(--glass-spec) / 0.72);
   box-shadow:
-    inset 0 1px 0 rgb(var(--glass-spec) / 0.85),
-    inset 0 -1px 0 rgb(var(--glass-spec) / 0.28),
-    inset 0 0 0 1px rgb(var(--glass-tint) / 0.07),
-    0 0 0 0.5px rgb(var(--glass-spec) / 0.35),
-    0 calc(var(--u) * 0.5) calc(var(--u) * 1.4) rgb(var(--deep) / 0.08);
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.82),
+    0 calc(var(--u) * 0.45) calc(var(--u) * 1.3) rgb(var(--deep) / 0.07);
 }
 
 .product-tile {
