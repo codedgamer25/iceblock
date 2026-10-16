@@ -4,24 +4,45 @@ import { telLink, whatsappLink } from '@/lib/whatsapp';
 
 export function Hero() {
   return (
-    <section className="theme-frost relative overflow-hidden pb-v-space pt-[calc(var(--header-height)+18px)] sm:pt-[calc(var(--header-height)+var(--v-space-sm))] border-b" style={{ borderColor: 'var(--rule)' }}>
-      <div className="shell flex flex-col items-center gap-6 sm:gap-8">
+    <section
+      className="theme-frost relative overflow-hidden pb-v-space pt-[calc(var(--header-height)+12px)] sm:pt-[calc(var(--header-height)+var(--v-space-sm))] border-b"
+      style={{ borderColor: 'var(--rule)' }}
+    >
+      <div className="shell flex flex-col items-center gap-5 sm:gap-8">
         {/* Seamless Hero Lockup with Official Emblem & Production Photo Capsules */}
-        <Reveal className="w-[calc(100vw-16px)] max-w-none -mx-[var(--margin)] sm:mx-0 sm:w-full sm:max-w-[1020px] flex justify-center">
+        <Reveal className="w-full sm:max-w-[1020px] flex justify-center">
+          {/* Mobile-optimized enlarged 6x3 banner (< 640px) */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/koolink-hero-banner-mobile.png"
+            alt="Koolink Nigeria Limited (RC 950910) - Commercial Refrigeration, Ice Block Machines, Coldrooms and Solar Systems"
+            width={960}
+            height={845}
+            className="block sm:hidden w-full h-auto object-contain select-none pointer-events-none"
+            loading="eager"
+            fetchPriority="high"
+          />
+
+          {/* Desktop / Tablet panoramic 9x2 banner (>= 640px) */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/koolink-hero-banner.png"
             alt="Koolink Nigeria Limited (RC 950910) - Commercial Refrigeration, Ice Block Machines, Coldrooms and Solar Systems"
-            className="w-full h-auto object-contain block select-none pointer-events-none"
+            width={875}
+            height={493}
+            className="hidden sm:block w-full h-auto object-contain select-none pointer-events-none"
             loading="eager"
             fetchPriority="high"
           />
         </Reveal>
 
         {/* Conversion Action Bar & Trust Notes */}
-        <Reveal className="w-[calc(100vw-32px)] max-w-none -mx-[var(--margin)] sm:mx-0 sm:w-full sm:max-w-[1080px] flex flex-col sm:flex-row items-center justify-between gap-4 mt-1 sm:mt-2" delay={1}>
+        <Reveal
+          className="w-full sm:max-w-[1020px] flex flex-col sm:flex-row items-center justify-between gap-4 mt-1 sm:mt-2"
+          delay={1}
+        >
           <div
-            className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center"
+            className="flex w-full flex-col items-stretch gap-2.5 sm:w-auto sm:flex-row sm:items-center sm:gap-3"
             data-hero-cta
           >
             {isContactConfigured() ? (
@@ -45,7 +66,7 @@ export function Hero() {
             )}
           </div>
 
-          <div className="text-right sm:max-w-[44ch]">
+          <div className="text-center sm:text-right sm:max-w-[44ch]">
             <p className="body-small font-semibold" style={{ color: 'var(--accent)' }}>
               {PAYMENT_ADVICE}
             </p>

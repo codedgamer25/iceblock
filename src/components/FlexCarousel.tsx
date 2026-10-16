@@ -623,16 +623,19 @@ export const FlexCarousel: React.FC<FlexCarouselProps> = ({
     };
 
     const metrics = (s: any) => {
-      const cardH = Math.max(24, s.cardHeight * height);
+      const mobileScale = width < 640 ? Math.min(1, (width * 0.86) / Math.max(1, s.cardHeight * height)) : 1;
+      const cardH = Math.max(24, s.cardHeight * height * mobileScale);
       const fixed = FIT_ASPECT[s.fit as FitAspectName];
-      const widths = slots.map(slot => (fixed || slot.aspect) * cardH);
+      const maxCardW = width < 640 ? width * 0.8 : Infinity;
+      const widths = slots.map(slot => Math.min(maxCardW, (fixed || slot.aspect) * cardH));
       const centers: number[] = [];
       let cursor = 0;
+      const gapPx = width < 640 ? Math.max(10, s.gap * 0.75) : s.gap;
       for (let i = 0; i < widths.length; i++) {
         centers.push(cursor + widths[i] / 2);
-        cursor += widths[i] + s.gap;
+        cursor += widths[i] + gapPx;
       }
-      return { cardH, widths, centers, gap: s.gap, loop: Math.max(cursor, 1) };
+      return { cardH, widths, centers, gap: gapPx, loop: Math.max(cursor, 1) };
     };
 
     const nearest = (m: any, at: number) => {
@@ -1150,13 +1153,16 @@ export const FlexCarousel: React.FC<FlexCarouselProps> = ({
         const first = pointer.samples[0];
         const lastSample = pointer.samples[pointer.samples.length - 1];
         let velocity = 0;
-        if (first && lastSample && lastSample.t > first.t && now - lastSample.t < 70) {
+        if (first && lastSample && lastSample.t > first.t && now - lastSample.t < 80) {
           velocity = -((lastSample.x - first.x) / (lastSample.t - first.t)) * 1000;
         }
         vel = velocity;
-        const landing = snapPoint(m, pos + velocity * 0.32);
+        // Apple Designing Fluid Interfaces momentum projection: (v / 1000) * d / (1 - d)
+        const decel = 0.9968;
+        const projected = pos + ((velocity / 1000) * decel) / (1 - decel);
+        const landing = snapPoint(m, projected);
         goal = landing;
-        if (Math.abs(velocity) > 400 && Math.abs(landing - pos) < 1) step(m, velocity > 0 ? 1 : -1);
+        if (Math.abs(velocity) > 320 && Math.abs(landing - pos) < 1) step(m, velocity > 0 ? 1 : -1);
         mode = 'spring';
         start();
         return;

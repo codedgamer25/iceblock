@@ -227,6 +227,87 @@ export function SiteHeader() {
     };
   }, [open, close]);
 
+  /* Apple Designing Fluid Interfaces: 1:1 drag-to-dismiss with rubber-banding and momentum projection on phone bottom sheet. */
+  const dragRef = useRef<{
+    id: number;
+    startY: number;
+    samples: Array<{ y: number; t: number }>;
+    active: boolean;
+  } | null>(null);
+
+  const onSheetPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (window.innerWidth >= 640) return;
+    const scroller = panel.current?.querySelector('.menu-items');
+    if (scroller && scroller.contains(e.target as Node) && scroller.scrollTop > 2) return;
+    dragRef.current = {
+      id: e.pointerId,
+      startY: e.clientY,
+      samples: [{ y: e.clientY, t: performance.now() }],
+      active: false,
+    };
+  }, []);
+
+  const onSheetPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const state = dragRef.current;
+    const node = panel.current;
+    if (!state || e.pointerId !== state.id || !node) return;
+    const dy = e.clientY - state.startY;
+    if (!state.active) {
+      if (Math.abs(dy) < 8) return;
+      if (dy < 0 && node.querySelector('.menu-items')?.contains(e.target as Node)) {
+        dragRef.current = null;
+        return;
+      }
+      state.active = true;
+      try {
+        node.setPointerCapture(e.pointerId);
+      } catch {
+        /* ignore */
+      }
+      node.style.transition = 'none';
+    }
+    const now = performance.now();
+    state.samples.push({ y: e.clientY, t: now });
+    while (state.samples.length > 3 && now - state.samples[0].t > 90) state.samples.shift();
+
+    const h = Math.max(240, node.offsetHeight);
+    /* Apple rubberband(overshoot, dim, 0.55) when pulled upward past resting point */
+    const offset =
+      dy >= 0 ? dy : -((Math.abs(dy) * h * 0.35) / (h + 0.35 * Math.abs(dy)));
+    node.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
+  }, []);
+
+  const endSheetDrag = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const state = dragRef.current;
+      const node = panel.current;
+      dragRef.current = null;
+      if (!state || !state.active || !node) return;
+      try {
+        node.releasePointerCapture(e.pointerId);
+      } catch {
+        /* ignore */
+      }
+      node.style.transition = '';
+      node.style.transform = '';
+
+      const dy = e.clientY - state.startY;
+      const first = state.samples[0];
+      const last = state.samples[state.samples.length - 1];
+      let velocity = 0;
+      if (first && last && last.t > first.t && performance.now() - last.t < 80) {
+        velocity = ((last.y - first.y) / (last.t - first.t)) * 1000;
+      }
+      /* Apple momentum projection: (v / 1000) * d / (1 - d) */
+      const projected = dy + ((velocity / 1000) * 0.996) / (1 - 0.996);
+      const threshold = (node.offsetHeight || 400) * 0.32;
+      if (velocity > 420 || (velocity >= -80 && projected > threshold)) {
+        close();
+      }
+    },
+    [close],
+  );
+
   return (
     <>
       <header ref={header} data-on-dark="false" className="site-header">
@@ -277,7 +358,15 @@ export function SiteHeader() {
           role="dialog"
           aria-modal="true"
           aria-label="Menu"
+          onPointerDown={onSheetPointerDown}
+          onPointerMove={onSheetPointerMove}
+          onPointerUp={endSheetDrag}
+          onPointerCancel={endSheetDrag}
         >
+          <div className="sheet-grabber" aria-hidden="true">
+            <span />
+          </div>
+
           <button type="button" className="close-btn" onClick={() => close()}>
             <span className="logo-inside h3">
               <KoolinkLogo />

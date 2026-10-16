@@ -2898,6 +2898,20 @@ html.menu-open body {
   display: none;
 }
 
+.sheet-grabber {
+  display: none;
+}
+
+.button,
+.menu-btn,
+.close-btn,
+.menu-link-heading,
+.nav-link,
+.contact-wrap {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 @media (max-width: 639px) {
   .action-bar {
     position: fixed;
@@ -2905,7 +2919,7 @@ html.menu-open body {
     z-index: 65;
     display: flex;
     gap: calc(var(--u) * 0.6);
-    padding: calc(var(--u) * 0.7) var(--margin);
+    padding: calc(var(--u) * 0.7) calc(var(--u) * 1.25);
     /* Clears the iOS home indicator without guessing at its height. */
     padding-bottom: max(calc(var(--u) * 0.7), env(safe-area-inset-bottom));
 
@@ -2970,16 +2984,33 @@ html.menu-open body {
    --------------------------------------------------------------------------- */
 
 @media (max-width: 639px) {
+  /* Apple iOS standard horizontal margin (~18-20px) instead of the desktop 4.6u (69px)
+     that previously squeezed phone content into a 63%-wide central strip. */
+  .shell {
+    padding-inline: calc(var(--u) * 1.25);
+  }
+
   /* A 50px rise is a sixth of a phone screen. Shorter travel, same duration —
      the movement stays legible without the copy starting off-screen. */
   html[data-js='1'] .scroll-entrance > * {
     transform: translate3d(0, 36px, 0);
   }
 
-  /* The notes get less room and less padding on a phone — one short line each,
-     which is all a note should ever be. */
+  /* iOS bottom-sheet drag indicator pill */
+  .sheet-grabber {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-block: calc(var(--u) * 0.2) calc(var(--u) * 0.35);
+    cursor: grab;
+  }
 
-
+  .sheet-grabber span {
+    width: 36px;
+    height: 4px;
+    border-radius: 9999px;
+    background-color: rgb(var(--frost) / 0.32);
+  }
 
   /* On a phone this stops being a side drawer and becomes an inset sheet that rises
      from the bottom.
@@ -2991,26 +3022,14 @@ html.menu-open body {
      part of a phone a thumb cannot reach; rising from the bottom puts them where the
      hand already is. */
   .menu-panel {
-    /* Not `--margin`. That token is the page's text margin, 4.6u, which at the phone unit is
-       69px a side — it left a bottom sheet 237px wide on a 375px screen, 63% of the width, so
-       "Ice drinks chiller machines" wrapped onto two lines and the last group headings were
-       cut off below the fold of the scroller. A sheet is not a text column; it wants the edge
-       of the screen, with just enough inset to read as a sheet rather than a new page.
-
-       84vh rather than 78 for the same reason: the links now fit on one line each, so more of
-       the menu is reachable without scrolling, and a strip of the page still shows above it,
-       which is the cue that the page is still there underneath. */
     inset: auto calc(var(--u) * 0.8) 0;
     width: auto;
-    /* The base rule caps this at `100vw - --margin * 2`, which is the same 69px-a-side text
-       margin and was still holding the sheet at 237px however the inset was set. Releasing the
-       cap is what actually widens it; the inset alone did nothing. */
     max-width: none;
     height: auto;
     max-height: 84vh;
     flex-direction: column;
     gap: calc(var(--u) * 0.9);
-    padding: calc(var(--u) * 1.2) calc(var(--u) * 1.2) calc(var(--u) * 1.4);
+    padding: calc(var(--u) * 0.8) calc(var(--u) * 1.2) calc(var(--u) * 1.4);
     border: 1px solid rgb(var(--glass-spec) / var(--glass-rim));
     border-radius: var(--radius-panel);
     /* Clears the home indicator, and leaves the action bar's height underneath. */
@@ -3027,11 +3046,11 @@ html.menu-open body {
     width: 100%;
     height: 1px;
     align-self: auto;
-    margin-top: calc(var(--u) * 0.9);
+    margin-top: calc(var(--u) * 0.6);
   }
 
   .menu-items {
-    padding-top: calc(var(--u) * 1.2);
+    padding-top: calc(var(--u) * 1);
   }
 
   /* A sheet is short, so the type comes down again and the rows tighten. */

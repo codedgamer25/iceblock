@@ -41,6 +41,7 @@ export function ProductCatalogue() {
   const toolbar = useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
+  const swipeStart = useRef<{ x: number; y: number; t: number } | null>(null);
   const viewerGroup = CATALOGUE.find((group) => group.id === viewer?.group);
   const shot =
     viewerGroup && viewer ? viewerGroup.shots[viewer.index] : undefined;
@@ -327,7 +328,33 @@ export function ProductCatalogue() {
                 <X size={23} />
               </button>
             </div>
-            <div className={styles.viewerPhoto}>
+            <div
+              className={styles.viewerPhoto}
+              onPointerDown={(e) => {
+                swipeStart.current = {
+                  x: e.clientX,
+                  y: e.clientY,
+                  t: performance.now(),
+                };
+              }}
+              onPointerUp={(e) => {
+                const start = swipeStart.current;
+                swipeStart.current = null;
+                if (!start) return;
+                const dx = e.clientX - start.x;
+                const dy = e.clientY - start.y;
+                const dt = Math.max(1, performance.now() - start.t);
+                const vx = (dx / dt) * 1000;
+                const decel = 0.998;
+                const projected = dx + ((vx / 1000) * decel) / (1 - decel);
+                if (
+                  Math.abs(dx) > Math.abs(dy) &&
+                  (Math.abs(dx) > 40 || Math.abs(projected) > 120)
+                ) {
+                  movePhoto(dx < 0 ? 1 : -1);
+                }
+              }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 key={shot.slug}
