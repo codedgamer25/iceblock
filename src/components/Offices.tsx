@@ -46,8 +46,11 @@ export function Offices() {
 
       <Reveal className="shell mt-10">
         <div
-          className="flex flex-col gap-4 rounded-card border p-[calc(var(--gutter)*1.5)] sm:flex-row sm:items-center sm:justify-between"
-          style={{ borderColor: 'rgb(var(--ember) / 0.35)' }}
+          className="glass-surface flex flex-col gap-4 rounded-card border p-[calc(var(--gutter)*1.5)] sm:flex-row sm:items-center sm:justify-between"
+          style={{
+            borderColor: 'rgb(var(--ember) / 0.35)',
+            backgroundColor: 'rgb(255 255 255 / 0.48)',
+          }}
         >
           <div>
             <p className="eyebrow" style={{ color: 'rgb(var(--ember))' }}>

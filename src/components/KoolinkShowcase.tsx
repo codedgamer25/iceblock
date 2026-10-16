@@ -21,8 +21,7 @@ export function KoolinkShowcase() {
 
           <Link
             href="/products"
-            className="inline-flex items-center gap-2 body-small font-medium self-start sm:self-auto"
-            style={{ color: 'var(--accent)' }}
+            className="button secondary self-start sm:self-auto shrink-0"
           >
             Explore all 29 photographs <ArrowRight size={16} />
           </Link>

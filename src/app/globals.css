@@ -148,6 +148,10 @@
   --text-muted: rgb(var(--steel));
   --rule: rgb(var(--deep) / 0.12);
   --accent: rgb(var(--marine));
+  background-image:
+    radial-gradient(80% 55% at 18% 0%, rgb(255 255 255 / 0.78), transparent 70%),
+    radial-gradient(65% 50% at 88% 12%, rgb(var(--chill) / 0.12), transparent 68%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.82);
 }
 
 .theme-sheet {
@@ -158,6 +162,10 @@
   --text-muted: rgb(var(--steel));
   --rule: rgb(var(--deep) / 0.14);
   --accent: rgb(var(--marine));
+  background-image:
+    radial-gradient(75% 50% at 82% 0%, rgb(255 255 255 / 0.58), transparent 68%),
+    radial-gradient(60% 50% at 12% 18%, rgb(var(--cyan) / 0.08), transparent 65%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.68);
 }
 
 .theme-glacier {
@@ -168,6 +176,10 @@
   --text-muted: rgb(var(--steel));
   --rule: rgb(var(--deep) / 0.18);
   --accent: rgb(var(--marine));
+  background-image:
+    radial-gradient(75% 55% at 22% 0%, rgb(255 255 255 / 0.52), transparent 68%),
+    radial-gradient(65% 55% at 85% 85%, rgb(var(--chill) / 0.16), transparent 68%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.62);
 }
 
 .theme-deep {
@@ -178,6 +190,10 @@
   --text-muted: rgb(var(--haze));
   --rule: rgb(var(--frost) / 0.16);
   --accent: rgb(var(--chill));
+  background-image:
+    radial-gradient(70% 50% at 18% 0%, rgb(var(--cyan) / 0.14), transparent 68%),
+    radial-gradient(60% 45% at 85% 15%, rgb(var(--marine) / 0.22), transparent 65%);
+  box-shadow: inset 0 1px 0 rgb(var(--frost) / 0.14);
 }
 
 .theme-abyss {
@@ -188,6 +204,7 @@
   --text-muted: rgb(var(--haze));
   --rule: rgb(var(--frost) / 0.14);
   --accent: rgb(var(--chill));
+  box-shadow: inset 0 1px 0 rgb(var(--frost) / 0.12);
 }
 
 [class*='theme-'] {
@@ -212,6 +229,7 @@
     font-family: var(--font-geist-sans), system-ui, sans-serif;
     font-size: var(--step-body);
     line-height: 1.6;
+    font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -277,6 +295,7 @@ section[id],
   line-height: 1.02;
   letter-spacing: -0.022em;
   font-weight: 400;
+  font-optical-sizing: auto;
   text-wrap: balance;
 }
 
@@ -288,6 +307,7 @@ section[id],
      negative tracking is most of what separates display type from big body type. */
   letter-spacing: -0.035em;
   font-weight: 400;
+  font-optical-sizing: auto;
   text-wrap: balance;
 }
 
@@ -557,12 +577,12 @@ section[id],
   content: '';
   position: absolute;
   inset: 0 0 auto;
-  height: 30%;
+  height: 32%;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    rgb(var(--glass-spec) / 0.28),
-    rgb(var(--glass-spec) / 0.04) 44%,
+    rgb(var(--glass-spec) / 0.34),
+    rgb(var(--glass-spec) / 0.05) 44%,
     transparent
   );
 }
@@ -572,10 +592,11 @@ section[id],
      rather than paint, and the label still measures 13.7:1 on a dark section. */
   background-color: rgb(var(--btn-fill) / 0.9);
   color: rgb(var(--btn-ink));
-  border-color: rgb(var(--btn-fill) / 0.5);
+  border-color: rgb(var(--btn-fill) / 0.55);
   box-shadow:
-    inset 0 1px 0 rgb(var(--glass-spec) / 0.55),
-    inset 0 -1px 0 rgb(var(--btn-ink) / 0.14),
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.64),
+    inset 0 -1px 0 rgb(var(--btn-ink) / 0.16),
+    0 0 0 0.5px rgb(var(--glass-spec) / 0.18),
     0 1px 2px rgb(0 0 0 / 0.08),
     0 calc(var(--u) * 0.55) calc(var(--u) * 1.6) rgb(var(--deep) / 0.22);
 }
@@ -589,15 +610,16 @@ section[id],
     background-color: rgb(var(--btn-fill) / 1);
     transform: translateY(-1px);
     box-shadow:
-      inset 0 1px 0 rgb(var(--glass-spec) / 0.72),
-      inset 0 -1px 0 rgb(var(--btn-ink) / 0.16),
+      inset 0 1px 0 rgb(var(--glass-spec) / 0.78),
+      inset 0 -1px 0 rgb(var(--btn-ink) / 0.18),
+      0 0 0 0.5px rgb(var(--glass-spec) / 0.24),
       0 2px 5px rgb(0 0 0 / 0.12),
       0 calc(var(--u) * 0.85) calc(var(--u) * 2.2) rgb(var(--deep) / 0.28);
   }
 }
 
 .button.secondary {
-  background-color: rgb(var(--glass-spec) / 0.08);
+  background-color: rgb(var(--glass-spec) / 0.12);
   color: var(--text);
   border-color: rgb(var(--glass-spec) / var(--glass-rim));
   /* A chamfer rather than an outline. `inset 0 1px 2px` put a 2px-blurred glow along the top
@@ -609,19 +631,21 @@ section[id],
     inset 0 1px 0 rgb(var(--glass-spec) / var(--glass-bevel-near)),
     inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
     inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
-    0 1px 2px rgb(0 0 0 / 0.04),
-    0 calc(var(--u) * 0.3) calc(var(--u) * 1) rgb(var(--deep) / 0.1);
+    0 0 0 0.5px rgb(var(--glass-spec) / 0.18),
+    0 1px 2px rgb(0 0 0 / 0.05),
+    0 calc(var(--u) * 0.35) calc(var(--u) * 1.1) rgb(var(--deep) / 0.12);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .button.secondary:hover {
-    background-color: rgb(var(--glass-spec) / 0.18);
-    border-color: rgb(var(--glass-spec) / 0.45);
+    background-color: rgb(var(--glass-spec) / 0.22);
+    border-color: rgb(var(--glass-spec) / 0.52);
     transform: translateY(-1px);
     box-shadow:
-      inset 0 1px 0 rgb(var(--glass-spec) / 0.82),
+      inset 0 1px 0 rgb(var(--glass-spec) / 0.86),
       inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
       inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
+      0 0 0 0.5px rgb(var(--glass-spec) / 0.26),
       0 2px 6px rgb(0 0 0 / 0.08),
       0 calc(var(--u) * 0.5) calc(var(--u) * 1.5) rgb(var(--deep) / 0.16);
   }
@@ -634,6 +658,15 @@ section[id],
    pill compresses rather than the box shrinking around static contents. */
 .button:active {
   transform: scale(0.97);
+}
+
+.button:active::after {
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--glass-spec) / 0.48),
+    rgb(var(--glass-spec) / 0.08) 48%,
+    transparent
+  );
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2732,15 +2765,20 @@ html.menu-open body {
    colour bed with nothing behind it to bend. */
 .card,
 .product-tile {
+  background-color: rgb(var(--glass-spec) / 0.42);
   background-image: linear-gradient(
     148deg,
-    rgb(var(--glass-spec) / 0.12),
-    rgb(var(--glass-spec) / 0.03) 38%,
+    rgb(var(--glass-spec) / 0.38),
+    rgb(var(--glass-spec) / 0.08) 38%,
     transparent 64%
   );
+  border-color: rgb(var(--glass-spec) / 0.72);
   box-shadow:
-    inset 0 1px 0 rgb(var(--glass-spec) / 0.18),
-    0 calc(var(--u) * 0.5) calc(var(--u) * 1.4) rgb(var(--deep) / 0.14);
+    inset 0 1px 0 rgb(var(--glass-spec) / 0.85),
+    inset 0 -1px 0 rgb(var(--glass-spec) / 0.28),
+    inset 0 0 0 1px rgb(var(--glass-tint) / 0.07),
+    0 0 0 0.5px rgb(var(--glass-spec) / 0.35),
+    0 calc(var(--u) * 0.5) calc(var(--u) * 1.4) rgb(var(--deep) / 0.08);
 }
 
 .product-tile {
@@ -2912,16 +2950,25 @@ html.menu-open body {
   -webkit-tap-highlight-color: transparent;
 }
 
+.menu-btn,
+.close-btn {
+  transition: transform var(--speed-press) var(--ease-out-quart);
+}
+
+.menu-btn:active,
+.close-btn:active {
+  transform: scale(0.95);
+}
+
 @media (max-width: 639px) {
   .action-bar {
     position: fixed;
-    inset: auto 0 0;
+    inset: auto calc(var(--u) * 0.85) max(calc(var(--u) * 0.65), env(safe-area-inset-bottom));
     z-index: 65;
     display: flex;
-    gap: calc(var(--u) * 0.6);
-    padding: calc(var(--u) * 0.7) calc(var(--u) * 1.25);
-    /* Clears the iOS home indicator without guessing at its height. */
-    padding-bottom: max(calc(var(--u) * 0.7), env(safe-area-inset-bottom));
+    gap: calc(var(--u) * 0.5);
+    padding: calc(var(--u) * 0.45);
+    border-radius: var(--radius-pill);
 
     /* The bar declares its own bed, and it has to: it is fixed chrome, so it has no
        `.theme-*` ancestor, and every token the buttons read resolves to nothing here.
@@ -2939,17 +2986,20 @@ html.menu-open body {
     --btn-fill: var(--frost);
     --btn-ink: var(--deep);
 
-    background-color: rgb(var(--abyss) / 0.14);
+    background-color: rgb(var(--abyss) / 0.18);
     background-image: linear-gradient(
-      to bottom,
-      rgb(var(--glass-spec) / 0.24),
-      rgb(var(--glass-spec) / 0.02) 20%,
-      transparent 42%
+      152deg,
+      rgb(var(--glass-spec) / 0.28),
+      rgb(var(--glass-spec) / 0.04) 24%,
+      transparent 48%
     );
-    border-top: 1px solid rgb(var(--glass-spec) / var(--glass-rim));
+    border: 1px solid rgb(var(--glass-spec) / var(--glass-rim));
     box-shadow:
-      inset 0 1px 0 rgb(var(--glass-spec) / 0.24),
-      0 calc(var(--u) * -0.5) calc(var(--u) * 2) rgb(0 0 0 / 0.28);
+      inset 0 1px 0 rgb(var(--glass-spec) / var(--glass-bevel-near)),
+      inset 0 -1px 0 rgb(var(--glass-spec) / var(--glass-bevel-far)),
+      inset 0 0 0 1px rgb(var(--glass-tint) / var(--glass-bevel-dark)),
+      0 0 0 0.5px rgb(var(--glass-spec) / 0.16),
+      0 10px 30px rgb(0 0 0 / 0.34);
     backdrop-filter: blur(var(--glass-blur-chrome)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
     -webkit-backdrop-filter: blur(var(--glass-blur-chrome)) saturate(var(--glass-sat)) brightness(var(--glass-dim));
     transition: transform var(--speed-md) var(--ease-out-quart);
@@ -2959,7 +3009,7 @@ html.menu-open body {
      open, because two competing sets of actions on one screen is worse than either. */
   .action-bar[data-tucked='true'],
   html.menu-open .action-bar {
-    transform: translate3d(0, 120%, 0);
+    transform: translate3d(0, 140%, 0);
   }
 
   .action-bar-main {
@@ -2973,7 +3023,7 @@ html.menu-open body {
 
   /* So the last thing on the page is never sitting underneath the bar. */
   body {
-    padding-bottom: calc(var(--u) * 5);
+    padding-bottom: calc(var(--u) * 5.5);
   }
 }
 
