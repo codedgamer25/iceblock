@@ -28,14 +28,15 @@ export function WhyKoolink() {
         </p>
       </Reveal>
 
-      <Reveal className="shell spec-group mt-12" delay={1}>
+      <Reveal className="shell mt-12 grid gap-x-gutter gap-y-10 md:grid-cols-2" delay={1}>
         {DURABILITY.map((item) => (
-          <div key={item.heading} className="spec-row">
-            {/* No 01/02/03 numeral. The machine options lost theirs when the copy was cut back to
-                Koolink's own words, and these four are not a sequence anyway: they are four
-                independent claims, and numbering them implies an order that does not exist. */}
-            <h3 className="h3 max-w-[18ch]">{item.heading}</h3>
-            <p className="lead max-w-[54ch]">{item.body}</p>
+          <div
+            key={item.heading}
+            className="border-t pt-6 flex flex-col gap-3"
+            style={{ borderColor: 'var(--rule)' }}
+          >
+            <h3 className="h3 max-w-[22ch]">{item.heading}</h3>
+            <p className="lead max-w-[52ch]">{item.body}</p>
           </div>
         ))}
       </Reveal>

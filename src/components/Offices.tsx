@@ -70,7 +70,7 @@ export function Offices() {
             rel="noopener noreferrer"
             className="button primary"
           >
-            Message us on WhatsApp
+            Book now on WhatsApp
           </a>
           <a href={telLink()} className="button secondary numeral" aria-label={`Call ${PHONE_DISPLAY}`}>
             {PHONE_DISPLAY}

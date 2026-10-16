@@ -23,13 +23,13 @@ const display = Archivo({
 });
 
 
-const TITLE = `${BUSINESS.legalName} — ice block machines, coldrooms and chillers in ${BUSINESS.areaServed}`;
+const TITLE = `${BUSINESS.legalName} - ice block machines, coldrooms and chillers in ${BUSINESS.areaServed}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: TITLE,
-    template: `%s — ${BUSINESS.legalName}`,
+    template: `%s - ${BUSINESS.legalName}`,
   },
   description: BUSINESS.summary,
   /* The searches this business is actually lost to right now. Solar is the
@@ -78,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     areaServed: { '@type': 'Country', name: BUSINESS.areaServed },
     location: OFFICES.map((office) => ({
       '@type': 'Place',
-      name: `${BUSINESS.legalName} — ${office.label}`,
+      name: `${BUSINESS.legalName} - ${office.label}`,
       address: { '@type': 'PostalAddress', streetAddress: office.address },
     })),
   };

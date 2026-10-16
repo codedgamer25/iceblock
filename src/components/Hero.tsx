@@ -5,12 +5,12 @@ import { telLink, whatsappLink } from '@/lib/whatsapp';
 export function Hero() {
   return (
     <section
-      className="theme-frost relative overflow-hidden pb-v-space pt-[calc(var(--header-height)+12px)] sm:pt-[calc(var(--header-height)+var(--v-space-sm))] border-b"
+      className="theme-frost relative overflow-hidden pb-8 pt-[calc(var(--header-height)+10px)] sm:pb-12 sm:pt-[calc(var(--header-height)+18px)] border-b"
       style={{ borderColor: 'var(--rule)' }}
     >
-      <div className="shell flex flex-col items-center gap-5 sm:gap-8">
+      <div className="shell flex flex-col items-center gap-4 sm:gap-6">
         {/* Seamless Hero Lockup with Official Emblem & Production Photo Capsules */}
-        <Reveal className="w-full sm:max-w-[1020px] flex justify-center">
+        <Reveal className="w-full sm:max-w-[980px] flex justify-center">
           {/* Mobile-optimized enlarged 6x3 banner (< 640px) */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -30,7 +30,7 @@ export function Hero() {
             alt="Koolink Nigeria Limited (RC 950910) - Commercial Refrigeration, Ice Block Machines, Coldrooms and Solar Systems"
             width={875}
             height={493}
-            className="hidden sm:block w-full h-auto object-contain select-none pointer-events-none"
+            className="hidden sm:block w-full max-h-[56vh] h-auto object-contain select-none pointer-events-none"
             loading="eager"
             fetchPriority="high"
           />
@@ -38,7 +38,7 @@ export function Hero() {
 
         {/* Conversion Action Bar & Trust Notes */}
         <Reveal
-          className="w-full sm:max-w-[1020px] flex flex-col sm:flex-row items-center justify-between gap-4 mt-1 sm:mt-2"
+          className="w-full sm:max-w-[980px] flex flex-col sm:flex-row items-center justify-between gap-4"
           delay={1}
         >
           <div
@@ -66,14 +66,12 @@ export function Hero() {
             )}
           </div>
 
-          <div className="text-center sm:text-right sm:max-w-[44ch]">
-            <p className="body-small font-semibold" style={{ color: 'var(--accent)' }}>
+          <p className="body-small text-center sm:text-right sm:max-w-[44ch] text-subtle">
+            <strong className="font-semibold" style={{ color: 'var(--accent)' }}>
               {PAYMENT_ADVICE}
-            </p>
-            <p className="body-small text-subtle mt-0.5">
-              {BUSINESS.deliveryNote}
-            </p>
-          </div>
+            </strong>{' '}
+            {BUSINESS.deliveryNote}
+          </p>
         </Reveal>
       </div>
     </section>

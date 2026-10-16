@@ -280,7 +280,7 @@ export function ProductCatalogue() {
                 rel="noopener noreferrer"
                 className={styles.primaryLink}
               >
-                Discuss your machine <ArrowUpRight size={18} />
+                Book now on WhatsApp <ArrowUpRight size={18} />
               </a>
             )}
             <span>{BUSINESS.deliveryNote}</span>

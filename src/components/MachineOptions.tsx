@@ -41,41 +41,47 @@ export function MachineOptions() {
       </Reveal>
 
       {GROUPS.map((group, index) => (
-        <Reveal key={group.id} className="shell spec-group mt-14" delay={index}>
-          <div id={`machine-${group.id}`} className="spec-head scroll-mt-header">
+        <Reveal key={group.id} className="shell mt-14" delay={index}>
+          <div id={`machine-${group.id}`} className="scroll-mt-header border-t pt-6" style={{ borderColor: 'var(--rule)' }}>
             <h3 className="h3">{group.label}</h3>
           </div>
 
-          {group.choices.map((choice) => (
-            <div key={choice.id} className="spec-row">
-              <p className="h3">{choice.name}</p>
-              <div>
-                <p className="lead" style={{ color: 'var(--text)' }}>
-                  {choice.detail}
-                </p>
+          <div
+            className={`mt-6 grid gap-gutter ${
+              group.choices.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'
+            }`}
+          >
+            {group.choices.map((choice) => (
+              <article key={choice.id} className="card flex flex-col justify-between gap-3">
+                <div>
+                  <h4 className="h3">{choice.name}</h4>
+                  <p className="lead mt-3" style={{ color: 'var(--text)' }}>
+                    {choice.detail}
+                  </p>
+                </div>
                 {choice.note && (
-                  <p className="body-small mt-2" style={{ color: 'var(--accent)' }}>
+                  <p className="body-small pt-2" style={{ color: 'var(--accent)' }}>
                     {choice.note}
                   </p>
                 )}
-              </div>
-            </div>
-          ))}
+              </article>
+            ))}
+          </div>
         </Reveal>
       ))}
 
-      <Reveal className="shell spec-group mt-14">
-        <div id="machine-capacity" className="spec-head scroll-mt-header">
+      <Reveal className="shell mt-14">
+        <div id="machine-capacity" className="scroll-mt-header border-t pt-6" style={{ borderColor: 'var(--rule)' }}>
           <h3 className="h3">All sizes</h3>
         </div>
 
-        <div className="spec-row">
-          <p className="figure-value">
+        <div className="card mt-6 grid gap-6 md:grid-cols-12 md:items-center">
+          <p className="figure-value md:col-span-5">
             {CAPACITY.from}
             <span style={{ color: 'var(--text-muted)' }}>-</span>
             {CAPACITY.to}
           </p>
-          <div>
+          <div className="md:col-span-7">
             <p className="lead" style={{ color: 'var(--text)' }}>
               {CAPACITY.note}
             </p>
@@ -91,7 +97,7 @@ export function MachineOptions() {
                 rel="noopener noreferrer"
                 className="button primary mt-6"
               >
-                Call or WhatsApp for prices
+                Book now on WhatsApp
               </a>
             )}
           </div>

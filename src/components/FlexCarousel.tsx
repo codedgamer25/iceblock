@@ -18,19 +18,19 @@ export const DEFAULT_ITEMS: ReadonlyArray<FlexCarouselItem> = [
     src: '/products/nylon.webp',
     alt: 'Koolink Nylon Type Ice Block Machine',
     title: 'Nylon Type Machines',
-    subtitle: '21 to 500+ blocks per batch • Bagged clean ice',
+    subtitle: '21 to 500+ blocks per batch, bagged clean ice',
   },
   {
     src: '/products/mould.webp',
     alt: 'Koolink Stainless Mould Type Ice Block Machine',
     title: 'Mould Type Machines',
-    subtitle: 'Fixed steel grid • Zero daily nylon consumables',
+    subtitle: 'Fixed steel grid, zero daily nylon consumables',
   },
   {
     src: '/products/coldroom.webp',
     alt: 'Koolink Walk-In Cold Room Installation',
     title: 'Walk-In Cold Rooms',
-    subtitle: 'Modular insulated panels • Solar & AC options',
+    subtitle: 'Modular insulated panels, solar and AC options',
   },
   {
     src: '/products/solar.webp',

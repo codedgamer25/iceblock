@@ -12,10 +12,9 @@ export function KoolinkShowcase() {
       <div className="shell flex flex-col gap-6">
         <Reveal className="w-full flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <p className="eyebrow" style={{ color: 'var(--accent)' }}>Interactive WebGL Showcase</p>
-            <h2 className="h2 mt-1">Explore our flagship refrigeration &amp; cold systems.</h2>
-            <p className="body text-subtle mt-1">
-              Drag, swipe or scrub with trackpad. Click any card to expand details with chromatic liquid dispersion.
+            <h2 className="h2">Machines and cold rooms at work.</h2>
+            <p className="body text-subtle mt-2 max-w-[54ch]">
+              Nylon and mould ice block machines, walk-in cold rooms and solar installations built in our factory.
             </p>
           </div>
 
@@ -23,7 +22,7 @@ export function KoolinkShowcase() {
             href="/products"
             className="button secondary self-start sm:self-auto shrink-0"
           >
-            Explore all 29 photographs <ArrowRight size={16} />
+            View all 29 photographs <ArrowRight size={16} />
           </Link>
         </Reveal>
 
