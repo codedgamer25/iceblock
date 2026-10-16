@@ -724,15 +724,15 @@ export const FlexCarousel: React.FC<FlexCarouselProps> = ({
       if (t >= 1) return e;
       const kind = introState.kind;
       if (kind === 'rise') {
-        e.strength = easeInOut((t - 0.3) / 0.65);
+        e.strength = easeOut((t - 0.25) / 0.7);
         e.card = (rel: number) => {
-          const delay = Math.min(Math.abs(rel) / (width * 0.6), 1) * 0.34;
-          const local = clamp01((t - delay) / 0.6);
+          const delay = Math.min(Math.abs(rel) / (width * 0.6), 1) * 0.28;
+          const local = clamp01((t - delay) / 0.62);
           return {
-            alpha: clamp01(local * 4),
+            alpha: clamp01(local * 3.5),
             x: 0,
-            y: (1 - easeOutQuint(local)) * height * 0.62,
-            scale: 0.5 + 0.5 * easeInOut((local - 0.18) / 0.82)
+            y: (1 - easeOutQuint(local)) * height * 0.24,
+            scale: 0.92 + 0.08 * easeOut(local)
           };
         };
       } else if (kind === 'bloom') {

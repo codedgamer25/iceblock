@@ -41,7 +41,7 @@
   padding: 0 16px;
   pointer-events: none;
   text-align: center;
-  animation: flex-carousel-reveal 900ms ease both;
+  animation: flex-carousel-reveal var(--speed-enter) var(--ease-out-quart) both;
   z-index: 10;
 }
 
@@ -70,7 +70,7 @@
     0 6px 20px rgb(7 24 34 / 0.08);
   backdrop-filter: blur(18px) saturate(1.7) brightness(1.06);
   -webkit-backdrop-filter: blur(18px) saturate(1.7) brightness(1.06);
-  animation: flex-carousel-title 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: flex-carousel-title var(--speed-ui) var(--ease-out-quart);
 }
 
 .flex-carousel__subtitle {
@@ -89,7 +89,7 @@
   line-height: 1;
   font-variant-numeric: tabular-nums;
   opacity: 0.68;
-  transition: opacity 400ms ease;
+  transition: opacity var(--speed-fade) var(--ease-thaw);
   color: rgb(var(--deep, 7 24 34));
 }
 
@@ -110,7 +110,7 @@
 .flex-carousel__reel {
   display: flex;
   flex-direction: column;
-  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--speed-exit) var(--ease-out-quart);
 }
 
 .flex-carousel__reel span {
@@ -136,11 +136,11 @@
 @keyframes flex-carousel-title {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px) scale(0.97);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -156,7 +156,7 @@
 @media (prefers-reduced-motion: reduce) {
   .flex-carousel__caption,
   .flex-carousel__title {
-    animation: none;
+    animation: flex-carousel-reveal var(--speed-fast) ease both;
   }
 
   .flex-carousel__reel {
