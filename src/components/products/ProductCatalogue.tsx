@@ -10,6 +10,7 @@ import {
   Layers,
   Package,
   Phone,
+  Search,
   Sun,
   Warehouse,
   X,
@@ -30,9 +31,11 @@ import { enquiryMessage, telLink, whatsappLink } from '@/lib/whatsapp';
 import styles from './Products.module.css';
 
 const ICONS = { nylon: Package, mould: Boxes, coldroom: Warehouse, solar: Sun };
+const QUICK_TAGS = ['Solar', 'Stainless', 'Brine', 'Compressor', 'Cold room', 'Factory'] as const;
 
 export function ProductCatalogue() {
   const [filter, setFilter] = useState<CatalogueFilter>('all');
+  const [query, setQuery] = useState('');
   const [view, setView] = useState<'grid' | 'stack'>('grid');
   const [viewer, setViewer] = useState<{
     group: GalleryGroupId;
@@ -45,9 +48,23 @@ export function ProductCatalogue() {
   const viewerGroup = CATALOGUE.find((group) => group.id === viewer?.group);
   const shot =
     viewerGroup && viewer ? viewerGroup.shots[viewer.index] : undefined;
+  const normalizedQuery = query.trim().toLowerCase();
   const visibleGroups = CATALOGUE.filter(
     (group) => filter === 'all' || group.id === filter,
-  );
+  )
+    .map((group) => {
+      if (!normalizedQuery) return group;
+      const groupMatches =
+        group.title.toLowerCase().includes(normalizedQuery) ||
+        group.label.toLowerCase().includes(normalizedQuery) ||
+        group.blurb.toLowerCase().includes(normalizedQuery);
+      const matchingShots = group.shots.filter(
+        (photo) =>
+          groupMatches || photo.caption.toLowerCase().includes(normalizedQuery),
+      );
+      return { ...group, shots: matchingShots };
+    })
+    .filter((group) => group.shots.length > 0);
   const count = visibleGroups.reduce(
     (total, group) => total + group.shots.length,
     0,
@@ -68,7 +85,7 @@ export function ProductCatalogue() {
   useEffect(() => {
     // Re-measure the existing scroll runtime after a filter or layout changes the cards.
     window.dispatchEvent(new Event('catalogue:layout'));
-  }, [filter, view]);
+  }, [filter, query, view]);
 
   useEffect(() => {
     if (!viewerOpen) return;
@@ -190,6 +207,46 @@ export function ProductCatalogue() {
             {count} {count === 1 ? 'photograph' : 'photographs'}{' '}
             <span>/ Our own work</span>
           </p>
+
+          <div className={styles.searchRow}>
+            <div className={styles.searchBox}>
+              <Search size={15} aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search machines, brine, solar, compressor…"
+                aria-label="Search product photographs"
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery('')}
+                  aria-label="Clear search"
+                  className={styles.clearSearch}
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+            <div className={styles.quickTags} role="group" aria-label="Quick keyword filters">
+              {QUICK_TAGS.map((tag) => {
+                const active = query.toLowerCase() === tag.toLowerCase();
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setQuery(active ? '' : tag)}
+                    className={styles.tagPill}
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div
             className={styles.viewSwitch}
             role="group"
@@ -216,50 +273,77 @@ export function ProductCatalogue() {
           </div>
         </div>
 
-        <div key={filter} className={styles.results}>
-          {visibleGroups.map((group, groupIndex) => {
-            const Icon = ICONS[group.id];
-            return (
-              <section
-                id={group.id}
-                key={group.id}
-                className={styles.group}
-                aria-labelledby={`heading-${group.id}`}
+        <div key={`${filter}-${normalizedQuery}`} className={styles.results}>
+          {visibleGroups.length === 0 ? (
+            <div className={styles.emptyState}>
+              <p>No photographs match &ldquo;{query}&rdquo; in this category.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery('');
+                  chooseFilter('all');
+                }}
+                className={styles.tagPill}
               >
-                <div className={styles.groupHeading}>
-                  <div>
-                    <p className={styles.categoryLabel}>
-                      <Icon size={18} />
-                      {group.label}
-                    </p>
-                    <h2 id={`heading-${group.id}`}>{group.title}</h2>
-                    <p>{group.blurb}</p>
-                  </div>
-                  <p className={styles.audience}>
-                    <span>Made for</span>
-                    {group.product.who}
-                  </p>
-                </div>
-                <ScrollStack
-                  className={`${styles.photoGrid} ${view === 'stack' ? styles.stackView : ''}`}
-                  enabled={view === 'stack'}
+                Reset filters
+              </button>
+            </div>
+          ) : (
+            visibleGroups.map((group, groupIndex) => {
+              const Icon = ICONS[group.id];
+              const fullGroup = CATALOGUE.find((g) => g.id === group.id) ?? group;
+              return (
+                <section
+                  id={group.id}
+                  key={group.id}
+                  className={styles.group}
+                  aria-labelledby={`heading-${group.id}`}
                 >
-                  {group.shots.map((photo, index) => (
-                    <ScrollStackItem key={photo.slug} stackIndex={index}>
-                      <GalleryFigure
-                        shot={photo}
-                        group={group.title}
-                        priority={groupIndex === 0 && index < 3}
-                        className={styles.photoCard}
-                        sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
-                        onPreview={() => setViewer({ group: group.id, index })}
-                      />
-                    </ScrollStackItem>
-                  ))}
-                </ScrollStack>
-              </section>
-            );
-          })}
+                  <div className={styles.groupHeading}>
+                    <div>
+                      <p className={styles.categoryLabel}>
+                        <Icon size={18} />
+                        {group.label}
+                      </p>
+                      <h2 id={`heading-${group.id}`}>{group.title}</h2>
+                      <p>{group.blurb}</p>
+                    </div>
+                    <p className={styles.audience}>
+                      <span>Made for</span>
+                      {group.product.who}
+                    </p>
+                  </div>
+                  <ScrollStack
+                    className={`${styles.photoGrid} ${view === 'stack' ? styles.stackView : ''}`}
+                    enabled={view === 'stack'}
+                  >
+                    {group.shots.map((photo, index) => {
+                      const originalIndex = fullGroup.shots.findIndex(
+                        (s) => s.slug === photo.slug,
+                      );
+                      return (
+                        <ScrollStackItem key={photo.slug} stackIndex={index}>
+                          <GalleryFigure
+                            shot={photo}
+                            group={group.title}
+                            priority={groupIndex === 0 && index < 3}
+                            className={styles.photoCard}
+                            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                            onPreview={() =>
+                              setViewer({
+                                group: group.id,
+                                index: originalIndex >= 0 ? originalIndex : index,
+                              })
+                            }
+                          />
+                        </ScrollStackItem>
+                      );
+                    })}
+                  </ScrollStack>
+                </section>
+              );
+            })
+          )}
         </div>
 
         <section className={styles.customBuild}>
