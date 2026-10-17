@@ -7,6 +7,24 @@ import {
   surfaceValues,
 } from '@/lib/liquid-glass';
 
+export {
+  Glass,
+  GlassDiv,
+  animateGlassValue,
+  cubicBezier,
+  deriveGlass,
+  glassEase,
+  glassValue,
+  rubberBand,
+  useLensWobble,
+} from '@/lib/samasante-liquid-glass';
+export type {
+  GlassOptics,
+  GlassProps,
+  GlassSurfaceLens,
+  GlassValue,
+} from '@/lib/samasante-liquid-glass';
+
 /**
  * The refraction itself: an SVG filter that bends whatever is behind the glass at its edges, the
  * way a bevel does, rather than only softening it.

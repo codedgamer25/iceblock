@@ -9,6 +9,7 @@ import {
   PHONE_DISPLAY,
   isContactConfigured,
 } from '@/lib/business';
+import { Glass } from '@/lib/samasante-liquid-glass';
 import { telLink, whatsappLink } from '@/lib/whatsapp';
 
 /**
@@ -45,9 +46,22 @@ export function Offices() {
       </Reveal>
 
       <Reveal className="shell mt-10">
-        <div
-          className="glass-surface flex flex-col gap-4 rounded-card border p-[calc(var(--gutter)*1.5)] sm:flex-row sm:items-center sm:justify-between"
+        <Glass
+          optics={{
+            strength: 0.06,
+            depth: 0.55,
+            curvature: 0.35,
+            bend: 0.5,
+            dispersion: 0.35,
+            frost: 10,
+            saturate: 1.25,
+            sheen: 0.4,
+            glow: 0.14,
+            specular: 1.1,
+          }}
+          className="glass-surface w-full flex flex-col gap-4 rounded-card border p-[calc(var(--gutter)*1.5)] sm:flex-row sm:items-center sm:justify-between"
           style={{
+            display: 'flex',
             borderColor: 'rgb(var(--ember) / 0.35)',
             backgroundColor: 'rgb(255 255 255 / 0.48)',
           }}
@@ -59,7 +73,7 @@ export function Offices() {
             <p className="h3 mt-2 max-w-[30ch]">{PAYMENT_ADVICE}</p>
           </div>
           <p className="body-small max-w-[30ch] text-subtle">{BUSINESS.deliveryNote}</p>
-        </div>
+        </Glass>
       </Reveal>
 
       {isContactConfigured() && (

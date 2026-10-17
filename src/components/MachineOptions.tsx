@@ -5,6 +5,7 @@ import { Reveal } from '@/components/Reveal';
 import { SplitText } from '@/components/SplitText';
 import { isContactConfigured } from '@/lib/business';
 import { CAPACITY, MACHINE_TYPES, POWER_OPTIONS, PRODUCTION_CYCLES } from '@/lib/machines';
+import { Glass } from '@/lib/samasante-liquid-glass';
 import { enquiryMessage, whatsappLink } from '@/lib/whatsapp';
 
 /* Their own words for each group. The leads that used to sit under these headings were
@@ -191,9 +192,22 @@ export function MachineOptions() {
               {CAPACITY.note}
             </p>
 
-            <div
-              className="mt-5 rounded-2xl border p-4"
+            <Glass
+              optics={{
+                strength: 0.055,
+                depth: 0.52,
+                curvature: 0.34,
+                bend: 0.48,
+                dispersion: 0.34,
+                frost: 8,
+                saturate: 1.2,
+                sheen: 0.36,
+                glow: 0.12,
+                specular: 1.08,
+              }}
+              className="mt-5 w-full rounded-2xl border p-4"
               style={{
+                display: 'block',
                 borderColor: 'var(--rule)',
                 backgroundColor: 'rgb(255 255 255 / 0.45)',
               }}
@@ -227,7 +241,7 @@ export function MachineOptions() {
                   </dd>
                 </div>
               </dl>
-            </div>
+            </Glass>
 
             {isContactConfigured() && (
               <a
