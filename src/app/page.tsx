@@ -5,12 +5,13 @@ import { MachineOptions } from '@/components/MachineOptions';
 import { Numbers } from '@/components/Numbers';
 import { Offices } from '@/components/Offices';
 import { SocialBand } from '@/components/SocialBand';
+import { ThermalCoreStage } from '@/components/ThermalCoreStage';
 import { WhyKoolink } from '@/components/WhyKoolink';
 
 /**
  * Section order is the sale in order: who we are, what we build, how a machine is
- * specified, the figures, why ours rather than the cheap one, proof you can watch,
- * where to find us, the ask.
+ * specified, the sub-zero thermal core architecture, the figures, why ours rather than
+ * the cheap one, proof you can watch, where to find us, the ask.
  *
  * There is no "how buying works" section any more. It described a four-step process in
  * language Koolink never used, and the facts inside it (visit before paying, delivery
@@ -27,6 +28,7 @@ export default function HomePage() {
       <Hero />
       <KoolinkShowcase />
       <MachineOptions />
+      <ThermalCoreStage />
       <Numbers />
       <WhyKoolink />
       <SocialBand />
