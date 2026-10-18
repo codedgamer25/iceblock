@@ -8,8 +8,8 @@ import { Reveal } from '@/components/Reveal';
 
 export function KoolinkShowcase() {
   return (
-    <section id="products" className="theme-frost py-v-space border-b scroll-mt-header" style={{ borderColor: 'var(--rule)' }}>
-      <div className="shell flex flex-col gap-6">
+    <section id="products" className="theme-frost py-v-space border-b scroll-mt-header overflow-hidden" style={{ borderColor: 'var(--rule)' }}>
+      <div className="shell mb-6 sm:mb-8">
         <Reveal className="w-full flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <h2 className="h2">Machines and cold rooms at work.</h2>
@@ -25,25 +25,25 @@ export function KoolinkShowcase() {
             View all 29 photographs <ArrowRight size={16} />
           </Link>
         </Reveal>
-
-        {/* Liquid-glass WebGL FlexCarousel */}
-        <Reveal className="w-full" delay={1}>
-          <div className="-mx-[calc(var(--u)*1.25)] w-[100vw] sm:mx-0 sm:w-full h-[clamp(360px,52vh,620px)] relative overflow-hidden bg-transparent">
-            <FlexCarousel
-              items={DEFAULT_ITEMS}
-              preset="liquid"
-              intro="rise"
-              cardHeight={0.62}
-              gap={16}
-              radius={20}
-              fit="natural"
-              squeeze={0.25}
-              focusOnClick
-              captions
-            />
-          </div>
-        </Reveal>
       </div>
+
+      {/* Liquid-glass WebGL FlexCarousel */}
+      <Reveal className="w-full" delay={1}>
+        <div className="w-full h-[clamp(460px,64vh,720px)] relative overflow-hidden bg-transparent">
+          <FlexCarousel
+            items={DEFAULT_ITEMS}
+            preset="liquid"
+            intro="rise"
+            cardHeight={0.56}
+            gap={18}
+            radius={20}
+            fit="natural"
+            squeeze={0.25}
+            focusOnClick
+            captions
+          />
+        </div>
+      </Reveal>
     </section>
   );
 }
