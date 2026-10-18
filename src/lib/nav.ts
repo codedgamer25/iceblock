@@ -49,7 +49,6 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
       { label: 'Nylon or mould type', href: '/#machine-type' },
       { label: 'Solar, solar friendly, mains', href: '/#machine-power' },
       { label: 'Once, twice, three times daily', href: '/#machine-cycle' },
-      { label: '21 to over 500 blocks a day', href: '/#machine-capacity' },
     ],
   },
   {

@@ -1,11 +1,11 @@
 import { CtaBand } from '@/components/CtaBand';
+import { BuildFilm } from '@/components/BuildFilm';
 import { Hero } from '@/components/Hero';
 import { KoolinkShowcase } from '@/components/KoolinkShowcase';
 import { MachineOptions } from '@/components/MachineOptions';
 import { Numbers } from '@/components/Numbers';
 import { Offices } from '@/components/Offices';
 import { SocialBand } from '@/components/SocialBand';
-import { ThermalCoreStage } from '@/components/ThermalCoreStage';
 import { WhyKoolink } from '@/components/WhyKoolink';
 
 /**
@@ -18,17 +18,17 @@ import { WhyKoolink } from '@/components/WhyKoolink';
  * anywhere in Nigeria, an operational manual) are all stated in their own words
  * elsewhere on the page.
  *
- * The scrubbed video section that used to sit after the products has been removed —
- * the imagery now lives in the product tiles and the section beds, which carry it
- * without asking the reader for four screens of scroll or a megabyte of frames.
+ * The film sits after the product row: proof in motion before the reader is asked to
+ * specify a machine. It is one half-viewport scrub, not a four-screen pin — the frame
+ * grows from half size to full width as it enters, then loops quietly and can be paused.
  */
 export default function HomePage() {
   return (
     <>
       <Hero />
       <KoolinkShowcase />
+      <BuildFilm />
       <MachineOptions />
-      <ThermalCoreStage />
       <Numbers />
       <WhyKoolink />
       <SocialBand />
