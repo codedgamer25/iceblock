@@ -69,7 +69,7 @@ export function MachineOptions() {
 
           <div
             className={`mt-6 grid gap-gutter ${
-              group.choices.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'
+              group.choices.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
             }`}
           >
             {group.choices.map((choice) => {

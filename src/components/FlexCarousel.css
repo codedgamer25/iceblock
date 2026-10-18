@@ -33,7 +33,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: clamp(16px, 3vh, 28px);
+  bottom: clamp(12px, 2.8vh, 26px);
   top: auto;
   display: flex;
   flex-direction: column;
@@ -50,7 +50,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 100%;
+  max-width: min(92vw, 440px);
+  text-wrap: balance;
   padding: 7px 20px 8px;
   border-radius: 9999px;
   font-size: 14px;
@@ -79,6 +80,18 @@
   font-size: 12px;
   opacity: 0.76;
   margin-top: 1px;
+}
+
+@media (max-width: 639px) {
+  .flex-carousel__title {
+    padding: 6px 16px 7px;
+    border-radius: 20px;
+    font-size: 13px;
+  }
+  .flex-carousel__subtitle {
+    font-size: 11px;
+    margin-top: 2px;
+  }
 }
 
 .flex-carousel__count {
