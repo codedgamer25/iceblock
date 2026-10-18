@@ -3312,3 +3312,53 @@ html.menu-open body {
     border-top-color: rgb(var(--frost) / 0.7);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Cold chain film - scroll-scrubbed scale reveal.
+
+   The frame is the stable layout box; the stage is the element that scales. Keeping
+   them separate means the trigger can be measured without reading the stage's own
+   transformed rect, which would feed its scale back into the progress.
+   --------------------------------------------------------------------------- */
+
+.film-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  isolation: isolate;
+}
+
+.film-frame::before {
+  content: '';
+  position: absolute;
+  inset: 12% 8%;
+  z-index: -1;
+  background: radial-gradient(
+    50% 60% at 50% 50%,
+    rgb(var(--cyan) / 0.18),
+    rgb(var(--marine) / 0.08) 45%,
+    transparent 75%
+  );
+  filter: blur(42px);
+  pointer-events: none;
+}
+
+.film-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.film-stage video {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-stage {
+    transform: none !important;
+    will-change: auto;
+  }
+}
