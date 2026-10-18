@@ -33,13 +33,13 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(50% + var(--flex-carousel-half) * var(--flex-carousel-lift, 1) + 52px);
+  bottom: clamp(16px, 3vh, 28px);
+  top: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
   padding: 0 16px;
-  padding-bottom: 8px;
   pointer-events: none;
   text-align: center;
   animation: flex-carousel-reveal var(--speed-enter) var(--ease-out-quart) both;

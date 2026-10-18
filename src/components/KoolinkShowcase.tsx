@@ -8,7 +8,7 @@ import { Reveal } from '@/components/Reveal';
 
 export function KoolinkShowcase() {
   return (
-    <section id="products" className="theme-frost py-v-space border-b scroll-mt-header overflow-hidden" style={{ borderColor: 'var(--rule)' }}>
+    <section id="products" className="theme-frost pt-v-space pb-8 sm:pb-12 border-b scroll-mt-header overflow-hidden" style={{ borderColor: 'var(--rule)' }}>
       <div className="shell mb-6 sm:mb-8">
         <Reveal className="w-full flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
