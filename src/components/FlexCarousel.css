@@ -33,7 +33,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(50% + var(--flex-carousel-half) * var(--flex-carousel-lift, 1) + 12px);
+  top: calc(50% + var(--flex-carousel-half) * var(--flex-carousel-lift, 1) + 52px);
   display: flex;
   flex-direction: column;
   align-items: center;

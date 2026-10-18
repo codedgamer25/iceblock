@@ -29,12 +29,12 @@ export function KoolinkShowcase() {
 
       {/* Liquid-glass WebGL FlexCarousel */}
       <Reveal className="w-full" delay={1}>
-        <div className="w-full h-[clamp(460px,64vh,720px)] relative overflow-hidden bg-transparent">
+        <div className="w-full h-[clamp(490px,66vh,740px)] relative overflow-hidden bg-transparent">
           <FlexCarousel
             items={DEFAULT_ITEMS}
             preset="liquid"
             intro="rise"
-            cardHeight={0.56}
+            cardHeight={0.52}
             gap={18}
             radius={20}
             fit="natural"
