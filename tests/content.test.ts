@@ -546,7 +546,7 @@ describe('the product ScrollStack', () => {
       join(process.cwd(), 'src', 'components', 'gallery', 'GalleryFigure.tsx'),
       'utf8',
     );
-    expect(GALLERY).toHaveLength(21);
+    expect(GALLERY).toHaveLength(23);
     expect(new Set(GALLERY.map((shot) => shot.slug)).size).toBe(GALLERY.length);
     expect(figure).toContain('className="product-stamp numeral"');
     expect(figure.match(/^\s*Book now\s*$/gm)).toHaveLength(1);

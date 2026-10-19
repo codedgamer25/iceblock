@@ -66,6 +66,8 @@ export const GALLERY: ReadonlyArray<GalleryShot> = [
   { slug: '20-41-08', group: 'nylon', width: 540, height: 720, smallWidth: 300, caption: 'A red trough machine part-way through assembly.' },
   { slug: '20-43-48-1', group: 'coldroom', width: 720, height: 500, smallWidth: 400, caption: 'A room fitted out with shelving along both walls.' },
   { slug: '20-43-45', group: 'coldroom', width: 540, height: 720, smallWidth: 300, caption: 'A finished room wrapped for transport, door and hinges visible.' },
+  { slug: '20-43-48', group: 'coldroom', width: 720, height: 402, smallWidth: 400, caption: 'An empty room, floor laid and the evaporators run along the ceiling.' },
+  { slug: '20-43-47', group: 'coldroom', width: 606, height: 604, smallWidth: 400, caption: 'Inside a fitted room, the evaporator mounted over the door.' },
   { slug: '20-43-49-1', group: 'coldroom', width: 720, height: 552, smallWidth: 400, caption: 'A large room with a row of evaporators along the far wall.' },
   { slug: '20-43-50', group: 'coldroom', width: 720, height: 720, smallWidth: 400, caption: 'A room in use, stocked with pallets and crates.' },
   { slug: 'solar-roof-install', group: 'solar', width: 540, height: 720, smallWidth: 300, caption: 'A technician mounting solar panels on site.' },
