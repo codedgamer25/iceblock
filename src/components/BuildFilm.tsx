@@ -263,47 +263,6 @@ export function BuildFilm() {
             >
               <source src="/videos/koolink-cold-film.mp4" type="video/mp4" />
             </video>
-
-            {/* The frame is part of the picture, not a player chrome. */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(180deg, rgba(4,16,23,0.18) 0%, transparent 24%, transparent 72%, rgba(4,16,23,0.5) 100%)',
-              }}
-            />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute left-5 top-5 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-[rgba(242,247,250,0.62)] sm:left-7 sm:top-7"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--chill))]" />
-              Koolink / Machine demonstration
-            </div>
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute bottom-5 right-5 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-[rgba(242,247,250,0.48)] sm:bottom-7 sm:right-7"
-            >
-              <span>{muted ? 'Audio muted' : 'Audio live'}</span>
-              <span className="opacity-40">•</span>
-              <span>Factory film</span>
-            </div>
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-[rgba(242,247,250,0.34)] sm:left-4 sm:top-4"
-            />
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute right-3 top-3 h-3 w-3 border-r border-t border-[rgba(242,247,250,0.34)] sm:right-4 sm:top-4"
-            />
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute bottom-3 left-3 h-3 w-3 border-b border-l border-[rgba(242,247,250,0.34)] sm:bottom-4 sm:left-4"
-            />
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-[rgba(242,247,250,0.34)] sm:bottom-4 sm:right-4"
-            />
           </div>
         </div>
       </div>
