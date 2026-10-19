@@ -38,11 +38,11 @@ export function Hero() {
 
         {/* Conversion Action Bar & Trust Notes */}
         <Reveal
-          className="w-full sm:max-w-[980px] flex flex-col sm:flex-row items-center justify-between gap-4"
+          className="w-full sm:max-w-[980px] flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-5"
           delay={1}
         >
           <div
-            className="flex w-full flex-col items-stretch gap-2.5 sm:w-auto sm:flex-row sm:items-center sm:gap-3"
+            className="flex w-full flex-col items-stretch gap-2.5 sm:w-auto sm:flex-row sm:items-center sm:gap-3 shrink-0"
             data-hero-cta
           >
             {isContactConfigured() ? (
@@ -51,11 +51,11 @@ export function Hero() {
                   href={whatsappLink()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="button primary"
+                  className="button primary whitespace-nowrap"
                 >
                   Book now on WhatsApp
                 </a>
-                <a href={telLink()} className="button secondary numeral">
+                <a href={telLink()} className="button secondary numeral whitespace-nowrap">
                   Call {PHONE_DISPLAY}
                 </a>
               </>
@@ -66,7 +66,7 @@ export function Hero() {
             )}
           </div>
 
-          <p className="body-small text-center sm:text-right sm:max-w-[44ch] text-subtle">
+          <p className="body-small text-center lg:text-right max-w-[46ch] text-subtle">
             <strong className="font-semibold" style={{ color: 'var(--accent)' }}>
               {PAYMENT_ADVICE}
             </strong>{' '}

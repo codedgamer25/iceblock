@@ -518,6 +518,8 @@ section[id],
   letter-spacing: 0.01em;
   text-align: center;
   border: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
   /* No `transition` here on purpose. This selector is declared a second time in the
      glass block below, at the same specificity, so source order decides and anything
      written here is dead. A 180ms transition did live here and was silently overridden
