@@ -318,7 +318,7 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
       <div
         ref={ref}
         data-lenis-prevent
-        className={cx('flex-1 overflow-y-auto px-6 py-4 focus:outline-none', className)}
+        className={cx('flex-1 overflow-y-auto px-4 sm:px-6 py-5 pb-16 focus:outline-none', className)}
         {...props}
       >
         {children}

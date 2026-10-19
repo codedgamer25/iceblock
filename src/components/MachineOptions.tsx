@@ -197,18 +197,39 @@ export function MachineOptions() {
                 Your Custom Specification
               </p>
               <h3 className="h3 mt-1">Ready to get your exact quote?</h3>
-              <dl className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-                <div className="rounded-xl border p-3" style={{ borderColor: 'var(--rule)', backgroundColor: 'rgb(255 255 255 / 0.4)' }}>
-                  <dt className="text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Machine Type</dt>
-                  <dd className="mt-1 font-semibold" style={{ color: 'var(--text)' }}>{selected.type ?? 'Any'}</dd>
+              <dl className="mt-4 flex flex-wrap gap-2.5 sm:gap-3 text-sm">
+                <div
+                  className="flex-1 min-w-[125px] sm:min-w-[145px] rounded-xl border px-3.5 py-2.5 flex flex-col justify-between"
+                  style={{ borderColor: 'var(--rule)', backgroundColor: 'rgb(255 255 255 / 0.45)' }}
+                >
+                  <dt className="text-[11px] uppercase tracking-wider font-medium" style={{ color: 'var(--text-muted)' }}>
+                    Machine Type
+                  </dt>
+                  <dd className="mt-1 font-semibold text-sm whitespace-nowrap" style={{ color: 'var(--text)' }}>
+                    {selected.type ?? 'Any'}
+                  </dd>
                 </div>
-                <div className="rounded-xl border p-3" style={{ borderColor: 'var(--rule)', backgroundColor: 'rgb(255 255 255 / 0.4)' }}>
-                  <dt className="text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Power System</dt>
-                  <dd className="mt-1 font-semibold" style={{ color: 'var(--text)' }}>{selected.power ?? 'Any'}</dd>
+                <div
+                  className="flex-1 min-w-[125px] sm:min-w-[145px] rounded-xl border px-3.5 py-2.5 flex flex-col justify-between"
+                  style={{ borderColor: 'var(--rule)', backgroundColor: 'rgb(255 255 255 / 0.45)' }}
+                >
+                  <dt className="text-[11px] uppercase tracking-wider font-medium" style={{ color: 'var(--text-muted)' }}>
+                    Power System
+                  </dt>
+                  <dd className="mt-1 font-semibold text-sm whitespace-nowrap" style={{ color: 'var(--text)' }}>
+                    {selected.power ?? 'Any'}
+                  </dd>
                 </div>
-                <div className="rounded-xl border p-3" style={{ borderColor: 'var(--rule)', backgroundColor: 'rgb(255 255 255 / 0.4)' }}>
-                  <dt className="text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Formation Speed</dt>
-                  <dd className="mt-1 font-semibold" style={{ color: 'var(--text)' }}>{selected.cycle ?? 'Any'}</dd>
+                <div
+                  className="flex-1 min-w-[125px] sm:min-w-[145px] rounded-xl border px-3.5 py-2.5 flex flex-col justify-between"
+                  style={{ borderColor: 'var(--rule)', backgroundColor: 'rgb(255 255 255 / 0.45)' }}
+                >
+                  <dt className="text-[11px] uppercase tracking-wider font-medium" style={{ color: 'var(--text-muted)' }}>
+                    Formation Speed
+                  </dt>
+                  <dd className="mt-1 font-semibold text-sm whitespace-nowrap" style={{ color: 'var(--text)' }}>
+                    {selected.cycle ?? 'Any'}
+                  </dd>
                 </div>
               </dl>
             </div>
@@ -270,7 +291,7 @@ export function MachineOptions() {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div
                 className="rounded-xl border p-3"
                 style={{
@@ -442,31 +463,35 @@ export function MachineOptions() {
 
             {/* Calculations Summary Grid */}
             <div
-              className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t"
+              className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t overflow-visible"
               style={{ borderColor: 'var(--rule)' }}
             >
-              <div className="rounded-lg p-2.5 bg-black/[0.03] dark:bg-white/[0.03]">
+              <div className="rounded-lg p-3 bg-black/[0.03] dark:bg-white/[0.03] flex flex-col justify-between min-h-[88px]">
                 <div className="text-[11px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                   Batch Size
                 </div>
-                <div className="mt-1 text-lg font-bold font-display" style={{ color: 'var(--text)' }}>
-                  {capacity}
+                <div>
+                  <div className="mt-1 text-xl font-bold font-display leading-tight" style={{ color: 'var(--text)' }}>
+                    {capacity}
+                  </div>
+                  <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>blocks / run</div>
                 </div>
-                <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>blocks / run</div>
               </div>
 
-              <div className="rounded-lg p-2.5 bg-black/[0.03] dark:bg-white/[0.03]">
+              <div className="rounded-lg p-3 bg-black/[0.03] dark:bg-white/[0.03] flex flex-col justify-between min-h-[88px]">
                 <div className="text-[11px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                   Daily Frequency
                 </div>
-                <div className="mt-1 text-lg font-bold font-display" style={{ color: 'var(--text)' }}>
-                  {cyclesCount}x
+                <div>
+                  <div className="mt-1 text-xl font-bold font-display leading-tight" style={{ color: 'var(--text)' }}>
+                    {cyclesCount}x
+                  </div>
+                  <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>runs / 24h</div>
                 </div>
-                <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>runs / 24h</div>
               </div>
 
               <div
-                className="rounded-lg p-2.5 border"
+                className="rounded-lg p-3 border flex flex-col justify-between min-h-[88px]"
                 style={{
                   borderColor: 'var(--accent)',
                   backgroundColor: 'rgb(255 255 255 / 0.6)',
@@ -475,20 +500,24 @@ export function MachineOptions() {
                 <div className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: 'var(--accent)' }}>
                   Daily Output
                 </div>
-                <div className="mt-1 text-lg font-bold font-display" style={{ color: 'var(--accent)' }}>
-                  {dailyBlocks}
+                <div>
+                  <div className="mt-1 text-xl font-bold font-display leading-tight" style={{ color: 'var(--accent)' }}>
+                    {dailyBlocks}
+                  </div>
+                  <div className="text-[11px] font-medium mt-0.5" style={{ color: 'var(--accent)' }}>blocks / day</div>
                 </div>
-                <div className="text-[11px] font-medium" style={{ color: 'var(--accent)' }}>blocks / day</div>
               </div>
 
-              <div className="rounded-lg p-2.5 bg-black/[0.03] dark:bg-white/[0.03]">
+              <div className="rounded-lg p-3 bg-black/[0.03] dark:bg-white/[0.03] flex flex-col justify-between min-h-[88px]">
                 <div className="text-[11px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                   Est. Daily Weight
                 </div>
-                <div className="mt-1 text-lg font-bold font-display" style={{ color: 'var(--text)' }}>
-                  ~{dailyKg.toLocaleString()}
+                <div>
+                  <div className="mt-1 text-xl font-bold font-display leading-tight" style={{ color: 'var(--text)' }}>
+                    ~{dailyKg.toLocaleString()}
+                  </div>
+                  <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>kg / day</div>
                 </div>
-                <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>kg / day</div>
               </div>
             </div>
 
