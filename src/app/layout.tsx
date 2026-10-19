@@ -69,17 +69,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
      this is what puts the right branch into a local search result. */
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
+    '@type': ['LocalBusiness', 'Manufacturer'],
     name: BUSINESS.legalName,
+    alternateName: BUSINESS.name,
     description: BUSINESS.summary,
     url: SITE_URL,
     telephone: [PHONE_E164, PHONE_ALT_E164],
     slogan: BUSINESS.motto,
+    taxID: BUSINESS.rcNumber,
     areaServed: { '@type': 'Country', name: BUSINESS.areaServed },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: OFFICES[0].address,
+      addressCountry: 'NG',
+    },
     location: OFFICES.map((office) => ({
       '@type': 'Place',
       name: `${BUSINESS.legalName} - ${office.label}`,
-      address: { '@type': 'PostalAddress', streetAddress: office.address },
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: office.address,
+        addressCountry: 'NG',
+      },
     })),
   };
 

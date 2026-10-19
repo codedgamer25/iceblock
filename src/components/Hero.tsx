@@ -9,6 +9,9 @@ export function Hero() {
       style={{ borderColor: 'var(--rule)' }}
     >
       <div className="shell flex flex-col items-center gap-4 sm:gap-6">
+        <h1 className="visually-hidden">
+          Commercial Ice Block Machines &amp; Walk-In Cold Rooms in Nigeria | Koolink Nigeria Limited
+        </h1>
         {/* Seamless Hero Lockup with Official Emblem & Production Photo Capsules */}
         <Reveal className="w-full sm:max-w-[980px] flex justify-center">
           {/* Mobile-optimized enlarged 6x3 banner (< 640px) */}

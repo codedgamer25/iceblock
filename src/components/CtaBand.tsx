@@ -36,9 +36,7 @@ export function CtaBand() {
             before deciding, which makes it the worst paragraph on the page to whisper.
             Frost measures 5.60:1 in the same place. */}
         <p className="lead max-w-[52ch]" style={{ color: 'var(--text)' }}>
-          We don&apos;t disclose or discuss prices online. Call or WhatsApp for more details
-          including prices. You can also visit or send someone to our office before making any
-          payment.
+          Because every machine is custom-built to your block capacity and power setup, contact us on WhatsApp for an instant custom quote. You can also visit or send someone to our office before making any payment.
         </p>
 
         {isContactConfigured() ? (

@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { Reveal } from '@/components/Reveal';
 import { SplitText } from '@/components/SplitText';
+import { isContactConfigured } from '@/lib/business';
 import { MACHINE_TYPES, POWER_OPTIONS, PRODUCTION_CYCLES } from '@/lib/machines';
+import { whatsappLink } from '@/lib/whatsapp';
 
 /* Their own words for each group. The leads that used to sit under these headings were
    mine and said nothing the rows below did not already say. */
@@ -121,6 +123,53 @@ export function MachineOptions() {
           </div>
         </Reveal>
       ))}
+
+      <Reveal className="shell mt-12" delay={3}>
+        <div
+          className="rounded-card border p-6 sm:p-8"
+          style={{
+            borderColor: 'var(--rule)',
+            backgroundColor: 'rgb(255 255 255 / 0.55)',
+            backdropFilter: 'blur(16px)',
+          }}
+        >
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <p className="eyebrow" style={{ color: 'var(--accent)' }}>
+                Your Custom Specification
+              </p>
+              <h3 className="h3 mt-1">Ready to get your exact quote?</h3>
+              <dl className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                <div className="rounded-xl border p-3" style={{ borderColor: 'var(--rule)', backgroundColor: 'rgb(255 255 255 / 0.4)' }}>
+                  <dt className="text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Machine Type</dt>
+                  <dd className="mt-1 font-semibold" style={{ color: 'var(--text)' }}>{selected.type ?? 'Any'}</dd>
+                </div>
+                <div className="rounded-xl border p-3" style={{ borderColor: 'var(--rule)', backgroundColor: 'rgb(255 255 255 / 0.4)' }}>
+                  <dt className="text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Power System</dt>
+                  <dd className="mt-1 font-semibold" style={{ color: 'var(--text)' }}>{selected.power ?? 'Any'}</dd>
+                </div>
+                <div className="rounded-xl border p-3" style={{ borderColor: 'var(--rule)', backgroundColor: 'rgb(255 255 255 / 0.4)' }}>
+                  <dt className="text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Formation Speed</dt>
+                  <dd className="mt-1 font-semibold" style={{ color: 'var(--text)' }}>{selected.cycle ?? 'Any'}</dd>
+                </div>
+              </dl>
+            </div>
+
+            {isContactConfigured() && (
+              <a
+                href={whatsappLink(
+                  `Hello Koolink, I want a custom quote for: ${selected.type ?? 'Standard'} | ${selected.power ?? 'Solar'} | ${selected.cycle ?? 'Daily cycle'}. Please advise on capacity options and current pricing.`
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="button primary whitespace-nowrap self-start md:self-center shrink-0"
+              >
+                Get Price for This Spec on WhatsApp
+              </a>
+            )}
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 }

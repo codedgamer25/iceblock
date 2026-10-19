@@ -86,9 +86,9 @@ export type Social = { platform: string; handle: string; href?: string };
 
 export const SOCIAL_LINKS: ReadonlyArray<Social> = [
   { platform: 'Instagram', handle: 'Koolinkcoldrooms', href: 'https://instagram.com/koolinkcoldrooms' },
-  { platform: 'Facebook', handle: 'Koolink Nigeria Limited' },
-  { platform: 'YouTube', handle: 'Koolink Nigeria Limited' },
-  { platform: 'TikTok', handle: 'Koolink iceblock Machines' },
+  { platform: 'Facebook', handle: 'Koolink Nigeria Limited', href: 'https://facebook.com/koolinknigerialimited' },
+  { platform: 'YouTube', handle: 'Koolink Nigeria Limited', href: 'https://youtube.com/@koolinknigerialimited' },
+  { platform: 'TikTok', handle: 'Koolink iceblock Machines', href: 'https://tiktok.com/@koolinkiceblockmachines' },
 ];
 
 /** A Nigerian mobile in international form: +234, then 7/8/9, then nine digits. */
