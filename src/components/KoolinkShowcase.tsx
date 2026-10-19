@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import FlexCarousel, { DEFAULT_ITEMS } from '@/components/FlexCarousel';
 import { Reveal } from '@/components/Reveal';
+import { GALLERY } from '@/lib/gallery';
 
 export function KoolinkShowcase() {
   return (
@@ -22,7 +23,7 @@ export function KoolinkShowcase() {
             href="/products"
             className="button secondary self-start sm:self-auto shrink-0"
           >
-            View all 29 photographs <ArrowRight size={16} />
+            View all {GALLERY.length} photographs <ArrowRight size={16} />
           </Link>
         </Reveal>
       </div>

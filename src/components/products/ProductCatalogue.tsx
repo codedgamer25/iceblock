@@ -276,7 +276,11 @@ export function ProductCatalogue() {
         <div key={`${filter}-${normalizedQuery}`} className={styles.results}>
           {visibleGroups.length === 0 ? (
             <div className={styles.emptyState}>
-              <p>No photographs match &ldquo;{query}&rdquo; in this category.</p>
+              <p>
+                {query
+                  ? `No photographs match "${query}" in this category.`
+                  : 'New photographs for this category will be uploaded shortly.'}
+              </p>
               <button
                 type="button"
                 onClick={() => {
