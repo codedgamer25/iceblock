@@ -203,11 +203,10 @@ export function BuildFilm() {
       <div className="shell">
         <Reveal className="flex flex-col justify-between gap-7 sm:flex-row sm:items-end sm:gap-10">
           <div>
-            <SectionLabel>Cold chain film</SectionLabel>
-            <h2 className="h2 mt-4 max-w-[18ch]">The cold chain, in motion.</h2>
+            <SectionLabel>Machine demonstration</SectionLabel>
+            <h2 className="h2 mt-4 max-w-[18ch]">Commercial machines, in motion.</h2>
             <p className="lead mt-5 max-w-[54ch]">
-              A short loop through the elements we build around — water, ice, and the
-              chamber that holds the temperature.
+              A demonstration of Koolink commercial ice block machines and solar systems at work in Nigeria.
             </p>
           </div>
 
@@ -215,7 +214,7 @@ export function BuildFilm() {
             type="button"
             onClick={toggle}
             className="button secondary shrink-0 self-start sm:self-auto"
-            aria-label={playing ? 'Pause the cold chain film' : 'Play the cold chain film'}
+            aria-label={playing ? 'Pause demonstration film' : 'Play demonstration film'}
           >
             {playing ? <Pause size={15} /> : <Play size={15} />}
             <span>{playing ? 'Pause film' : 'Play film'}</span>
@@ -237,7 +236,7 @@ export function BuildFilm() {
               loop
               playsInline
               preload="metadata"
-              aria-label="Koolink cold chain film: slow motion water and ice"
+              aria-label="Koolink commercial ice block machine demonstration film in operation"
               onPlay={() => setPlaying(true)}
               onPause={() => setPlaying(false)}
             >
@@ -258,13 +257,13 @@ export function BuildFilm() {
               className="pointer-events-none absolute left-5 top-5 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-[rgba(242,247,250,0.62)] sm:left-7 sm:top-7"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--chill))]" />
-              Koolink / cold chain film
+              Koolink / Machine demonstration
             </div>
             <div
               aria-hidden="true"
               className="pointer-events-none absolute bottom-5 right-5 font-mono text-[9px] uppercase tracking-[0.2em] text-[rgba(242,247,250,0.48)] sm:bottom-7 sm:right-7"
             >
-              12s / loop
+              Factory film
             </div>
             <span
               aria-hidden="true"
