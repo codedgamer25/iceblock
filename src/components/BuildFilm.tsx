@@ -1,6 +1,6 @@
 'use client';
 
-import { Pause, Play } from 'lucide-react';
+import { Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Reveal } from '@/components/Reveal';
@@ -34,18 +34,26 @@ export function BuildFilm() {
   const manualPause = useRef(false);
   const reducedMotion = useRef(false);
   const [playing, setPlaying] = useState(true);
+  const [muted, setMuted] = useState(true);
 
   const setVideoPlaying = useCallback((next: boolean) => {
     const video = videoRef.current;
     if (!video) return;
     if (next) {
-      video.muted = true;
       void video.play().catch(() => {
         /* Autoplay can be refused; the poster remains and the button still works. */
       });
     } else {
       video.pause();
     }
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const next = !video.muted;
+    video.muted = next;
+    setMuted(next);
   }, []);
 
   const toggle = useCallback(() => {
@@ -210,15 +218,27 @@ export function BuildFilm() {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={toggle}
-            className="button secondary shrink-0 self-start sm:self-auto"
-            aria-label={playing ? 'Pause demonstration film' : 'Play demonstration film'}
-          >
-            {playing ? <Pause size={15} /> : <Play size={15} />}
-            <span>{playing ? 'Pause film' : 'Play film'}</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0 self-start sm:self-auto">
+            <button
+              type="button"
+              onClick={toggleMute}
+              className="button secondary shrink-0"
+              aria-label={muted ? 'Turn sound on for demonstration film' : 'Mute demonstration film'}
+            >
+              {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+              <span>{muted ? 'Sound on' : 'Mute'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={toggle}
+              className="button secondary shrink-0"
+              aria-label={playing ? 'Pause demonstration film' : 'Play demonstration film'}
+            >
+              {playing ? <Pause size={15} /> : <Play size={15} />}
+              <span>{playing ? 'Pause film' : 'Play film'}</span>
+            </button>
+          </div>
         </Reveal>
       </div>
 
@@ -232,13 +252,14 @@ export function BuildFilm() {
               ref={videoRef}
               className="h-full w-full object-cover"
               poster="/videos/koolink-cold-film-poster.jpg"
-              muted
+              muted={muted}
               loop
               playsInline
               preload="metadata"
               aria-label="Koolink commercial ice block machine demonstration film in operation"
               onPlay={() => setPlaying(true)}
               onPause={() => setPlaying(false)}
+              onVolumeChange={(e) => setMuted(e.currentTarget.muted)}
             >
               <source src="/videos/koolink-cold-film.mp4" type="video/mp4" />
             </video>
@@ -261,9 +282,11 @@ export function BuildFilm() {
             </div>
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute bottom-5 right-5 font-mono text-[9px] uppercase tracking-[0.2em] text-[rgba(242,247,250,0.48)] sm:bottom-7 sm:right-7"
+              className="pointer-events-none absolute bottom-5 right-5 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-[rgba(242,247,250,0.48)] sm:bottom-7 sm:right-7"
             >
-              Factory film
+              <span>{muted ? 'Audio muted' : 'Audio live'}</span>
+              <span className="opacity-40">•</span>
+              <span>Factory film</span>
             </div>
             <span
               aria-hidden="true"
