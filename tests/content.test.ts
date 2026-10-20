@@ -320,11 +320,7 @@ describe('the photograph catalogue', () => {
   it('fills every group it advertises', () => {
     for (const group of GALLERY_GROUPS) {
       const shots = GALLERY.filter((shot) => shot.group === group.id);
-      if (group.id === 'mould') {
-        expect(shots.length).toBe(0);
-      } else {
-        expect(shots.length, `${group.id} has no photographs`).toBeGreaterThan(0);
-      }
+      expect(shots.length, `${group.id} has no photographs`).toBeGreaterThan(0);
     }
   });
 
@@ -367,7 +363,6 @@ describe('the photograph catalogue', () => {
     expect(leads.length).toBe(GALLERY_GROUPS.length);
 
     for (const [, group, slug] of leads) {
-      if (group === 'mould') continue;
       const first = GALLERY.find((shot) => shot.group === group);
       expect(first?.slug, `${group} should open on ${slug}`).toBe(slug);
     }

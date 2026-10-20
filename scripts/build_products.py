@@ -81,12 +81,12 @@ CAPTIONS = {
     "20-40-55": "The same trough loaded with bottled drinks instead of sleeves.",
     "20-40-56": "An upright cabinet with its tray runners empty and the door open.",
     "20-40-57-1": "Finished cabinets in the yard with their condensers, waiting to go out.",
-    "20-40-57": "The showroom, where a machine can be seen before anything is paid.",
+    "20-40-57": "The showroom, where mould type machines and steel moulds can be inspected.",
     "20-40-58": "A long red trough machine with the lid up and the sleeves inside.",
     "20-40-59-1": "Wrapped and checked in at the logistics counter for delivery.",
     "20-40-59": "A trough of finished blocks, ready to be lifted out.",
     "20-41-00": "A day's blocks bagged on the drying shelves, still dripping.",
-    "20-41-01-1": "Wrapped and loaded into a customer's own car.",
+    "20-41-01-1": "A compact mould type machine with a blue lid, standing on the yard pavers.",
     "20-41-01": "A red and white upright standing beside its condenser.",
     "20-41-02-1": "Bagging by hand from an open cabinet of finished blocks.",
     "20-41-02": "The door, insulated and carrying the Koolink plate.",
@@ -119,7 +119,7 @@ CAPTIONS = {
 # the heading names.
 LEADS = {
     "nylon": "20-40-58",
-    "mould": "20-45-38",
+    "mould": "20-41-01-1",
     "coldroom": "20-43-48-1",
     "solar": "solar-roof-install",
 }
