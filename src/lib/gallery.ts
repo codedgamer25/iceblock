@@ -71,4 +71,6 @@ export const GALLERY: ReadonlyArray<GalleryShot> = [
   { slug: '20-43-49-1', group: 'coldroom', width: 720, height: 552, smallWidth: 400, caption: 'A large room with a row of evaporators along the far wall.' },
   { slug: '20-43-50', group: 'coldroom', width: 720, height: 720, smallWidth: 400, caption: 'A room in use, stocked with pallets and crates.' },
   { slug: 'solar-roof-install', group: 'solar', width: 540, height: 720, smallWidth: 300, caption: 'A technician mounting solar panels on site.' },
+  { slug: 'solar-100-blocks-yellow', group: 'solar', width: 768, height: 1024, smallWidth: 400, caption: 'A 100-block full solar machine installed indoors with wall-mounted lithium battery banks.' },
+  { slug: 'solar-100-blocks-red', group: 'solar', width: 768, height: 1024, smallWidth: 400, caption: 'A 100-block Koolink full solar machine installed outdoors under a dedicated solar array.' },
 ];

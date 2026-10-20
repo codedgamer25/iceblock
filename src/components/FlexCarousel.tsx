@@ -86,6 +86,18 @@ export const DEFAULT_ITEMS: ReadonlyArray<FlexCarouselItem> = [
     title: 'Factory Showroom',
     subtitle: 'Full live machine demonstration prior to purchase',
   },
+  {
+    src: '/gallery/solar-100-blocks-yellow.webp',
+    alt: '100-Block Full Solar Ice Machine with Lithium Battery Bank',
+    title: '100-Block Solar Machine',
+    subtitle: 'Indoor installation with dedicated lithium storage bank',
+  },
+  {
+    src: '/gallery/solar-100-blocks-red.webp',
+    alt: '100-Block Outdoor Solar Machine Under Roof Array',
+    title: 'Full Solar Ice System',
+    subtitle: '100 blocks per cycle powered entirely by off-grid solar panels',
+  },
 ];
 
 export const BEND_PRESETS = {
