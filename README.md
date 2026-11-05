@@ -79,3 +79,28 @@ npm test
 npm run build
 npm start
 ```
+
+---
+
+## Deploy to Vercel
+
+This repository is optimized for one-click deployment on [Vercel](https://vercel.com):
+
+### Option 1: Vercel Dashboard (Recommended)
+
+1. Push this repository to GitHub, GitLab, or Bitbucket.
+2. In your Vercel Dashboard, click **Add New...** -> **Project**.
+3. Import the repository. Vercel automatically detects Next.js via `vercel.json`.
+4. Click **Deploy**.
+
+### Option 2: Vercel CLI
+
+1. Install or run Vercel CLI:
+   ```bash
+   npx vercel
+   ```
+2. Follow the interactive prompts to link and deploy your project.
+3. For direct production deployment with a token:
+   ```bash
+   npx vercel --token <YOUR_VERCEL_TOKEN> --prod --yes
+   ```
